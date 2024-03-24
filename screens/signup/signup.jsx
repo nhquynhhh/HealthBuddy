@@ -4,7 +4,7 @@ import { Icon, Button, Divider } from "react-native-elements";
 import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from '../../colors';
 
-export default function Login() {
+export default function Signup() {
     const windowHeight = useWindowDimensions().height;
     const windowWidth = useWindowDimensions().width;
 
