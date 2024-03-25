@@ -3,8 +3,9 @@ import React, { Component, useEffect, useState } from 'react'
 import { Icon, Button, Divider } from "react-native-elements";
 import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from '../../colors';
+import { isEmail } from '../../utils/validation';
 
-export default function Signup() {
+export default function Signup({ navigation }) {
     const windowHeight = useWindowDimensions().height;
     const windowWidth = useWindowDimensions().width;
 
@@ -19,17 +20,17 @@ export default function Signup() {
     const [passwordConfirmIsVisible, setPasswordConfirmIsVisible] =
     React.useState(false);
 
-    const isEmail = () => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-    };
+    // const isEmail = () => {
+    //     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    //     return emailRegex.test(email);
+    // };
 
     const handleSignUp = async () => {
         if (username === "" || email === "" || password === "" || passwordConfirm === "") {
             Alert.alert('Thông báo', 'Vui lòng nhập đầy đủ thông tin.');
             return;
         }
-        else if (!isEmail()) {
+        else if (!isEmail(email)) {
             Alert.alert('Thông báo', 'Email không hợp lệ.');
             return;
         }
@@ -152,7 +153,7 @@ export default function Signup() {
                 start: { x: 0, y: 0.5 },
                 end: { x: 1, y: 0.5 },
             }}
-            onPress={handleSignUp}>
+            onPress={() => handleSignUp(email)}>
         </Button>
 
         <Divider style={{marginTop: 30, height: 1, backgroundColor: colors.blue, width: windowWidth / 2}}>
@@ -160,7 +161,7 @@ export default function Signup() {
 
         <View style={{flexDirection: 'row', marginTop: 30}}>
             <Text>Đã có tài khoản? </Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
                 <Text style={{color: colors.blue, fontWeight: '600'}}>Đăng nhập</Text>
             </TouchableOpacity>
         </View>
