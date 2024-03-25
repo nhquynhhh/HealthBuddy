@@ -1,150 +1,181 @@
-import { View, Text, Image, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, useWindowDimensions } from 'react-native'
-import React, { Component} from 'react'
+import { View, Text, Image, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, useWindowDimensions, Alert } from 'react-native'
+import React, { Component } from 'react'
 import { Icon, Button, Divider } from "react-native-elements";
 import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from '../../colors'
+import { login, login_with_token } from '../../services/api_login'
 
-export default function Login() {
-    const windowHeight = useWindowDimensions().height;
-    const windowWidth = useWindowDimensions().width;
 
-    const [email, setEmail] = React.useState("");
-    const [password, setPassword] = React.useState("");
-  
-    const [passwordIsVisible, setPasswordIsVisible] =
-      React.useState(false);
+export default function Login({ navigation }) {
+	const windowHeight = useWindowDimensions().height;
+	const windowWidth = useWindowDimensions().width;
 
-  return (
-    <SafeAreaView style={[{alignItems: 'center'}, styles.container]}>
-       <Image source={require('../../assets/img_bare_logo.png')} 
-            style={styles.loginLogo}
-       />
-       <Text style={styles.headingText}>Đăng nhập</Text>
-       <Text style={styles.infoText}>Đăng nhập để tiếp tục sử dụng app</Text>
+	const [email, setEmail] = React.useState("");
+	const [password, setPassword] = React.useState("");
 
-        <SafeAreaView style={[styles.inputFieldContainer, {marginTop: 30}]}>
-            <Icon style={styles.iconBlue} 
-                name="email" 
-                type='fontisto' 
-                color={colors.blue}>
-            </Icon>
-            <TextInput style={styles.inputField} 
-                placeholder='Nhập email' 
-                onChangeText={setEmail} 
-                value={email}>
-            </TextInput>
-        </SafeAreaView>
-        <SafeAreaView style={[styles.inputFieldContainer, {marginTop: 30}]}>
-            <Icon style={styles.iconBlue} 
-                name="lock-outline" 
-                type='material-community' 
-                color={colors.blue}>
-            </Icon>
-            <TextInput style={styles.inputField} 
-                placeholder='Nhập mật khẩu' 
-                onChangeText={setPassword} 
-                value={password} 
-                secureTextEntry={!passwordIsVisible}>
-            </TextInput>
-            <TouchableOpacity
-                style={styles.passwordVisibleButton}
-                onPress={() => setPasswordIsVisible(!passwordIsVisible)}
-            >
-                <Icon
-                    name={passwordIsVisible ? "eye-outline" : "eye-off-outline"}
-                    size={24}
-                    color={colors.blue}
-                    type='ionicon'
-                />
-            </TouchableOpacity>
-        </SafeAreaView>
-    <TouchableOpacity style={{ alignSelf: 'flex-end'}}>
-        <Text style={[{color: colors.blue, marginTop: 15, marginRight: 15}, styles.txtSmall]}>Quên mật khẩu?</Text>
-    </TouchableOpacity>
+	const [passwordIsVisible, setPasswordIsVisible] =
+		React.useState(false);
 
-    <Button title={"ĐĂNG NHẬP"} 
-        style={styles.btnClick} 
-        titleStyle={{fontWeight:'700', fontSize: 20}} 
-        buttonStyle={{minWidth:'95%', height: 42, borderRadius: 10}}
-        ViewComponent={LinearGradient} 
-        linearGradientProps={{
-            colors: [colors.blue, colors.lightBlue],
-            start: { x: 0, y: 0.5 },
-            end: { x: 1, y: 0.5 },
-    }}>
-    </Button>
+	const handleLogin = async (email, password) => {
+		console.log(email, password)
+		console.log('Login button clicked')
+		login({ email: email, password: password })
+			.then(response => {
+				if (response.ok) {
+					return response.json().then(data => {
+						code = data.code
+						messagse = data.message
+						access_token = data.token['access_token']
+						refresh_token = data.token['refresh_token']
+						if (code == '200') {
+							navigation.navigate('Home')
+						}
+					})
+				} else {
+					return response.json().then(data => {
+						messagse = data.message
+						Alert.alert('Thông báo', messagse)
+					})
+				}
+			})
+			.catch((error) => {
+				console.error('Error:', error);
+			});
+	}
+	return (
+		<SafeAreaView style={[{ alignItems: 'center' }, styles.container]}>
+			<Image source={require('../../assets/img_bare_logo.png')}
+				style={styles.loginLogo}
+			/>
+			<Text style={styles.headingText}>Đăng nhập</Text>
+			<Text style={styles.infoText}>Đăng nhập để tiếp tục sử dụng app</Text>
 
-    <Divider style={{marginTop: 30, height: 1, backgroundColor: colors.blue, width: windowWidth / 2}}>
-    </Divider>
+			<SafeAreaView style={[styles.inputFieldContainer, { marginTop: 30 }]}>
+				<Icon style={styles.iconBlue}
+					name="email"
+					type='fontisto'
+					color={colors.blue}>
+				</Icon>
+				<TextInput style={styles.inputField}
+					placeholder='Nhập email'
+					onChangeText={setEmail}
+					value={email}>
+				</TextInput>
+			</SafeAreaView>
+			<SafeAreaView style={[styles.inputFieldContainer, { marginTop: 30 }]}>
+				<Icon style={styles.iconBlue}
+					name="lock-outline"
+					type='material-community'
+					color={colors.blue}>
+				</Icon>
+				<TextInput style={styles.inputField}
+					placeholder='Nhập mật khẩu'
+					onChangeText={setPassword}
+					value={password}
+					secureTextEntry={!passwordIsVisible}>
+				</TextInput>
+				<TouchableOpacity
+					style={styles.passwordVisibleButton}
+					onPress={() => setPasswordIsVisible(!passwordIsVisible)}
+				>
+					<Icon
+						name={passwordIsVisible ? "eye-outline" : "eye-off-outline"}
+						size={24}
+						color={colors.blue}
+						type='ionicon'
+					/>
+				</TouchableOpacity>
+			</SafeAreaView>
+			<TouchableOpacity style={{ alignSelf: 'flex-end' }} onPress={() => navigation.navigate('ForgotPassword')}>
+				<Text style={[{ color: colors.blue, marginTop: 15, marginRight: 15 }, styles.txtSmall]}>Quên mật khẩu?</Text>
+			</TouchableOpacity>
 
-    <View style={{flexDirection: 'row', marginTop: 30}}>
-        <Text>Chưa có tài khoản? </Text>
-        <TouchableOpacity>
-            <Text style={{color: colors.blue, fontWeight: '600'}}>Đăng ký</Text>
-        </TouchableOpacity>
-    </View>
-    
-    <Image source={require('../../assets/img_login.png')}
-        style={{width: 210, height: 210, marginTop: 30}}>
-    </Image>
+			<Button title={"ĐĂNG NHẬP"}
+				style={styles.btnClick}
+				titleStyle={{ fontWeight: '700', fontSize: 20 }}
+				buttonStyle={{ minWidth: '95%', height: 42, borderRadius: 10 }}
+				ViewComponent={LinearGradient}
+				linearGradientProps={{
+					colors: [colors.blue, colors.lightBlue],
+					start: { x: 0, y: 0.5 },
+					end: { x: 1, y: 0.5 },
+				}}
+				onPress={() => handleLogin(email, password)}>
+			</Button>
 
-    </SafeAreaView>
-  )
+			<Divider style={{ marginTop: 30, height: 1, backgroundColor: colors.blue, width: windowWidth / 2 }}>
+			</Divider>
+
+			<View style={{ flexDirection: 'row', marginTop: 30 }}>
+				<Text>Chưa có tài khoản? </Text>
+				<TouchableOpacity
+					onPress={() => navigation.navigate('Signup')}
+				>
+					<Text style={{ color: colors.blue, fontWeight: '600' }}>Đăng ký</Text>
+				</TouchableOpacity>
+			</View>
+
+			<Image source={require('../../assets/img_login.png')}
+				style={{ width: 210, height: 210, marginTop: 30 }}>
+			</Image>
+
+		</SafeAreaView>
+	)
 }
 
 const styles = StyleSheet.create({
-    loginLogo:{
-        width: 75,
-        height: 75
-    },
-    headingText:{
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginTop: 10,
-        color: colors.blue
-    },
-    infoText:{
-        color: colors.darkGray, 
-        marginTop: 5,
-    },
-    inputFieldContainer:{
-        backgroundColor: colors.white,
-        minWidth: '90%',
-        borderColor: colors.blue,
-        borderWidth: 1,
-        borderRadius: 10,
-        height: 42,
-        padding: 5,
-        flexDirection: 'row',
-        alignItems: 'center'
-    },
-    inputField:{
-        fontSize: 15,
-    },
-    iconBlue:{
-        color: colors.blue,
-        fontSize: 24,
-        paddingLeft: 10,
-        paddingRight: 10
-    },
-    passwordVisibleButton: {
-        position: "absolute",
-        right: 0,
-        paddingLeft: 10,
-        paddingRight: 10
-    },
-    txtSmall:{
-        fontSize: 15
-    },
-    btnClick:{
-        paddingTop: 15,
-        borderRadius: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    container:{
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        paddingTop: 70
-    }
+	loginLogo: {
+		width: 75,
+		height: 75
+	},
+	headingText: {
+		fontSize: 24,
+		fontWeight: 'bold',
+		marginTop: 10,
+		color: colors.blue
+	},
+	infoText: {
+		color: colors.darkGray,
+		marginTop: 5,
+	},
+	inputFieldContainer: {
+		backgroundColor: colors.white,
+		minWidth: '90%',
+		borderColor: colors.blue,
+		borderWidth: 1,
+		borderRadius: 10,
+		height: 42,
+		padding: 5,
+		flexDirection: 'row',
+		alignItems: 'center'
+	},
+	inputField: {
+		fontSize: 15,
+	},
+	iconBlue: {
+		color: colors.blue,
+		fontSize: 24,
+		paddingLeft: 10,
+		paddingRight: 10
+	},
+	passwordVisibleButton: {
+		position: "absolute",
+		right: 0,
+		paddingLeft: 10,
+		paddingRight: 10
+	},
+	txtSmall: {
+		fontSize: 15
+	},
+	btnClick: {
+		paddingTop: 15,
+		borderRadius: 10,
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	container: {
+		backgroundColor: '#fff',
+		alignItems: 'center',
+		paddingTop: 70
+	}
 })
