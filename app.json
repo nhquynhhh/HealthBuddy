@@ -21,7 +21,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/img_bare_logo.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.anonymous.HealthBuddy"
     },
     "web": {
       "favicon": "./assets/img_bare_logo.png"
