@@ -1,5 +1,5 @@
-import { View, Text, Image, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, useWindowDimensions } from 'react-native'
-import React, { Component} from 'react'
+import { View, Text, Image, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, useWindowDimensions, ScrollView, Platform, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native'
+import React, { Component } from 'react'
 import { Icon, Button, Divider } from "react-native-elements";
 import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from '../../colors'
@@ -15,80 +15,86 @@ export default function Login() {
       React.useState(false);
 
   return (
-    <SafeAreaView style={[{alignItems: 'center'}, styles.container]}>
-       <Image source={require('../../assets/img_bare_logo.png')} 
-            style={styles.loginLogo}
-       />
-       <Text style={styles.headingText}>Đăng nhập</Text>
-       <Text style={styles.infoText}>Đăng nhập để tiếp tục sử dụng app</Text>
+    <KeyboardAvoidingView
+        behavior={Platform.OS === 'android' ? 'padding' : 'height'}
+        style={styles.container}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <ScrollView contentContainerStyle={{alignItems: 'center'}} showsVerticalScrollIndicator={false}> 
+                <Image source={require('../../assets/img_bare_logo.png')} 
+                    style={styles.loginLogo}
+            />
+            <Text style={styles.headingText}>Đăng nhập</Text>
+            <Text style={styles.infoText}>Đăng nhập để tiếp tục sử dụng app</Text>
 
-        <SafeAreaView style={[styles.inputFieldContainer, {marginTop: 30}]}>
-            <Icon style={styles.iconBlue} 
-                name="email" 
-                type='fontisto' 
-                color={colors.blue}>
-            </Icon>
-            <TextInput style={styles.inputField} 
-                placeholder='Nhập email' 
-                onChangeText={setEmail} 
-                value={email}>
-            </TextInput>
-        </SafeAreaView>
-        <SafeAreaView style={[styles.inputFieldContainer, {marginTop: 30}]}>
-            <Icon style={styles.iconBlue} 
-                name="lock-outline" 
-                type='material-community' 
-                color={colors.blue}>
-            </Icon>
-            <TextInput style={styles.inputField} 
-                placeholder='Nhập mật khẩu' 
-                onChangeText={setPassword} 
-                value={password} 
-                secureTextEntry={!passwordIsVisible}>
-            </TextInput>
-            <TouchableOpacity
-                style={styles.passwordVisibleButton}
-                onPress={() => setPasswordIsVisible(!passwordIsVisible)}
-            >
-                <Icon
-                    name={passwordIsVisible ? "eye-outline" : "eye-off-outline"}
-                    size={24}
-                    color={colors.blue}
-                    type='ionicon'
-                />
+                <SafeAreaView style={[styles.inputFieldContainer, {marginTop: 30}]}>
+                    <Icon style={styles.iconBlue} 
+                        name="email" 
+                        type='fontisto' 
+                        color={colors.blue}>
+                    </Icon>
+                    <TextInput style={styles.inputField} 
+                        placeholder='Nhập email' 
+                        onChangeText={setEmail} 
+                        value={email}>
+                    </TextInput>
+                </SafeAreaView>
+                <SafeAreaView style={[styles.inputFieldContainer, {marginTop: 30}]}>
+                    <Icon style={styles.iconBlue} 
+                        name="lock-outline" 
+                        type='material-community' 
+                        color={colors.blue}>
+                    </Icon>
+                    <TextInput style={styles.inputField} 
+                        placeholder='Nhập mật khẩu' 
+                        onChangeText={setPassword} 
+                        value={password} 
+                        secureTextEntry={!passwordIsVisible}>
+                    </TextInput>
+                    <TouchableOpacity
+                        style={styles.passwordVisibleButton}
+                        onPress={() => setPasswordIsVisible(!passwordIsVisible)}
+                    >
+                        <Icon
+                            name={passwordIsVisible ? "eye-outline" : "eye-off-outline"}
+                            size={24}
+                            color={colors.blue}
+                            type='ionicon'
+                        />
+                    </TouchableOpacity>
+                </SafeAreaView>
+            <TouchableOpacity style={{ alignSelf: 'flex-end'}}>
+                <Text style={[{color: colors.blue, marginTop: 15, marginRight: 15}, styles.txtSmall]}>Quên mật khẩu?</Text>
             </TouchableOpacity>
-        </SafeAreaView>
-    <TouchableOpacity style={{ alignSelf: 'flex-end'}}>
-        <Text style={[{color: colors.blue, marginTop: 15, marginRight: 15}, styles.txtSmall]}>Quên mật khẩu?</Text>
-    </TouchableOpacity>
 
-    <Button title={"ĐĂNG NHẬP"} 
-        style={styles.btnClick} 
-        titleStyle={{fontWeight:'700', fontSize: 20}} 
-        buttonStyle={{minWidth:'95%', height: 42, borderRadius: 10}}
-        ViewComponent={LinearGradient} 
-        linearGradientProps={{
-            colors: [colors.blue, colors.lightBlue],
-            start: { x: 0, y: 0.5 },
-            end: { x: 1, y: 0.5 },
-    }}>
-    </Button>
+            <Button title={"ĐĂNG NHẬP"} 
+                style={styles.btnClick} 
+                titleStyle={{fontWeight:'700', fontSize: 20}} 
+                buttonStyle={{minWidth:'95%', height: 42, borderRadius: 10}}
+                ViewComponent={LinearGradient} 
+                linearGradientProps={{
+                    colors: [colors.blue, colors.lightBlue],
+                    start: { x: 0, y: 0.5 },
+                    end: { x: 1, y: 0.5 },
+            }}>
+            </Button>
 
-    <Divider style={{marginTop: 30, height: 1, backgroundColor: colors.blue, width: windowWidth / 2}}>
-    </Divider>
+            <Divider style={{marginTop: 30, height: 1, backgroundColor: colors.blue, width: windowWidth / 2}}>
+            </Divider>
 
-    <View style={{flexDirection: 'row', marginTop: 30}}>
-        <Text>Chưa có tài khoản? </Text>
-        <TouchableOpacity>
-            <Text style={{color: colors.blue, fontWeight: '600'}}>Đăng ký</Text>
-        </TouchableOpacity>
-    </View>
-    
-    <Image source={require('../../assets/img_login.png')}
-        style={{width: 210, height: 210, marginTop: 30}}>
-    </Image>
+            <View style={{flexDirection: 'row', marginTop: 30}}>
+                <Text>Chưa có tài khoản? </Text>
+                <TouchableOpacity>
+                    <Text style={{color: colors.blue, fontWeight: '600'}}>Đăng ký</Text>
+                </TouchableOpacity>
+            </View>
+            
+            <Image source={require('../../assets/img_login.png')}
+                style={{width: 210, height: 210, marginTop: 30}}>
+            </Image>
 
-    </SafeAreaView>
+            </ScrollView>
+        </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   )
 }
 
@@ -145,6 +151,9 @@ const styles = StyleSheet.create({
     container:{
         backgroundColor: '#fff',
         alignItems: 'center',
-        paddingTop: 70
+        paddingTop: 50,
+        flex: 1,
+    },
+    scrollView:{
     }
 })
