@@ -40,13 +40,14 @@ export default function GetData() {
     return (
         <View style={{alignItems: 'center', paddingTop: 60}}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <View style={[styles.activePage, { width: windowWidth / 4, marginHorizontal: 10 }, currentPageNav === 'page1Nav' ? styles.activePage : styles.inactivePage]}></View>
+            <View style={[styles.activePage, { width: windowWidth / 4, marginHorizontal: 10 }, currentPageNav === 'page1Nav' ? styles.activePage : styles.inactivePage]} name='page1Nav'></View>
             <View style={[styles.inactivePage, { width: windowWidth / 4, marginHorizontal: 10 }, currentPageNav === 'page2Nav' ? styles.activePage : styles.inactivePage]} name='page2Nav'></View>
             <View style={[styles.inactivePage, { width: windowWidth / 4, marginHorizontal: 10 }, currentPageNav === 'page3Nav' ? styles.activePage : styles.inactivePage]} name='page3Nav'></View>
             </View>
             <View style={[{alignItems: 'center'}, currentPage === 'page1' ? styles.displayPage : styles.hidePage]}>
                 <Text style={styles.describeText}>Trước khi bắt đầu, hãy cung cấp cho chúng tôi một vài thông tin về bạn.</Text>
-                <Text style={styles.titleText}>1. Giới tính của bạn</Text>
+                {/* Different from AOD */}
+                <Text style={[styles.titleText, {width: '90%', textAlign: 'left', paddingLeft: 30}]}>1. Giới tính của bạn</Text>
                 <View style={{flexDirection: 'row', alignItems: 'center', width: '90%', marginHorizontal: 40}}>
                     <TouchableOpacity 
                         style={[styles.genderSelect, selectedGender === 'male' ? styles.selected : styles.notSelected]}
@@ -215,7 +216,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 20,
         alignSelf: 'flex-start',
-        marginLeft: 27,
+        marginStart: 27
     },
     notSelected:{
         borderColor: colors.gray, 
