@@ -152,11 +152,11 @@ function BottomNavigation() {
     )
 }
 
-
-export default function App(){
-    return (
-		<NavigationContainer>
-			<BottomNavigation/>
-		</NavigationContainer>
-    );
-};
+}
+// export default function App(){
+//     return (
+// 		<NavigationContainer>
+// 			<BottomNavigation/>
+// 		</NavigationContainer>
+//     );
+// };
