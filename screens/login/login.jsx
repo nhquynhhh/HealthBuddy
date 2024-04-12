@@ -1,19 +1,44 @@
-import { View, Text, Image, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, useWindowDimensions, ScrollView, Platform, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native'
+
+import { View, Text, Image, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, useWindowDimensions, Alert } from 'react-native'
+
+import { View, Text, Image, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, useWindowDimensions, ScrollView, Platform, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Alert from 'react-native'
+
 import React, { Component } from 'react'
 import { Icon, Button, Divider } from "react-native-elements";
 import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from '../../colors'
+import { handleLogin } from '../../services/authenticate/login'
+import { useAuth } from '../../services/context/AuthContext';
+import { getAccessToken, getRefreshToken } from '../../asyncStorage/auth';
 
-export default function Login() {
-    const windowHeight = useWindowDimensions().height;
-    const windowWidth = useWindowDimensions().width;
+export default function Login({ navigation }) {
+	const windowHeight = useWindowDimensions().height;
+	const windowWidth = useWindowDimensions().width;
 
-    const [email, setEmail] = React.useState("");
-    const [password, setPassword] = React.useState("");
-  
-    const [passwordIsVisible, setPasswordIsVisible] =
-      React.useState(false);
+	const { storeAccessToken, storeRefreshToken } = useAuth();
+	const [email, setEmail] = React.useState("");
+	const [password, setPassword] = React.useState("");
 
+	const [passwordIsVisible, setPasswordIsVisible] = React.useState(false);
+	
+	const login = async () => {
+		if (email === "") {
+			Alert.alert('Thông báo', 'Vui lòng nhập email');
+			return;
+		}
+		if (password === "") {
+			Alert.alert('Thông báo', 'Vui lòng nhập mật khẩu');
+			return;
+		}
+		const result = await handleLogin(email, password);
+		if (result === true) {
+			storeAccessToken(await getAccessToken());
+			storeRefreshToken(await getRefreshToken());
+		}
+		else {
+			Alert.alert('Thông báo', 'Đăng nhập thất bại');
+		}
+	}  
   return (
     <KeyboardAvoidingView
         behavior={Platform.OS === 'android' ? 'padding' : 'height'}
@@ -156,4 +181,5 @@ const styles = StyleSheet.create({
     },
     scrollView:{
     }
+
 })

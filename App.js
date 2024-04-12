@@ -1,3 +1,25 @@
+
+import { StyleSheet, Text, View, StatusBar } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { AppRouters } from './navigators/appRouters.jsx';
+import { AuthContext, AuthProvider } from './services/context/AuthContext.js';
+import { NavigationContainer } from '@react-navigation/native';
+
+export default function App() {
+
+	return (
+		<>
+			{/* <StatusBar barStyle='dark-content' backgroundColor='transparent' translucent /> */}
+			{
+				<AuthProvider>
+					<NavigationContainer>
+						<AppRouters />
+					</NavigationContainer>
+				</AuthProvider>
+			}
+		</>
+	);
+/*
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
@@ -35,7 +57,7 @@ function HomeStackScreens(){
         </HomeStack.Navigator>
     )
 }
-
+*/
 const PersonalStack = createNativeStackNavigator();
 function PersonalStackScreens(){
     return(

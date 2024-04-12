@@ -1,3 +1,4 @@
+
 import { ScrollView, Text, View, Image, useWindowDimensions, StyleSheet, TouchableOpacity, FlatList } from 'react-native'
 import React, { Component } from 'react'
 import { SearchBar, Icon, Divider } from 'react-native-elements';
@@ -6,12 +7,21 @@ import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import * as Progress from 'react-native-progress';
 import { FlatGrid } from 'react-native-super-grid';
 import { colors } from '../../colors';
+import { useAuth } from '../../services/context/useAuth';
 
 export default function Home() {
     const windowHeight = useWindowDimensions().height;
     const windowWidth = useWindowDimensions().width;
     const navigation = useNavigation();
+	  const { removeAccessToken, removeRefreshToken } = useAuth();
 
+  	const handleLogout = () => {
+      removeAccessToken();
+      removeRefreshToken();
+      navigation.navigate('Login');
+	  }
+
+  
     const categories = [
         { image: require('../../assets/img_kcal_icon.png'), label: 'Kiểm soát\ncalories', screen: 'Calories'},
         { image: require('../../assets/img_water_icon.png'), label: 'Theo dõi\nuống nước', screen: 'Water'},
