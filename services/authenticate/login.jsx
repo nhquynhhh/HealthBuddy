@@ -1,7 +1,7 @@
 import { Alert } from 'react-native';
 import { setAccessToken, setRefreshToken } from '../../asyncStorage/auth';
 import { callLoginAPI } from '../api/api_login';
-import { useAuth } from '../context/useAuth';
+import { useAuth } from '../../context/useAuth';
 
 const handleLogin = async (email, password) => {
 
@@ -18,7 +18,7 @@ const handleLogin = async (email, password) => {
 		console.log(code);
 		console.log(access_token);
 		console.log(refresh_token);
-		
+
 		if (response.ok && code === '200') {
 			await setAccessToken(access_token);
 			await setRefreshToken(refresh_token);

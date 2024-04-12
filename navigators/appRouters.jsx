@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
 import AuthNavigator from './authNavigator';
-import HomeNavigator from './homeNavigator'
+
+import MainNavigator from './mainNavigator';
+
 import SplashScreen from '../screens/splash/splashScreen';
 import {
 	setAccessToken,
@@ -10,11 +12,11 @@ import {
 	setEncrypted,
 	getEncrypted
 } from '../asyncStorage/auth';
-import { AuthContext } from '../services/context/AuthContext';
+import { AuthContext } from '../context/AuthContext';
 import { login_with_token } from '../services/api_login';
 import { handleLoginWithToken } from '../services/authenticate/login_with_token'
-import {handleLogin} from '../services/authenticate/login'
- 
+import { handleLogin } from '../services/authenticate/login'
+
 export const AppRouters = () => {
 	const [isShowSplash, setIsShowSplash] = useState(true);
 	const [refresh_token, setRefresh_token] = useState(null);
@@ -62,7 +64,7 @@ export const AppRouters = () => {
 		<>
 			{
 				isShowSplash ? <SplashScreen /> : (
-					isLogin ? <HomeNavigator /> : <AuthNavigator />
+					isLogin ? <MainNavigator /> : <AuthNavigator />
 				)
 			}
 		</>
