@@ -1,9 +1,13 @@
 import { Alert } from 'react-native';
-import { storeAccessToken, storeRefreshToken } from '../../asyncStorage/auth';
+import { setAccessToken, setRefreshToken } from '../../asyncStorage/auth';
 import { callLoginAPI } from '../api/api_login';
-import React, {useContext} from 'react';
+import { useAuth } from '../context/useAuth';
 
-const handleLogin = async (email, password, navigation) => {
+const handleLogin = async (email, password) => {
+
+	// const { storeAccessToken, storeRefreshToken } = useAuth();
+	console.log(email);
+	console.log(password);
 	try {
 		const response = await callLoginAPI({ email: email, password: password });
 		const data = await response.json();
@@ -15,17 +19,17 @@ const handleLogin = async (email, password, navigation) => {
 		console.log(access_token);
 		console.log(refresh_token);
 		
-		await storeAccessToken(access_token);
-		await storeRefreshToken(refresh_token);
-
 		if (response.ok && code === '200') {
-			navigation.navigate('Home');
+			await setAccessToken(access_token);
+			await setRefreshToken(refresh_token);
+			return true;
 		} else {
 			Alert.alert('Thông báo', message);
+			return false;
 		}
 	} catch (error) {
 		console.error('Error:', error);
+		return false;
 	}
 }
-
 export { handleLogin }

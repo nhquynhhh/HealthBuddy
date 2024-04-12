@@ -37,10 +37,10 @@ const getRefreshToken = async () => {
 		if (value !== null) {
 			return value;
 		}
+		return null;
 	} catch (e) {
 		console.log(e);
 	}
-
 }
 
 const setEncrypted = async (encrypted) => {

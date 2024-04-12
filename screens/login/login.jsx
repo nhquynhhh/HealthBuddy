@@ -3,45 +3,40 @@ import React, { Component } from 'react'
 import { Icon, Button, Divider } from "react-native-elements";
 import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from '../../colors'
-import { login, login_with_token } from '../../services/api_login'
-
+import { handleLogin } from '../../services/authenticate/login'
+import { useAuth } from '../../services/context/AuthContext';
+import { getAccessToken, getRefreshToken } from '../../asyncStorage/auth';
 
 export default function Login({ navigation }) {
 	const windowHeight = useWindowDimensions().height;
 	const windowWidth = useWindowDimensions().width;
 
+	const { storeAccessToken, storeRefreshToken } = useAuth();
+
 	const [email, setEmail] = React.useState("");
 	const [password, setPassword] = React.useState("");
 
-	const [passwordIsVisible, setPasswordIsVisible] =
-		React.useState(false);
-
-	const handleLogin = async (email, password) => {
-		console.log(email, password)
-		console.log('Login button clicked')
-		login({ email: email, password: password })
-			.then(response => {
-				if (response.ok) {
-					return response.json().then(data => {
-						code = data.code
-						messagse = data.message
-						access_token = data.token['access_token']
-						refresh_token = data.token['refresh_token']
-						if (code == '200') {
-							navigation.navigate('Home')
-						}
-					})
-				} else {
-					return response.json().then(data => {
-						messagse = data.message
-						Alert.alert('Thông báo', messagse)
-					})
-				}
-			})
-			.catch((error) => {
-				console.error('Error:', error);
-			});
+	const [passwordIsVisible, setPasswordIsVisible] = React.useState(false);
+	
+	const login = async () => {
+		if (email === "") {
+			Alert.alert('Thông báo', 'Vui lòng nhập email');
+			return;
+		}
+		if (password === "") {
+			Alert.alert('Thông báo', 'Vui lòng nhập mật khẩu');
+			return;
+		}
+		const result = await handleLogin(email, password);
+		if (result === true) {
+			storeAccessToken(await getAccessToken());
+			storeRefreshToken(await getRefreshToken());
+		}
+		else {
+			Alert.alert('Thông báo', 'Đăng nhập thất bại');
+		}
 	}
+
 	return (
 		<SafeAreaView style={[{ alignItems: 'center' }, styles.container]}>
 			<Image source={require('../../assets/img_bare_logo.png')}
@@ -100,7 +95,7 @@ export default function Login({ navigation }) {
 					start: { x: 0, y: 0.5 },
 					end: { x: 1, y: 0.5 },
 				}}
-				onPress={() => handleLogin(email, password)}>
+				onPress={() => login()}>
 			</Button>
 
 			<Divider style={{ marginTop: 30, height: 1, backgroundColor: colors.blue, width: windowWidth / 2 }}>
