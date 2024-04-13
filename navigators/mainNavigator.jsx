@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Icon } from 'react-native-elements';
-import { colors } from '../colors'
+import { colors } from '../utils/colors'
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
