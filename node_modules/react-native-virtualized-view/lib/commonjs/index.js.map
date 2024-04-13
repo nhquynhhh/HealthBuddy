@@ -1,0 +1,1 @@
+{"version":3,"names":[],"sources":["index.tsx"],"sourcesContent":["import ScrollView from './ScrollView';\n\nexport { ScrollView };\n"],"mappings":";;;;;;;;;;;;AAAA"}
