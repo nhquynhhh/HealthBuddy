@@ -1,17 +1,25 @@
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Icon } from 'react-native-elements';
+import { colors } from '../colors'
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, View, Button } from 'react-native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
+
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from '../screens/home/home';
-import Statistics from './screens/statistics/statistics';
-import Scan from './screens/scan/scan';
-import Notifications from './screens/notifications/notifications';
-import Personal from './screens/personal/personal';
-import Calories from './screens/calories/calories';
-import Water from './screens/water/water';
-import Workout from './screens/workout/workout';
-import BodyIndex from './screens/body_index/body_index';
-import FavouriteFood from './screens/fav_food/fav_food';
-import MenuSuggestion from './screens/menu_suggest/menu_suggest';
-import Search from './screens/search/search';
-import Premium from './screens/premium/premium';
+import Statistics from '../screens/statistics/statistics';
+import Scan from '../screens/scan/scan';
+import Notifications from '../screens/notifications/notifications';
+import Personal from '../screens/personal/personal';
+import Calories from '../screens/calories/calories';
+import Water from '../screens/water/water';
+import Workout from '../screens/workout/workout';
+import BodyIndex from '../screens/body_index/body_index';
+import FavouriteFood from '../screens/fav_food/fav_food';
+import MenuSuggestion from '../screens/menu_suggest/menu_suggest';
+import Search from '../screens/search/search';
+import Premium from '../screens/premium/premium';
 
 import React from 'react';
 
@@ -28,6 +36,7 @@ const MainNavigator = () => {
 				<HomeStack.Screen name="FavouriteFood" component={FavouriteFood} options={{ headerTitle: "Món ăn yêu thích" }} />
 				<HomeStack.Screen name="MenuSuggestion" component={MenuSuggestion} options={{ headerTitle: "Gợi ý thực đơn" }} />
 				<HomeStack.Screen name="Search" component={Search} options={{ headerTitle: "Tra cứu" }} />
+				<HomeStack.Screen name="Statistics" component={Statistics} options={{ headerTitle: "Thống kê" }} />
 			</HomeStack.Navigator>
 		)
 	}

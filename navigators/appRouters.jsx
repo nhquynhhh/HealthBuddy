@@ -22,36 +22,40 @@ export const AppRouters = () => {
 	const [refresh_token, setRefresh_token] = useState(null);
 	const [isLogin, setIsLogin] = useState(false);
 
-	const { storeAccessToken, storeRefreshToken, accessTokenContext } = useContext(AuthContext);
+	const { storeAccessToken, storeRefreshToken, accessTokenContext, isLogged, setLoginStatus } = useContext(AuthContext);
 
 	const checkToken = async () => {
 		const refresh = await getRefreshToken();
 		if (refresh !== null) {
+			console.log('There is a refresh token in the storage')
 			setRefresh_token(refresh);
-			storeRefreshToken(refresh);
 			return true;
 		}
 		return false;
 	}
 
 	const checkLogin = async () => {
-		if (await checkToken() === true) {
-			handleLoginWithToken(refresh_token);
-			storeAccessToken(await getAccessToken());
-			setIsLogin(true);
-		} else {
-			if (accessTokenContext !== null) {
-				setIsLogin(true);
+		const isToken = await checkToken();
+		if (isToken === true) {
+			console.log('Checking token validity')
+			console.log('refresh_token', refresh_token)
+			const isValidToken = await handleLoginWithToken(await getRefreshToken());
+			console.log('isValidToken', isValidToken);
+			if (isValidToken === true) {
+				setLoginStatus(true);
 			} else {
-				setIsLogin(false);
+				console.log('Token is invalid')
+				setLoginStatus(false);
 			}
+		} else {
+			setLoginStatus(false);
 		}
 	}
 
 	useEffect(() => {
 		const timeout = setTimeout(() => {
 			setIsShowSplash(false);
-		}, 1500);
+		}, 50);
 
 		return () => clearTimeout(timeout)
 	}, []);
@@ -59,6 +63,15 @@ export const AppRouters = () => {
 	useEffect(() => {
 		checkLogin();
 	}, []);
+
+	useEffect(() => {
+		if (isLogged === true) {
+			setIsLogin(true);
+		}
+		else {
+			setIsLogin(false);
+		}
+	}, [isLogged]);
 
 	return (
 		<>

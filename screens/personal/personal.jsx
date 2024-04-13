@@ -1,17 +1,29 @@
 import { ScrollView, Text, View, Image, useWindowDimensions, StyleSheet, TouchableOpacity } from 'react-native'
-import React, { Component } from 'react'
+import React, { Component, useContext } from 'react'
 import { SearchBar, Icon, Divider, Input, Button } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import { DataTable } from 'react-native-paper'; 
 import { colors } from '../../colors';
+import { AuthContext } from '../../context/AuthContext';
+import { removeAccessTokenAsync, removeRefreshTokenAsync } from '../../asyncStorage/auth';
 
 export default function Personal() {
     const windowHeight = useWindowDimensions().height;
     const windowWidth = useWindowDimensions().width;
     const navigation = useNavigation();
 
+	const { removeAccessToken, removeRefreshToken, isLogged, setLoginStatus } = useContext(AuthContext);
+
+	const logout = () => {
+		removeAccessToken();
+		removeRefreshToken();
+		removeAccessTokenAsync()
+		removeRefreshTokenAsync();
+		setLoginStatus(false);
+		console.log("Logout");
+	}
     return (
       <ScrollView style={{backgroundColor: colors.white, marginBottom: 60}}>
         <View style={{flexDirection: 'row', alignItems: 'center', padding: 16}}>
@@ -99,7 +111,8 @@ export default function Personal() {
                 colors: [colors.red, colors.red],
                 start: { x: 0, y: 0.5 },
                 end: { x: 1, y: 0.5 },
-            }}>
+            }}
+			onPress={() => logout()}>
         </Button>
         <View style={{paddingBottom: 70}}></View>
       </ScrollView>

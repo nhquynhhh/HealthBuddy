@@ -1,20 +1,21 @@
 
 
 import { View, Text, Image, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, useWindowDimensions, ScrollView, Platform, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native'
-
-import React, { Component } from 'react'
+import { useNavigation } from '@react-navigation/native';
+import React, { Component, useContext } from 'react'
 import { Icon, Button, Divider } from "react-native-elements";
 import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from '../../colors'
 import { handleLogin } from '../../services/authenticate/login'
-import { useAuth } from '../../context/AuthContext';
+import { AuthContext } from '../../context/AuthContext';
 import { getAccessToken, getRefreshToken } from '../../asyncStorage/auth';
 
-export default function Login({ navigation }) {
+export default function Login() {
 	const windowHeight = useWindowDimensions().height;
 	const windowWidth = useWindowDimensions().width;
+	const navigation = useNavigation();
 
-	const { storeAccessToken, storeRefreshToken } = useAuth();
+	const { storeAccessToken, storeRefreshToken, isLogged, setLoginStatus } = useContext(AuthContext);
 	const [email, setEmail] = React.useState("");
 	const [password, setPassword] = React.useState("");
 
@@ -33,8 +34,10 @@ export default function Login({ navigation }) {
 		if (result === true) {
 			storeAccessToken(await getAccessToken());
 			storeRefreshToken(await getRefreshToken());
+			setLoginStatus(true);
 		}
 		else {
+			setLoginStatus(false);
 			Alert.alert('Thông báo', 'Đăng nhập thất bại');
 		}
 	}
@@ -86,7 +89,9 @@ export default function Login({ navigation }) {
 							/>
 						</TouchableOpacity>
 					</SafeAreaView>
-					<TouchableOpacity style={{ alignSelf: 'flex-end' }}>
+					<TouchableOpacity style={{ alignSelf: 'flex-end' }}
+						onPress={() => navigation.navigate('ForgotPassword')}
+					>
 						<Text style={[{ color: colors.blue, marginTop: 15, marginRight: 15 }, styles.txtSmall]}>Quên mật khẩu?</Text>
 					</TouchableOpacity>
 
@@ -99,7 +104,9 @@ export default function Login({ navigation }) {
 							colors: [colors.blue, colors.lightBlue],
 							start: { x: 0, y: 0.5 },
 							end: { x: 1, y: 0.5 },
-						}}>
+						}}
+						onPress={() => login()}>
+
 					</Button>
 
 					<Divider style={{ marginTop: 30, height: 1, backgroundColor: colors.blue, width: windowWidth / 2 }}>
@@ -107,7 +114,8 @@ export default function Login({ navigation }) {
 
 					<View style={{ flexDirection: 'row', marginTop: 30 }}>
 						<Text>Chưa có tài khoản? </Text>
-						<TouchableOpacity>
+						<TouchableOpacity
+							onPress={() => navigation.navigate('Signup')}>
 							<Text style={{ color: colors.blue, fontWeight: '600' }}>Đăng ký</Text>
 						</TouchableOpacity>
 					</View>

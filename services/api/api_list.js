@@ -32,4 +32,9 @@ const refresh_token = {
 	method: 'POST'
 }
 
-export { login_api, signup_api, logout_api, otp_required, check_acount, refresh_token };
+const authenticated_account = {
+	url: `${BASE_URL}/api/otp-authenticated-account`,
+	method: 'POST'
+}
+
+export { login_api, signup_api, logout_api, otp_required, check_acount, refresh_token, authenticated_account };

@@ -18,6 +18,21 @@ const setRefreshToken = async (token) => {
 	}
 }
 
+const removeAccessTokenAsync = async () => {
+	try {
+		await AsyncStorage.removeItem("accessToken");
+	} catch (e) {
+		console.log(e);
+	}
+}
+
+const removeRefreshTokenAsync = async () => {
+	try {
+		await AsyncStorage.removeItem("refreshToken");
+	} catch (e) {
+		console.log(e);
+	}
+}
 
 const getAccessToken = async () => {
 	try {
@@ -61,7 +76,14 @@ const getEncrypted = async () => {
 	} catch (e) {
 		console.log(e);
 	}
+}
 
+const removeEncrypted = async () => {
+	try {
+		await AsyncStorage.removeItem("encrypted");
+	} catch (e) {
+		console.log(e);
+	}
 }
 
 export {
@@ -71,5 +93,8 @@ export {
 	getRefreshToken,
 	setEncrypted,
 	getEncrypted,
+	removeAccessTokenAsync,
+	removeRefreshTokenAsync,
+	removeEncrypted
 };
 

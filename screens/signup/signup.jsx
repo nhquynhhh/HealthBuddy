@@ -4,10 +4,13 @@ import { Icon, Button, Divider } from "react-native-elements";
 import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from '../../colors';
 import { isEmail } from '../../utils/validation';
+import { signup } from '../../services/authenticate/signup';
+import { useNavigation } from '@react-navigation/native';
 
-export default function Signup({ navigation }) {
+export default function Signup() {
     const windowHeight = useWindowDimensions().height;
     const windowWidth = useWindowDimensions().width;
+	const navigation = useNavigation();
 
     const [email, setEmail] = React.useState("");
     const [username, setUsername] = React.useState(""); 
@@ -19,11 +22,6 @@ export default function Signup({ navigation }) {
 
     const [passwordConfirmIsVisible, setPasswordConfirmIsVisible] =
     React.useState(false);
-
-    // const isEmail = () => {
-    //     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    //     return emailRegex.test(email);
-    // };
 
     const handleSignUp = async () => {
         if (username === "" || email === "" || password === "" || passwordConfirm === "") {
@@ -43,10 +41,16 @@ export default function Signup({ navigation }) {
             return;
         }
         else{
-            Alert.alert('Thông báo', 'Đăng ký thành công.');
+			const result = await signup({ username: username, email: email, password: password });
+			if (result === true) {
+				navigation.navigate('Activation');
+				Alert.alert('Thông báo', 'Đăng ký thành công.');
+			}
+			else {
+				Alert.alert('Thông báo', 'Đăng ký thất bại.');
+			}
         }
     }
-
   return (
     <SafeAreaView style={[{alignItems: 'center'}, styles.container]}>
         <Image source={require('../../assets/img_bare_logo.png')} 
@@ -153,7 +157,7 @@ export default function Signup({ navigation }) {
                 start: { x: 0, y: 0.5 },
                 end: { x: 1, y: 0.5 },
             }}
-            onPress={() => handleSignUp(email)}>
+            onPress={() => handleSignUp()}>
         </Button>
 
         <Divider style={{marginTop: 30, height: 1, backgroundColor: colors.blue, width: windowWidth / 2}}>
