@@ -6,6 +6,7 @@ export const AuthProvider = ({ children }) => {
 
 	const [accessTokenContext, setAccessTokenContext] = useState(null);
 	const [refreshTokenContext, setRefreshTokenContext] = useState(null);
+	const [isLogged, setIsLogged] = useState(false);
 	const [userInfo, setUserInfo] = useState({
 		email: null,
 		phone: null,
@@ -40,11 +41,14 @@ export const AuthProvider = ({ children }) => {
 			email: email
 		})
 	}
+
+	const setLoginStatus = (status) => {
+		setIsLogged(status);
+	}
+
 	return (
-		<AuthContext.Provider value={{ accessTokenContext, account, storeAccessToken, removeAccessToken, storeRefreshToken, removeRefreshToken, setAccountContext }}>
+		<AuthContext.Provider value={{ accessTokenContext, account, storeAccessToken, removeAccessToken, storeRefreshToken, removeRefreshToken, setAccountContext, refreshTokenContext, isLogged, setLoginStatus }}>
 			{children}
 		</AuthContext.Provider>
 	);
 };
-
-export const useAuth = () => useContext(AuthContext);

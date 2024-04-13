@@ -9,8 +9,6 @@ import ResetPassword from '../screens/reset_password/reset_password';
 
 import React from 'react';
 
-import { View, Text } from 'react-native';
-
 const AuthNavigator = () => {
 	const Stack = createNativeStackNavigator();
 

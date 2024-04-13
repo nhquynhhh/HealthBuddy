@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
 import AuthNavigator from './authNavigator';
-import HomeNavigator from './homeNavigator'
+
+import MainNavigator from './mainNavigator';
+
 import SplashScreen from '../screens/splash/splashScreen';
 import {
 	setAccessToken,
@@ -10,46 +12,50 @@ import {
 	setEncrypted,
 	getEncrypted
 } from '../asyncStorage/auth';
-import { AuthContext } from '../services/context/AuthContext';
+import { AuthContext } from '../context/AuthContext';
 import { login_with_token } from '../services/api_login';
 import { handleLoginWithToken } from '../services/authenticate/login_with_token'
-import {handleLogin} from '../services/authenticate/login'
- 
+import { handleLogin } from '../services/authenticate/login'
+
 export const AppRouters = () => {
 	const [isShowSplash, setIsShowSplash] = useState(true);
 	const [refresh_token, setRefresh_token] = useState(null);
 	const [isLogin, setIsLogin] = useState(false);
 
-	const { storeAccessToken, storeRefreshToken, accessTokenContext } = useContext(AuthContext);
+	const { storeAccessToken, storeRefreshToken, accessTokenContext, isLogged, setLoginStatus } = useContext(AuthContext);
 
 	const checkToken = async () => {
 		const refresh = await getRefreshToken();
 		if (refresh !== null) {
+			console.log('There is a refresh token in the storage')
 			setRefresh_token(refresh);
-			storeRefreshToken(refresh);
 			return true;
 		}
 		return false;
 	}
 
 	const checkLogin = async () => {
-		if (await checkToken() === true) {
-			handleLoginWithToken(refresh_token);
-			storeAccessToken(await getAccessToken());
-			setIsLogin(true);
-		} else {
-			if (accessTokenContext !== null) {
-				setIsLogin(true);
+		const isToken = await checkToken();
+		if (isToken === true) {
+			console.log('Checking token validity')
+			console.log('refresh_token', refresh_token)
+			const isValidToken = await handleLoginWithToken(await getRefreshToken());
+			console.log('isValidToken', isValidToken);
+			if (isValidToken === true) {
+				setLoginStatus(true);
 			} else {
-				setIsLogin(false);
+				console.log('Token is invalid')
+				setLoginStatus(false);
 			}
+		} else {
+			setLoginStatus(false);
 		}
 	}
 
 	useEffect(() => {
 		const timeout = setTimeout(() => {
 			setIsShowSplash(false);
-		}, 1500);
+		}, 50);
 
 		return () => clearTimeout(timeout)
 	}, []);
@@ -58,11 +64,20 @@ export const AppRouters = () => {
 		checkLogin();
 	}, []);
 
+	useEffect(() => {
+		if (isLogged === true) {
+			setIsLogin(true);
+		}
+		else {
+			setIsLogin(false);
+		}
+	}, [isLogged]);
+
 	return (
 		<>
 			{
 				isShowSplash ? <SplashScreen /> : (
-					isLogin ? <HomeNavigator /> : <AuthNavigator />
+					isLogin ? <MainNavigator /> : <AuthNavigator />
 				)
 			}
 		</>

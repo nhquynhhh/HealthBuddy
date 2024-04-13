@@ -27,12 +27,7 @@ export default function ForgotPassword({ navigation }) {
 						console.log(accessToken)
 						setAccessToken(accessToken)
 						setEncrypted(encrypted)
-						useEffect(() => {
-							getAccessToken()
-						})
 						Alert.alert("Thông báo", message)
-						console.log(getAccessToken())
-						console.log(getEncrypted())
 						return true
 					})
 				} else {

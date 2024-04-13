@@ -1,15 +1,34 @@
 import { View, Text, Image, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, useWindowDimensions, Alert } from 'react-native'
-import React, { Component, useEffect, useState } from 'react'
+import React, { Component, useEffect, useState, useContext } from 'react'
 import { Icon, Button, Divider } from "react-native-elements";
 import { LinearGradient } from 'expo-linear-gradient';
 import OtpTextInput from 'react-native-text-input-otp'
 import { colors } from '../../colors';
+import {handleAuthenticatedAccount} from '../../services/authenticate/authenticated_account';
+import { AuthContext } from '../../context/AuthContext';
+
 
 export default function Activation() {
     const windowHeight = useWindowDimensions().height;
     const windowWidth = useWindowDimensions().width;
-
+	const { isLogged, setLoginStatus } = useContext(AuthContext);
     const [otp, setOtp] = React.useState('');
+
+	const handleActivation = async () => {
+		if (otp === "") {
+			Alert.alert('Thông báo', 'Vui lòng nhập mã OTP');
+			return;
+		}
+		const result = await handleAuthenticatedAccount(otp);
+		if (result === true) {
+			setLoginStatus(true);
+			Alert.alert('Thông báo', 'Kích hoạt thành công');
+		}
+		else {
+			setLoginStatus(false);
+			Alert.alert('Thông báo', 'Kích hoạt thất bại');
+		}
+	}
 
     return (
         <View style={{alignItems:'center', paddingTop: 100}}>
@@ -43,7 +62,8 @@ export default function Activation() {
                 colors: [colors.blue, colors.lightBlue],
                 start: { x: 0, y: 0.5 },
                 end: { x: 1, y: 0.5 },
-            }}>
+            }}
+			onPress={() => handleActivation()}>
             </Button>
         </View>
     )
