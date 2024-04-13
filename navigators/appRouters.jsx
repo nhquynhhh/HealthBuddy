@@ -13,9 +13,7 @@ import {
 	getEncrypted
 } from '../asyncStorage/auth';
 import { AuthContext } from '../context/AuthContext';
-import { login_with_token } from '../services/api_login';
 import { handleLoginWithToken } from '../services/authenticate/login_with_token'
-import { handleLogin } from '../services/authenticate/login'
 
 export const AppRouters = () => {
 	const [isShowSplash, setIsShowSplash] = useState(true);
@@ -38,7 +36,6 @@ export const AppRouters = () => {
 		const isToken = await checkToken();
 		if (isToken === true) {
 			console.log('Checking token validity')
-			console.log('refresh_token', refresh_token)
 			const isValidToken = await handleLoginWithToken(await getRefreshToken());
 			console.log('isValidToken', isValidToken);
 			if (isValidToken === true) {
@@ -53,17 +50,16 @@ export const AppRouters = () => {
 	}
 
 	useEffect(() => {
-		const timeout = setTimeout(() => {
+		const timeout = setTimeout(async () => {
+			// Thực hiện checkLogin khi splash screen đang hiển thị
+			await checkLogin();
+			// Sau khi checkLogin hoàn thành, ẩn splash screen
 			setIsShowSplash(false);
-		}, 50);
-
-		return () => clearTimeout(timeout)
+		}, 500);
+	
+		return () => clearTimeout(timeout);
 	}, []);
-
-	useEffect(() => {
-		checkLogin();
-	}, []);
-
+	
 	useEffect(() => {
 		if (isLogged === true) {
 			setIsLogin(true);

@@ -37,4 +37,15 @@ const authenticated_account = {
 	method: 'POST'
 }
 
-export { login_api, signup_api, logout_api, otp_required, check_acount, refresh_token, authenticated_account };
+const otp_reset_password = {
+	url: `${BASE_URL}/api/otp-reset-password`,
+	method: 'POST'
+}
+
+const reset_password = {
+	url: `${BASE_URL}/api/reset-password`,
+	method: 'POST'
+
+}
+
+export { login_api, signup_api, logout_api, otp_required, check_acount, refresh_token, authenticated_account, otp_reset_password, reset_password };

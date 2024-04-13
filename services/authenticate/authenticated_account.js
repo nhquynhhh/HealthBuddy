@@ -1,5 +1,5 @@
 import { callAuthenAccAPI } from "../api/api_otp";
-import { getAccessToken, getRefreshToken, getEncrypted } from '../../asyncStorage/auth';
+import { getAccessToken, getRefreshToken, getEncrypted, removeEncrypted } from '../../asyncStorage/auth';
 
 const handleAuthenticatedAccount = async (otp) => {
 	const access_token = await getAccessToken();
@@ -10,6 +10,7 @@ const handleAuthenticatedAccount = async (otp) => {
 	const { message, code } = data;
 	if (response.ok && code === '200') {
 		console.log(message);
+		await removeEncrypted();
 		return true;
 	} else {
 		console.log(message);

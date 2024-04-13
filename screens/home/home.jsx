@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import * as Progress from 'react-native-progress';
 import { FlatGrid } from 'react-native-super-grid';
-import { colors } from '../../colors';
+import { colors } from '../../utils/colors';
 import { useAuth } from '../../context/useAuth';
 
 export default function Home() {
