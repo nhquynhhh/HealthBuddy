@@ -7,8 +7,6 @@ import { NavigationContainer } from '@react-navigation/native';
 
 export default function App() {
 
-	const test = "test";
-
 	return (
 		<>
 			{/* <StatusBar barStyle='dark-content' backgroundColor='transparent' translucent /> */}
