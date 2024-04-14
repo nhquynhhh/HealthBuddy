@@ -2,11 +2,11 @@ import { View, Text, Image, StyleSheet, SafeAreaView, TextInput, TouchableOpacit
 import React, { Component, useEffect, useState } from 'react'
 import { Icon, Button, Divider } from "react-native-elements";
 import { LinearGradient } from 'expo-linear-gradient';
-import { colors } from '../../colors';
-import { otp_required_api } from '../../services/api_otp';
+import { colors } from '../../utils/colors';
 import { isEmail } from '../../utils/validation';
-import { setAccessToken, setRefreshToken, getAccessToken, getRefreshToken, setEncrypted, getEncrypted } from '../../asyncStorage/auth';
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+import { handleCheckAccount } from '../../services/authenticate/check_account';
+import { callOTPPassAPI } from '../../services/authenticate/required_otp';
 
 export default function ForgotPassword({ navigation }) {
 	const windowHeight = useWindowDimensions().height;
@@ -14,39 +14,6 @@ export default function ForgotPassword({ navigation }) {
 
 	const [email, setEmail] = React.useState("");
 
-	const callOTPAPI = async (email) => {
-		otp_required_api({ email: email, reset: 'true' })
-			.then(response => {
-				if (response.ok) {
-					navigation.navigate('OtpPassword')
-					return response.json().then(data => {
-						encrypted = data.encrypted
-						message = data.message
-						accessToken = data.token['access_token']
-						refreshToken = data.token['refresh_token']
-						console.log(accessToken)
-						setAccessToken(accessToken)
-						setEncrypted(encrypted)
-						useEffect(() => {
-							getAccessToken()
-						})
-						Alert.alert("Thông báo", message)
-						console.log(getAccessToken())
-						console.log(getEncrypted())
-						return true
-					})
-				} else {
-					return response.json().then(data => {
-						message = data.message
-						Alert.alert('Thông báo', message)
-						return false
-					})
-				}
-			})
-			.catch((error) => {
-				console.error('Error:', error);
-			});
-	}
 
 	const handleFotgotPassword = async (email) => {
 		if (email === "") {
@@ -56,10 +23,14 @@ export default function ForgotPassword({ navigation }) {
 			Alert.alert('Thông báo', 'Email không hợp lệ.');
 			return;
 		} else {
-			callOTPAPI(email)
+			const response = await handleCheckAccount(email);
+			if (response === true) {
+				navigation.navigate('OTPForgotPassword');
+				const result = await callOTPPassAPI(email);
+				return;
+			}
 		}
 	}
-
 	return (
 		<View style={{ alignItems: 'center', paddingTop: windowHeight / 5 }}>
 			<Image source={require('../../assets/img_forgot_password.png')}
