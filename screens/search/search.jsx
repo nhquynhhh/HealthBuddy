@@ -130,7 +130,7 @@ function Search() {
     );
 
     return ( 
-        <SafeAreaView  style={{height: "100%", backgroundColor: colors.white}}>
+        <SafeAreaView  style={{height: "100%", backgroundColor: colors.white, paddingBottom: 100}}>
             <View style={styles.btnContainer}>
                 <Button title={"Nguyên liệu"} 
                     titleStyle={{fontWeight:'700', fontSize: 12,
@@ -169,7 +169,7 @@ function Search() {
                 <View style={styles.ListContainer}>
                     {filteredWishListItems .length > 0 ? filteredWishListItems.map((item) => (
                         <FoodList key={item.dish.id} FoodList={item.dish} />
-                    )) : isSearchQuery ? <NoResults /> :
+                    )) : isSearchQuery ? <NoResults height={400}/> :
                     ListItems.map((item) => (
                         <FoodList key={item.dish.id} FoodList={item.dish} />
                     ))
@@ -221,9 +221,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 30,
         paddingTop: 10,
     },
-    noResultsContainer: {
-
-    }
 })
 
 export default Search;

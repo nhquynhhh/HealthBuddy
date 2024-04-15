@@ -22,11 +22,13 @@ import Search from '../screens/search/search';
 import Premium from '../screens/premium/premium';
 import BMI from '../screens/bmi/bmi';
 import FoodDetails from '../screens/food_details/food_details';
+import Energy from '../screens/energy/energy';
 
-import React from 'react';
+import React, { useState } from 'react';
 
 const MainNavigator = () => {
 	const HomeStack = createNativeStackNavigator();
+	const [ShowBottomNavigator, setShowBottomNavigator] = useState(false);
 	function HomeStackScreens() {
 		return (
 			<HomeStack.Navigator screenOptions={{ headerTitleAlign: 'center', headerTitleStyle: { fontWeight: 'bold' } }}>
@@ -39,7 +41,8 @@ const MainNavigator = () => {
 				<HomeStack.Screen name="MenuSuggestion" component={MenuSuggestion} options={{ headerTitle: "Gợi ý thực đơn" }} />
 				<HomeStack.Screen name="Search" component={Search} options={{ headerTitle: "Tra cứu" }} />
 				<HomeStack.Screen name="Statistics" component={Statistics} options={{ headerTitle: "Thống kê" }} />
-				<HomeStack.Screen name="BMI" component={BMI} options={{ headerTitle: "BMI là gì ?" }} />
+				<HomeStack.Screen name="BMI" component={BMI} options={{ headerTitle: "BMI là gì ?"}} />
+				<HomeStack.Screen name="Energy" component={Energy} options={{ headerTitle: "BMI là gì ?" }} />
 				<HomeStack.Screen name="FoodDetails" component={FoodDetails}
 					options={({ route }) => ({ 
 						headerTitle: route.params.data.name
@@ -148,7 +151,10 @@ const MainNavigator = () => {
 							)
 						}
 					}} />
-			</Tab.Navigator>
+					
+			</Tab.Navigator> 
+			
+
 		)
 	}
 	return (

@@ -7,12 +7,19 @@ import { Icon } from "react-native-elements";
 
 function BodyIndex({user}) {
     user = {
-        age: 30,
-        weight: 76.6,
-        height: 120,
-
+        age: 20,
+        weight: 45,
+        height: 160,
+        gender: "nam",
     }
     const BMI = (user?.weight/((user?.height*user?.height)/10000)).toFixed(1);
+    let energy;
+    if(user?.gender == "nam"){
+        energy = (6.25 * user?.height) + (10 * user?.weight) - (5 * user?.age) + 5;
+    }else {
+        energy = (6.25 * user?.height) + (10 + user?.weight) - (5 * user?.age) - 161;
+
+    }
     let Evaluate;
     switch (true) {
         case BMI < 18.5:
@@ -87,7 +94,7 @@ function BodyIndex({user}) {
                 <View style={styles.ContainerItem}>
                     <Text style={styles.Text}>Năng lượng cần mỗi ngày</Text>
                     <TouchableOpacity
-                        onPress={()=>onPressHandler("BMI")}
+                        onPress={()=>onPressHandler("Energy")}
                         style={{position: "absolute", right: 8, top: 8}}
                     >
                         <Icon
@@ -98,7 +105,7 @@ function BodyIndex({user}) {
                         />
                     </TouchableOpacity>
                     <View style={styles.alignItems}>
-                        <Text style={styles.textIndex}>2500</Text>
+                        <Text style={styles.textIndex}>{energy}</Text>
                         <Text>calories</Text>
                     </View>
                 </View>    

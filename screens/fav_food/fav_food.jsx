@@ -1,6 +1,7 @@
 import React from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import Foodlist from "../food_list/food_list"
+import { colors } from "../../colors";
 
 function FavouriteFood() {
      wishListItems = [
@@ -120,6 +121,7 @@ const styles = StyleSheet.create({
         flexWrap: "wrap",
         flexDirection: "row",
         justifyContent: "space-between",
+        backgroundColor: colors.white,
         paddingHorizontal: 30,
         paddingTop: 10,
         paddingBottom: 100,

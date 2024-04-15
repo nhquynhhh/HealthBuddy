@@ -46,7 +46,7 @@ function FoodDetails({route}) {
 
                     <View style={styles.ContainerIngredient}>
                         <View style={styles.ContainerItem}>
-                            <Text>Nguyên liệu chuẩn bị</Text>
+                            <Text style={styles.text2}>Nguyên liệu chuẩn bị</Text>
                             <Text>{FoodList?.name}</Text>
                             <Text>cd</Text>
                             <Text>ef</Text>
@@ -56,7 +56,7 @@ function FoodDetails({route}) {
                     </View>
                     <View style={styles.ContainerIngredient}>
                         <View style={styles.ContainerItem}>
-                            <Text>Cách chế biến</Text>
+                            <Text style={styles.text2}>Cách chế biến</Text>
                             <Text>ab</Text>
                             <Text>cd</Text>
                             <Text>ef</Text>
@@ -86,7 +86,6 @@ const styles = StyleSheet.create({
         display: "flex",
         justifyContent: "center",
         flexWrap: "nowrap",
-        marginTop: 20,
         paddingHorizontal: 20,
         
     },
@@ -99,7 +98,6 @@ const styles = StyleSheet.create({
         borderColor: "#D8D8D8",
         padding: 10, 
         marginVertical: 10,
-
     },
     ContainerImage: {
         height: imageHeight,
@@ -131,6 +129,9 @@ const styles = StyleSheet.create({
     },
     alignItems: {
         alignItems: "center",
+    },
+    text2: {
+        fontWeight: "700"
     }
 })
 export default FoodDetails;
