@@ -20,60 +20,59 @@ export const AppRouters = () => {
 	const [refresh_token, setRefresh_token] = useState(null);
 	const [isLogin, setIsLogin] = useState(false);
 
-	const { storeAccessToken, storeRefreshToken, accessTokenContext, isLogged, setLoginStatus } = useContext(AuthContext);
+	const { storeAccessToken, storeRefreshToken, accessTokenContext, isLogged, setLoginStatus, refreshTokenContext } = useContext(AuthContext);
 
-	const checkToken = async () => {
-		const refresh = await getRefreshToken();
-		if (refresh !== null) {
-			console.log('There is a refresh token in the storage')
-			setRefresh_token(refresh);
-			return true;
-		}
-		return false;
-	}
+	// const checkToken = async () => {
+	// 	const refresh = await getRefreshToken();
+	// 	if (refresh !== null) {
+	// 		console.log('There is a refresh token in the storage')
+	// 		setRefresh_token(refresh);
+	// 		return true;
+	// 	}
+	// 	return false;
+	// }
 
-	const checkLogin = async () => {
-		const isToken = await checkToken();
-		if (isToken === true) {
-			console.log('Checking token validity')
-			const isValidToken = await handleLoginWithToken(await getRefreshToken());
-			console.log('isValidToken', isValidToken);
-			if (isValidToken === true) {
-				setLoginStatus(true);
-			} else {
-				console.log('Token is invalid')
-				setLoginStatus(false);
-			}
-		} else {
-			setLoginStatus(false);
-		}
-	}
+	// const checkLogin = async () => {
+	// 	const isToken = await checkToken();
+	// 	if (isToken === true) {
+	// 		console.log('Checking token validity')
+	// 		const isValidToken = await handleLoginWithToken(await getRefreshToken());
+	// 		console.log('isValidToken', isValidToken);
+	// 		if (isValidToken === true) {
+	// 			setLoginStatus(true);
+	// 			storeAccessToken(await getAccessToken());
+	// 			storeRefreshToken(await getRefreshToken());
+	// 		} else {
+	// 			console.log('Token is invalid')
+	// 			setLoginStatus(false);
+	// 		}
+	// 	} else {
+	// 		setLoginStatus(false);
+	// 	}
+	// }
 
 	useEffect(() => {
 		const timeout = setTimeout(async () => {
-			// Thực hiện checkLogin khi splash screen đang hiển thị
-			await checkLogin();
-			// Sau khi checkLogin hoàn thành, ẩn splash screen
 			setIsShowSplash(false);
 		}, 500);
-	
+
 		return () => clearTimeout(timeout);
 	}, []);
 	
-	useEffect(() => {
-		if (isLogged === true) {
-			setIsLogin(true);
-		}
-		else {
-			setIsLogin(false);
-		}
-	}, [isLogged]);
+	// useEffect(() => {
+	// 	if (isLogged === true) {
+	// 		setIsLogin(true);
+	// 	}
+	// 	else {
+	// 		setIsLogin(false);
+	// 	}
+	// }, [isLogged]);
 
 	return (
 		<>
 			{
 				isShowSplash ? <SplashScreen /> : (
-					isLogin ? <MainNavigator /> : <AuthNavigator />
+					isLogged ? <MainNavigator /> : <AuthNavigator />
 				)
 			}
 		</>
