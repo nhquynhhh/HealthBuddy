@@ -26,7 +26,8 @@ const signup = async (props) => {
 		console.log(message);
 		return false;
 	}
-
 }
+
+
 
 export { signup }

@@ -45,7 +45,11 @@ const otp_reset_password = {
 const reset_password = {
 	url: `${BASE_URL}/api/reset-password`,
 	method: 'POST'
-
 }
 
-export { login_api, signup_api, logout_api, otp_required, check_acount, refresh_token, authenticated_account, otp_reset_password, reset_password };
+const update_user_info = {
+	url: `${BASE_URL}/api/update-user`,
+	method: 'POST'
+}
+
+export { login_api, signup_api, logout_api, otp_required, check_acount, refresh_token, authenticated_account, otp_reset_password, reset_password, update_user_info };

@@ -1,7 +1,7 @@
 import React from "react";
 import {View, Text, StyleSheet, Image, ScrollView, Dimensions, SafeAreaView} from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
-import { colors } from "../../colors";
+import { colors } from "../../utils/colors";
 
 const windowHeight = Dimensions.get('window').height;
 const imageHeight = windowHeight * 0.35;

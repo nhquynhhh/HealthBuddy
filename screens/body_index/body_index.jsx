@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { View, Text,StyleSheet, TouchableOpacity, SafeAreaView, Image} from "react-native";
 // import Header from "./header";
-import { colors } from "../../colors";
+import { colors } from "../../utils/colors";
 import { Icon } from "react-native-elements";
 
 function BodyIndex({user}) {

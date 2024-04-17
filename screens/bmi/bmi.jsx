@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, SafeAreaView, Image, ScrollView } from "react-native";
-import { colors } from "../../colors";
+import { colors } from "../../utils/colors";
 
 function BMI() {
     return ( 

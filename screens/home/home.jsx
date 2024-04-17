@@ -1,25 +1,20 @@
 
 import { ScrollView, Text, View, Image, useWindowDimensions, StyleSheet, TouchableOpacity, FlatList } from 'react-native'
-import React, { Component } from 'react'
+import React, { Component, useContext } from 'react'
 import { SearchBar, Icon, Divider } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import * as Progress from 'react-native-progress';
 import { FlatGrid } from 'react-native-super-grid';
 import { colors } from '../../utils/colors';
-import { useAuth } from '../../context/useAuth';
+import { AuthContext } from '../../context/AuthContext';
+
 
 export default function Home() {
 	const windowHeight = useWindowDimensions().height;
 	const windowWidth = useWindowDimensions().width;
 	const navigation = useNavigation();
-	const { removeAccessToken, removeRefreshToken } = useAuth();
-
-	const handleLogout = () => {
-		removeAccessToken();
-		removeRefreshToken();
-		navigation.navigate('Login');
-	}
+	const { userInfo, setUserInfo } = useContext(AuthContext);
 
 
 	const categories = [
@@ -45,7 +40,7 @@ export default function Home() {
 			{/* Header */}
 			<View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20, width: windowWidth * 0.5, paddingLeft: 20, paddingTop: 20, paddingBottom: 10 }}>
 				<Image source={require('../../assets/img_bare_logo.png')} style={{ width: 50, height: 50 }}></Image>
-				<Text style={{ textAlignVertical: 'center', fontSize: RFValue(20, 720), marginLeft: 15 }}>Xin chào, <Text style={{ fontWeight: '800' }}>Alice</Text>!</Text>
+				<Text style={{ textAlignVertical: 'center', fontSize: RFValue(20, 720), marginLeft: 15 }}>Xin chào, <Text style={{ fontWeight: '800' }}>{userInfo.username}</Text>!</Text>
 			</View>
 			{/* Divider */}
 			<Divider style={{ backgroundColor: colors.gray, height: 0.5 }}></Divider>

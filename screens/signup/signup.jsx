@@ -6,6 +6,7 @@ import { colors } from '../../utils/colors';
 import { isEmail } from '../../utils/validation';
 import { signup } from '../../services/authenticate/signup';
 import { useNavigation } from '@react-navigation/native';
+import { handleCheckAccount } from '../../services/authenticate/check_account';
 
 export default function Signup() {
 	const windowHeight = useWindowDimensions().height;
@@ -41,13 +42,14 @@ export default function Signup() {
 			return;
 		}
 		else {
-			const result = await signup({ username: username, email: email, password: password });
-			if (result === true) {
+			const check = await handleCheckAccount(email);
+			if (check === true) {
+				Alert.alert('Thông báo', 'Email đã được sử dụng.');
+				return;
+			} else {
 				navigation.navigate('Activation');
 				Alert.alert('Thông báo', 'Đăng ký thành công.');
-			}
-			else {
-				Alert.alert('Thông báo', 'Đăng ký thất bại.');
+				await signup({ username: username, email: email, password: password })
 			}
 		}
 	}

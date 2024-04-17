@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, TextInput, View, Text, SafeAreaView} from "reac
 import FoodList from "../food_list/food_list";
 import NoResults from "../no_results/no_results";
 import { Button, Icon } from "react-native-elements";
-import { colors } from "../../colors";
+import { colors } from "../../utils/colors";
 function Search() {
     const ListItems = [
         { 
