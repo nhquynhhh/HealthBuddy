@@ -27,7 +27,9 @@ export const AuthProvider = ({ children }) => {
 	});
 	const [account, setAccount] = useState({
 		account_id: null,
-		
+		email: null,
+		created_at: null,
+		authenticated: null,
 	})
 
 	// const checkToken = async () => {

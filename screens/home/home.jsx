@@ -16,7 +16,6 @@ export default function Home() {
 	const navigation = useNavigation();
 	const { userInfo, setUserInfo } = useContext(AuthContext);
 
-
 	const categories = [
 		{ image: require('../../assets/img_kcal_icon.png'), label: 'Kiểm soát\ncalories', screen: 'Calories' },
 		{ image: require('../../assets/img_water_icon.png'), label: 'Theo dõi\nuống nước', screen: 'Water' },
