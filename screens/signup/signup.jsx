@@ -52,7 +52,7 @@ export default function Signup() {
 		}
 	}
 	return (
-		<SafeAreaView style={[{ alignItems: 'center' }, styles.container]}>
+		<SafeAreaView style={[{ alignItems: 'center', backgroundColor: colors.white }, styles.container]}>
 			<Image source={require('../../assets/img_bare_logo.png')}
 				style={styles.signupLogo}
 			/>
