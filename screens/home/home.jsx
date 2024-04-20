@@ -23,14 +23,14 @@ export default function Home() {
 
 
 	const categories = [
-		{ image: require('../../assets/img_kcal_icon.png'), label: 'Kiểm soát\ncalories', screen: 'Calories' },
-		{ image: require('../../assets/img_water_icon.png'), label: 'Theo dõi\nuống nước', screen: 'Water' },
-		{ image: require('../../assets/img_workout_icon.png'), label: 'Vận động\ncơ thể', screen: 'Workout' },
-		{ image: require('../../assets/img_body_index_icon.png'), label: 'Chỉ số\nsức khỏe', screen: 'BodyIndex' },
-		{ image: require('../../assets/img_favourite_dish_icon.png'), label: 'Món ăn\nyêu thích', screen: 'FavouriteFood' },
-		{ image: require('../../assets/img_suggest_icon.png'), label: 'Gợi ý\nthực đơn', screen: 'MenuSuggestion' },
-		{ image: require('../../assets/img_statistics_icon.png'), label: 'Thống kê\nchi tiết', screen: 'Statistics' },
-		{ image: require('../../assets/img_search_icon.png'), label: 'Tra cứu', screen: 'Search' },
+		{ image: require('../../assets/img_kcal_icon.png'), label: 'Kiểm soát\ncalories', screen: 'Calories', tab: ''},
+        { image: require('../../assets/img_water_icon.png'), label: 'Theo dõi\nuống nước', screen: 'Water', tab: ''},
+        { image: require('../../assets/img_workout_icon.png'), label: 'Vận động\ncơ thể', screen: 'Workout', tab: ''},
+        { image: require('../../assets/img_body_index_icon.png'), label: 'Chỉ số\nsức khỏe', screen: 'BodyIndex', tab: ''},
+        { image: require('../../assets/img_favourite_dish_icon.png'), label: 'Món ăn\nyêu thích', screen: 'FavouriteFood', tab: ''},
+        { image: require('../../assets/img_suggest_icon.png'), label: 'Gợi ý\nthực đơn', screen: 'MenuSuggestion', tab: ''},
+        { image: require('../../assets/img_statistics_icon.png'), label: 'Thống kê\nchi tiết', screen: 'Statistics', tab: 'StatisticsTab'},
+        { image: require('../../assets/img_search_icon.png'), label: 'Tra cứu', screen: 'Search', tab: ''},
 	];
 
 	const [favDish, setFavDish] = React.useState([
@@ -50,24 +50,42 @@ export default function Home() {
 			{/* Divider */}
 			<Divider style={{ backgroundColor: colors.gray, height: 0.5 }}></Divider>
 			{/* Category list */}
-			<View style={[styles.catList, { marginTop: 30, width: windowWidth * 0.97 }]}>
-				<FlatList
-					scrollEnabled={false}
-					data={categories}
-					renderItem={({ item }) => (
-						<TouchableOpacity style={[styles.iconContainer, { width: windowWidth * 0.96 / 4 }]}
-							onPress={() => navigation.navigate(item.screen)}>
-							<View style={styles.roundContainer}>
-								<Image source={item.image} style={styles.image} />
-							</View>
-							<Text style={styles.text}>{item.label}</Text>
-						</TouchableOpacity>
-					)}
-					keyExtractor={(item, index) => index.toString()}
-					numColumns={4}
-					columnWrapperStyle={styles.row}
-				/>
-			</View>
+			<View style={[styles.catList, {marginTop: 30, width: windowWidth * 0.97}]}>
+                <FlatList
+                    scrollEnabled={false}
+                    data={categories}
+                    renderItem={({ item }) => {
+                        if (item.tab !== '') {
+                            return (
+                                <TouchableOpacity
+                                    style={[styles.iconContainer, { width: windowWidth * 0.96 / 4 }]}
+                                    onPress={() => navigation.navigate(item.tab, item.screen)}
+                                >
+                                    <View style={styles.roundContainer}>
+                                        <Image source={item.image} style={styles.image} />
+                                    </View>
+                                    <Text style={styles.text}>{item.label}</Text>
+                                </TouchableOpacity>
+                            );
+                        } else {
+                            return (
+                                <TouchableOpacity
+                                    style={[styles.iconContainer, { width: windowWidth * 0.96 / 4 }]}
+                                    onPress={() => navigation.navigate(item.screen)}
+                                >
+                                    <View style={styles.roundContainer}>
+                                        <Image source={item.image} style={styles.image} />
+                                    </View>
+                                    <Text style={styles.text}>{item.label}</Text>
+                                </TouchableOpacity>
+                            );
+                        }
+                    }}
+                    keyExtractor={(item, index) => index.toString()}
+                    numColumns={4}
+                    columnWrapperStyle={styles.row}
+                />
+            </View>
 			{/* Today's calories */}
 			<View style={{ padding: 20, borderWidth: 1, width: windowWidth * 0.9, alignSelf: 'center', borderRadius: 10, borderColor: colors.gray, marginVertical: 20 }}>
 				<Text style={styles.headerBox}>Lượng calories hôm nay</Text>
