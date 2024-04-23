@@ -15,6 +15,7 @@ import Personal from '../screens/personal/personal';
 import Calories from '../screens/calories/calories';
 import Water from '../screens/water/water';
 import Workout from '../screens/workout/workout';
+import WorkoutDetail from '../screens/workout/workout_detail';
 import BodyIndex from '../screens/body_index/body_index';
 import FavouriteFood from '../screens/fav_food/fav_food';
 import MenuSuggestion from '../screens/menu_suggest/menu_suggest';
@@ -32,15 +33,15 @@ const MainNavigator = () => {
 	function HomeStackScreens() {
 		return (
 			<HomeStack.Navigator screenOptions={{ headerTitleAlign: 'center', headerTitleStyle: { fontWeight: 'bold' } }}>
-				<HomeStack.Screen name="Home" component={Home} options={{ headerShown: false }} />
-				<HomeStack.Screen name="Calories" component={Calories} options={{ headerTitle: "Kiểm soát Calories" }} />
-				<HomeStack.Screen name="Water" component={Water} options={{ headerTitle: "Theo dõi uống nước" }} />
-				<HomeStack.Screen name="Workout" component={Workout} options={{ headerTitle: "Vận động cơ thể" }} />
-				<HomeStack.Screen name="BodyIndex" component={BodyIndex} options={{ headerTitle: "Chỉ số cơ thể" }} />
-				<HomeStack.Screen name="FavouriteFood" component={FavouriteFood} options={{ headerTitle: "Món ăn yêu thích" }} />
-				<HomeStack.Screen name="MenuSuggestion" component={MenuSuggestion} options={{ headerTitle: "Gợi ý thực đơn" }} />
-				<HomeStack.Screen name="Search" component={Search} options={{ headerTitle: "Tra cứu" }} />
-				<HomeStack.Screen name="Statistics" component={Statistics} options={{ headerTitle: "Thống kê" }} />
+				<HomeStack.Screen name="Home" component={Home} options={{headerShown: false}}/> 
+				<HomeStack.Screen name="Calories" component={Calories} options={{headerTitle: "Kiểm soát Calories"}}/>
+				<HomeStack.Screen name="Water" component={Water} options={{headerTitle: "Theo dõi uống nước"}}/>
+				<WorkoutStack.Screen name="Workout" component={WorkoutStackScreens} options={{headerShown: false}}/>
+				<HomeStack.Screen name="BodyIndex" component={BodyIndex} options={{headerTitle: "Chỉ số cơ thể"}}/>
+				<HomeStack.Screen name="Statistics" component={StatisticsStackScreens} options={{headerShown: false}}/>
+				<HomeStack.Screen name="FavouriteFood" component={FavouriteFood} options={{headerTitle: "Món ăn yêu thích"}}/>
+				<HomeStack.Screen name="MenuSuggestion" component={MenuSuggestion} options={{headerTitle: "Gợi ý thực đơn"}}/>
+				<HomeStack.Screen name="Search" component={Search} options={{headerTitle: "Tra cứu"}}/>
 				<HomeStack.Screen name="BMI" component={BMI} options={{ headerTitle: "BMI là gì ?"}} />
 				<HomeStack.Screen name="Energy" component={Energy} options={{ headerTitle: "BMI là gì ?" }} />
 				<HomeStack.Screen name="FoodDetails" component={FoodDetails}
@@ -54,12 +55,31 @@ const MainNavigator = () => {
 	}
 
 	const PersonalStack = createNativeStackNavigator();
-	function PersonalStackScreens() {
-		return (
-			<PersonalStack.Navigator screenOptions={{ headerTitleAlign: 'center', headerTitleStyle: { fontWeight: 'bold' } }}>
-				<PersonalStack.Screen name="Personal" component={Personal} options={{ headerTitle: "Tài khoản của tôi" }} />
-				<PersonalStack.Screen name="Premium" component={Premium} options={{ headerTitle: "Nâng cấp tài khoản" }} />
+	function PersonalStackScreens(){
+		return(
+			<PersonalStack.Navigator screenOptions={{headerTitleAlign: 'center', headerTitleStyle:{fontWeight: 'bold'}}}>
+				<PersonalStack.Screen name="Personal" component={Personal} options={{headerTitle: "Tài khoản của tôi"}}/>
+				<PersonalStack.Screen name="Premium" component={Premium} options={{headerTitle: "Nâng cấp tài khoản"}}/>
 			</PersonalStack.Navigator>
+		)
+	}
+
+	const WorkoutStack = createNativeStackNavigator();
+	function WorkoutStackScreens() {
+		return (
+			<WorkoutStack.Navigator screenOptions={{ headerTitleAlign: 'center', headerTitleStyle: { fontWeight: 'bold' } }}>
+				<WorkoutStack.Screen name="WorkoutStack" component={Workout} options={{ headerTitle: "Vận động cơ thể" }} />
+				<WorkoutStack.Screen name="WorkoutDetail" component={WorkoutDetail} options={{ headerTitle: "Chi tiết bài tập" }} />
+			</WorkoutStack.Navigator>
+		)
+	}
+
+	const StatisticsStack = createNativeStackNavigator();
+	function StatisticsStackScreens(){
+		return(
+			<StatisticsStack.Navigator screenOptions={{headerTitleAlign: 'center', headerTitleStyle:{fontWeight: 'bold'}}}>
+				<StatisticsStack.Screen name="StatisticsStack" component={Statistics} options={{headerTitle: "Thống kê chi tiết"}}/>
+			</StatisticsStack.Navigator>
 		)
 	}
 
@@ -93,7 +113,7 @@ const MainNavigator = () => {
 						}
 					}} />
 				<Tab.Screen name="StatisticsTab"
-					component={Statistics}
+					component={StatisticsStackScreens}
 					options={{
 						headerTitle: "Thống kê",
 						tabBarIcon: ({ focused }) => {
