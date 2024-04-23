@@ -21,14 +21,18 @@ import FavouriteFood from '../screens/fav_food/fav_food';
 import MenuSuggestion from '../screens/menu_suggest/menu_suggest';
 import Search from '../screens/search/search';
 import Premium from '../screens/premium/premium';
+import BMI from '../screens/bmi/bmi';
+import FoodDetails from '../screens/food_details/food_details';
+import Energy from '../screens/energy/energy';
 
-import React from 'react';
+import React, { useState } from 'react';
 
 const MainNavigator = () => {
 	const HomeStack = createNativeStackNavigator();
-	function HomeStackScreens(){
-		return(
-			<HomeStack.Navigator screenOptions={{headerTitleAlign: 'center', headerTitleStyle:{fontWeight: 'bold'}}}>
+	const [ShowBottomNavigator, setShowBottomNavigator] = useState(false);
+	function HomeStackScreens() {
+		return (
+			<HomeStack.Navigator screenOptions={{ headerTitleAlign: 'center', headerTitleStyle: { fontWeight: 'bold' } }}>
 				<HomeStack.Screen name="Home" component={Home} options={{headerShown: false}}/> 
 				<HomeStack.Screen name="Calories" component={Calories} options={{headerTitle: "Kiểm soát Calories"}}/>
 				<HomeStack.Screen name="Water" component={Water} options={{headerTitle: "Theo dõi uống nước"}}/>
@@ -38,6 +42,14 @@ const MainNavigator = () => {
 				<HomeStack.Screen name="FavouriteFood" component={FavouriteFood} options={{headerTitle: "Món ăn yêu thích"}}/>
 				<HomeStack.Screen name="MenuSuggestion" component={MenuSuggestion} options={{headerTitle: "Gợi ý thực đơn"}}/>
 				<HomeStack.Screen name="Search" component={Search} options={{headerTitle: "Tra cứu"}}/>
+				<HomeStack.Screen name="BMI" component={BMI} options={{ headerTitle: "BMI là gì ?"}} />
+				<HomeStack.Screen name="Energy" component={Energy} options={{ headerTitle: "BMI là gì ?" }} />
+				<HomeStack.Screen name="FoodDetails" component={FoodDetails}
+					options={({ route }) => ({ 
+						headerTitle: route.params.data.name
+					})}
+				/>
+
 			</HomeStack.Navigator>
 		)
 	}
@@ -159,7 +171,10 @@ const MainNavigator = () => {
 							)
 						}
 					}} />
-			</Tab.Navigator>
+					
+			</Tab.Navigator> 
+			
+
 		)
 	}
 	return (
