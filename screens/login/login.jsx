@@ -32,9 +32,9 @@ export default function Login() {
 		}
 		const result = await handleLogin(email, password);
 		if (result === true) {
+			setLoginStatus(true);
 			storeAccessToken(await getAccessToken());
 			storeRefreshToken(await getRefreshToken());
-			setLoginStatus(true);
 		}
 		else {
 			setLoginStatus(false);
