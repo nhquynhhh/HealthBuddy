@@ -6,6 +6,7 @@ import { colors } from '../../utils/colors';
 import DatePicker, {getToday, getFormatedDate} from 'react-native-modern-datepicker';
 import { format } from 'date-fns';
 import { LiquidGauge } from 'react-native-liquid-gauge';
+import ToastManager, { Toast } from 'toastify-react-native'
 
 export default function Calories() {
     const windowHeight = useWindowDimensions().height;
@@ -78,9 +79,28 @@ export default function Calories() {
       const newConsumedCalories = consumedCalories - calories;
       setConsumedCalories(newConsumedCalories);
     };
+    const showToastsMore = () => {
+      Toast.error('Bạn đã tiêu thụ nhiều hơn mục tiêu rồi! \nHãy cân nhắc lại chế độ ăn của mình nhé 🥺')
+    }
+    const showToastsEqual = () => {
+      Toast.success('Bạn đã đạt được số calo mục tiêu!\nLàm tốt lắm 🥳')
+  }
+    if (consumedCalories > targetCalories) {
+      showToastsMore();
+    } else if (consumedCalories === targetCalories){
+      showToastsEqual();
+    }
 
     return (
       <ScrollView style={{backgroundColor: colors.white, marginBottom: 60}}>
+        <ToastManager 
+          width={'100%'}
+          height={100}
+          position={'top'}
+          positionValue={0}
+          duration={7000}
+          textStyle={{fontSize: 15, lineHeight: 25, paddingRight: 5}}
+          style={{paddingRight: 5}}/>
         <View>
           <TouchableOpacity style={{flexDirection: 'row', paddingTop: 20, alignSelf: 'center'}} onPress={handleCalendar}>
             <Icon name='calendar-outline' type='ionicon' color={colors.blue}/>
