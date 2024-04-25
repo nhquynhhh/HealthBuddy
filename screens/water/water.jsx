@@ -79,7 +79,7 @@ export default function Calories() {
               circleThickness: 0.1,
               textVertPosition: 0.5,
               waveAnimateTime: 1000,
-              maxValue: 2000,
+              maxValue: targetWater,
               textSuffix: '',
             }}
             value={waterValue}
