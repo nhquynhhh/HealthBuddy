@@ -1,16 +1,19 @@
 import { useNavigation } from "@react-navigation/native";
-import React from "react";
+import React, {useContext} from "react";
 import { View, Text,StyleSheet, TouchableOpacity, SafeAreaView, Image} from "react-native";
 // import Header from "./header";
 import { colors } from "../../utils/colors";
 import { Icon } from "react-native-elements";
+import { AuthContext } from '../../context/AuthContext';
+
 
 function BodyIndex({user}) {
+	const { userInfo, account } = useContext(AuthContext);
     user = {
-        age: 20,
-        weight: 45,
-        height: 160,
-        gender: "nam",
+        age: userInfo.age,
+        weight: userInfo.weight,
+        height: userInfo.height,
+        gender: userInfo.gender == 'male' ? 'nam' : 'nữ',
     }
     const BMI = (user?.weight/((user?.height*user?.height)/10000)).toFixed(1);
     let energy;

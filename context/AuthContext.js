@@ -6,7 +6,9 @@ import {
 	getRefreshToken,
 } from "../asyncStorage/auth";
 import { handleLoginWithToken } from '../services/authenticate/login_with_token'
-
+import { he } from "date-fns/locale";
+import { handleGetUserInfo } from '../services/info/get_info';
+import { handleGetAccountInfo } from "../services/account/get_account_info";
 
 
 export const AuthContext = createContext();
@@ -18,15 +20,17 @@ export const AuthProvider = ({ children }) => {
 	const [userInfo, setUserInfo] = useState({
 		account_id: null,
 		age: null,
-		height: null,
-		weight: null,
 		aim: null,
 		exercise: null,
-		username: null,
 		gender: null,
+		has_subscription: null,
+		height: null,
+		username: null,
+		weight: null,
 	});
 	const [account, setAccount] = useState({
 		account_id: null,
+		username: null,
 		email: null,
 		created_at: null,
 		authenticated: null,
@@ -48,13 +52,20 @@ export const AuthProvider = ({ children }) => {
 			if (refresh_token) {
 				const isValidToken = await handleLoginWithToken(refresh_token);
 				if (isValidToken) {
+					const userInfo = await handleGetUserInfo();
+					if (userInfo) {
+						setUserInfo(userInfo);
+					}
+					const accountInfo = await handleGetAccountInfo();
+					if (accountInfo) {
+						setAccount(accountInfo);
+					}
 					setAccessTokenContext(await getAccessToken());
 					setRefreshTokenContext(refresh_token);
 					setIsLogged(true);
 				}
 			}
 		};
-
 		checkLogin();
 	}, []);
 

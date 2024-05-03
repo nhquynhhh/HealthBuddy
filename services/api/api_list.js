@@ -52,4 +52,27 @@ const update_user_info = {
 	method: 'POST'
 }
 
-export { login_api, signup_api, logout_api, otp_required, check_acount, refresh_token, authenticated_account, otp_reset_password, reset_password, update_user_info };
+const get_user_info = {
+	url: `${BASE_URL}/api/get-user`,
+	method: 'GET'
+}
+
+const get_account_info = {
+	url: `${BASE_URL}/api/get-account-info`,
+	method: 'GET'
+}
+
+export {
+	login_api,
+	signup_api,
+	logout_api,
+	otp_required,
+	check_acount,
+	refresh_token,
+	authenticated_account,
+	otp_reset_password,
+	reset_password,
+	update_user_info,
+	get_user_info,
+	get_account_info
+};

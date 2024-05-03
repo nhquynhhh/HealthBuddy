@@ -9,13 +9,15 @@ import { colors } from '../../utils/colors'
 import { handleLogin } from '../../services/authenticate/login'
 import { AuthContext } from '../../context/AuthContext';
 import { getAccessToken, getRefreshToken } from '../../asyncStorage/auth';
+import { handleGetUserInfo } from '../../services/info/get_info';
+import { handleGetAccountInfo } from '../../services/account/get_account_info';
 
 export default function Login() {
 	const windowHeight = useWindowDimensions().height;
 	const windowWidth = useWindowDimensions().width;
 	const navigation = useNavigation();
 
-	const { storeAccessToken, storeRefreshToken, isLogged, setLoginStatus } = useContext(AuthContext);
+	const { storeAccessToken, storeRefreshToken, isLogged, setLoginStatus, setUserInfo, setAccount } = useContext(AuthContext);
 	const [email, setEmail] = React.useState("");
 	const [password, setPassword] = React.useState("");
 
@@ -32,6 +34,14 @@ export default function Login() {
 		}
 		const result = await handleLogin(email, password);
 		if (result === true) {
+			const userInfo = await handleGetUserInfo();
+			if (userInfo) {
+				setUserInfo(userInfo);
+			}
+			const accountInfo = await handleGetAccountInfo();
+			if (accountInfo) {
+				setAccount(accountInfo);
+			}
 			setLoginStatus(true);
 			storeAccessToken(await getAccessToken());
 			storeRefreshToken(await getRefreshToken());

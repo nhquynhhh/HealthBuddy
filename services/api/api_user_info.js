@@ -1,4 +1,4 @@
-import { update_user_info } from "./api_list";
+import { update_user_info, get_user_info } from "./api_list";
 
 const callUpdateUserInfoAPI = async (props) => {
 	const {gender, age, height, weight, aim, accessToken} = props;
@@ -22,4 +22,17 @@ const callUpdateUserInfoAPI = async (props) => {
 	});
 }
 
-export { callUpdateUserInfoAPI };
+const callGetUserInfoAPI = async (accessToken) => {
+	const url = get_user_info.url;
+	const headers = {
+		'Content-Type': 'application/json',
+		'Authorization': `Bearer ${accessToken}`
+	};
+	const method = get_user_info.method;
+	return fetch(url, {
+		method,
+		headers
+	});
+}
+
+export { callUpdateUserInfoAPI, callGetUserInfoAPI };
