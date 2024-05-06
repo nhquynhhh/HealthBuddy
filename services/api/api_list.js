@@ -62,6 +62,21 @@ const get_account_info = {
 	method: 'GET'
 }
 
+const get_dish_list = {
+	url: `${BASE_URL}/api/get-all-dishes`,
+	method: 'GET'
+}
+
+const get_all_ingredients = {
+	url: `${BASE_URL}/api/get-all-ingredients`,
+	method: 'GET'
+}
+
+const get_recipe_by_dish_id = {
+	url: `${BASE_URL}/api/get-recipe-by-dish-id/:id`,
+	method: 'GET'
+}
+
 export {
 	login_api,
 	signup_api,
@@ -74,5 +89,8 @@ export {
 	reset_password,
 	update_user_info,
 	get_user_info,
-	get_account_info
+	get_account_info,
+	get_dish_list,
+	get_all_ingredients,
+	get_recipe_by_dish_id
 };

@@ -1,6 +1,6 @@
 
 import { ScrollView, Text, View, Image, useWindowDimensions, StyleSheet, TouchableOpacity, FlatList } from 'react-native'
-import React, { Component, useContext, useEffect } from 'react'
+import React, { Component, useContext, useEffect, useState } from 'react'
 import { SearchBar, Icon, Divider } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
@@ -13,8 +13,21 @@ export default function Home() {
 	const windowHeight = useWindowDimensions().height;
 	const windowWidth = useWindowDimensions().width;
 	const navigation = useNavigation();
-	const { userInfo, setUserInfo } = useContext(AuthContext);
-
+	const { userInfo, setUserInfo, account } = useContext(AuthContext);
+    user = {
+        age: userInfo.age,
+        weight: userInfo.weight,
+        height: userInfo.height,
+        gender: userInfo.gender == 'male' ? 'nam' : 'nữ',
+    }
+    const BMI = (user?.weight/((user?.height*user?.height)/10000)).toFixed(1);
+    let energy;
+    if(user?.gender == "nam"){
+        energy = (6.25 * user?.height) + (10 * user?.weight) - (5 * user?.age) + 5;
+    }else {
+        energy = (6.25 * user?.height) + (10 + user?.weight) - (5 * user?.age) - 161;
+    }
+	const caloriesNeeded = energy - 0;
 	const categories = [
 		{ image: require('../../assets/img_kcal_icon.png'), label: 'Kiểm soát\ncalories', screen: 'Calories', tab: '' },
 		{ image: require('../../assets/img_water_icon.png'), label: 'Theo dõi\nuống nước', screen: 'Water', tab: '' },
@@ -52,7 +65,11 @@ export default function Home() {
 							return (
 								<TouchableOpacity
 									style={[styles.iconContainer, { width: windowWidth * 0.96 / 4 }]}
-									onPress={() => navigation.navigate(item.tab, item.screen)}
+									onPress={() => {
+
+										navigation.navigate(item.tab, item.screen)
+
+									}}
 								>
 									<View style={styles.roundContainer}>
 										<Image source={item.image} style={styles.image} />
@@ -92,16 +109,16 @@ export default function Home() {
 					style={{ alignSelf: 'center' }} />
 				<View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15 }}>
 					<Text style={{ fontSize: RFValue(13, 720) }}>Mục tiêu:</Text>
-					<Text style={{ fontWeight: 'bold' }}>2000 calories</Text>
+					<Text style={{ fontWeight: 'bold' }}>{energy} calories</Text>
 				</View>
 				<View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15 }}>
 					<Text style={{ fontSize: RFValue(13, 720) }}>Calories đã hấp thụ:</Text>
-					<Text style={{ fontWeight: 'bold' }}>1000 calories</Text>
+					<Text style={{ fontWeight: 'bold' }}>0 calories</Text>
 				</View>
 				<Divider style={{ backgroundColor: colors.gray, height: 0.2, marginTop: 15 }}></Divider>
 				<View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15, fontSize: RFValue(13, 720) }}>
 					<Text style={{ fontWeight: 'bold' }}>Cần thêm:</Text>
-					<Text style={{ fontWeight: 'bold', color: colors.blue, fontSize: RFValue(14, 720) }}>1000 calories</Text>
+					<Text style={{ fontWeight: 'bold', color: colors.blue, fontSize: RFValue(14, 720) }}>{caloriesNeeded} calories</Text>
 				</View>
 				<TouchableOpacity onPress={() => { navigation.navigate('Calories') }}>
 					<Text style={{ textAlign: 'right', marginTop: 15, fontStyle: 'italic', color: colors.darkGray }}>Chi tiết {'\u25BA'}</Text>

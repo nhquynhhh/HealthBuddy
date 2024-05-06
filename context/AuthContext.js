@@ -4,12 +4,15 @@ import {
 	setRefreshToken,
 	getAccessToken,
 	getRefreshToken,
+	removeAccessTokenAsync, 
+	removeRefreshTokenAsync
 } from "../asyncStorage/auth";
 import { handleLoginWithToken } from '../services/authenticate/login_with_token'
 import { he } from "date-fns/locale";
 import { handleGetUserInfo } from '../services/info/get_info';
 import { handleGetAccountInfo } from "../services/account/get_account_info";
-
+import { handleGetDishList } from '../services/dish/get_all_dishes';
+import { handleGetAllIngredients } from '../services/ingredients/get_all_ingredients';
 
 export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
@@ -17,24 +20,10 @@ export const AuthProvider = ({ children }) => {
 	const [accessTokenContext, setAccessTokenContext] = useState(null);
 	const [refreshTokenContext, setRefreshTokenContext] = useState(null);
 	const [isLogged, setIsLogged] = useState(false);
-	const [userInfo, setUserInfo] = useState({
-		account_id: null,
-		age: null,
-		aim: null,
-		exercise: null,
-		gender: null,
-		has_subscription: null,
-		height: null,
-		username: null,
-		weight: null,
-	});
-	const [account, setAccount] = useState({
-		account_id: null,
-		username: null,
-		email: null,
-		created_at: null,
-		authenticated: null,
-	})
+	const [userInfo, setUserInfo] = useState(null);
+	const [account, setAccount] = useState(null);
+	const [dishes, setDishes] = useState([]);
+	const [ingredients, setIngredients] = useState([]);
 
 	// const checkToken = async () => {
 	// 	const refresh = await getRefreshToken();
@@ -60,14 +49,40 @@ export const AuthProvider = ({ children }) => {
 					if (accountInfo) {
 						setAccount(accountInfo);
 					}
+					const dishList = await handleGetDishList();
+					if (dishList) {
+						setDishes(dishList);
+					}
+					const ingredientList = await handleGetAllIngredients();
+					if (ingredientList) {
+						setIngredients(ingredientList);
+					}
 					setAccessTokenContext(await getAccessToken());
 					setRefreshTokenContext(refresh_token);
 					setIsLogged(true);
 				}
+			} else {
+				return;
 			}
 		};
 		checkLogin();
 	}, []);
+
+	// clear context and async storage when logout async
+	
+	// useEffect(() => {
+	// 	const checkLoginStatus = async () => {
+	// 		if (!isLogged) {
+	// 			setAccessTokenContext(null);
+	// 			setRefreshTokenContext(null);
+	// 			setUserInfo(null);
+	// 			setAccount(null);
+	// 			removeAccessTokenAsync();
+	// 			removeRefreshTokenAsync();
+	// 		}
+	// 	}
+	// 	checkLoginStatus();
+	// }, [isLogged]);
 
 	const storeAccessToken = (token) => {
 		setAccessTokenContext(token);
@@ -97,7 +112,7 @@ export const AuthProvider = ({ children }) => {
 	}
 
 	return (
-		<AuthContext.Provider value={{ accessTokenContext, account, storeAccessToken, removeAccessToken, storeRefreshToken, removeRefreshToken, setAccountContext, refreshTokenContext, isLogged, setLoginStatus, userInfo, setUserInfo }}>
+		<AuthContext.Provider value={{ accessTokenContext, account, storeAccessToken, removeAccessToken, storeRefreshToken, removeRefreshToken, setAccountContext, refreshTokenContext, isLogged, setIsLogged, userInfo, setUserInfo, setAccount,dishes, setDishes, ingredients, setIngredients }}>
 			{children}
 		</AuthContext.Provider>
 	);

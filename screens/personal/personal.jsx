@@ -14,13 +14,15 @@ export default function Personal() {
 	const windowWidth = useWindowDimensions().width;
 	const navigation = useNavigation();
 
-	const { removeAccessToken, removeRefreshToken, isLogged, setLoginStatus, userInfo, account } = useContext(AuthContext);
+	const { removeAccessToken, removeRefreshToken, isLogged, setIsLogged, userInfo, account, setUserInfo, setAccount } = useContext(AuthContext);
 
 	const logout = () => {
-		setLoginStatus(false);
+		setIsLogged(false);
 		removeAccessToken();
 		removeRefreshToken();
 		removeAccessTokenAsync()
+		removeRefreshTokenAsync();
+		removeAccessTokenAsync();
 		removeRefreshTokenAsync();
 		console.log("Logout");
 	}
