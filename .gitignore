@@ -33,3 +33,7 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+# package locks file
+package-lock.json
+package-lock.json

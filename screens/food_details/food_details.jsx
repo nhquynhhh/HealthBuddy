@@ -1,13 +1,17 @@
-import React from "react";
+import React, {useEffect, useState, useContext} from "react";
 import {View, Text, StyleSheet, Image, ScrollView, Dimensions, SafeAreaView} from 'react-native';
 import { LinearGradient } from "expo-linear-gradient";
 import { colors } from "../../utils/colors";
+import {handleGetRecipeByDishID} from "../../services/recipe/get_recipe_by_dish_id";
+
 
 const windowHeight = Dimensions.get('window').height;
 const imageHeight = windowHeight * 0.35;
 
 function FoodDetails({route}) {
-    const { data } = route.params;
+    const { data, recipe } = route.params;
+
+
     const FoodList = data; 
     return (
         <SafeAreaView  style={{height: "100%",}}> 
@@ -47,11 +51,12 @@ function FoodDetails({route}) {
                     <View style={styles.ContainerIngredient}>
                         <View style={styles.ContainerItem}>
                             <Text style={styles.text2}>Nguyên liệu chuẩn bị</Text>
-                            <Text>{FoodList?.name}</Text>
-                            <Text>cd</Text>
-                            <Text>ef</Text>
-                            <Text>gh</Text>
-                            <Text>tk</Text>
+                            {recipe?.map((item, index) => {
+								return (
+									<Text key={index}> {item.grams}g {item.name}</Text>
+								)
+							})
+							}
                         </View> 
                     </View>
                     <View style={styles.ContainerIngredient}>
@@ -64,15 +69,6 @@ function FoodDetails({route}) {
                             <Text>tk</Text>
                         </View>    
                     </View>
-                    <View style={styles.ContainerIngredient}>
-                        <View style={styles.ContainerItem}>
-                            <Text>ab</Text>
-                            <Text>cd</Text>
-                            <Text>ef</Text>
-                            <Text>gh</Text>
-                            <Text>tk</Text>
-                        </View>
-                    </View>   
                 </View>
             </ScrollView>
         </SafeAreaView>
