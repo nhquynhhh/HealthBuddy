@@ -51,7 +51,7 @@ export default function Home() {
 			{/* Header */}
 			<View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20, width: windowWidth * 0.5, paddingLeft: 20, paddingTop: 20, paddingBottom: 10 }}>
 				<Image source={require('../../assets/img_bare_logo.png')} style={{ width: 50, height: 50 }}></Image>
-				<Text style={{ textAlignVertical: 'center', fontSize: RFValue(20, 720), marginLeft: 15 }}>Xin chào, <Text style={{ fontWeight: '800' }}>{userInfo.username}</Text>!</Text>
+				<Text style={{ textAlignVertical: 'center', fontSize: RFValue(20, 720), marginLeft: 15 }}><Text style={{ fontWeight: '800' }}>{userInfo.username}</Text>!</Text>
 			</View>
 			{/* Divider */}
 			<Divider style={{ backgroundColor: colors.gray, height: 0.5 }}></Divider>
