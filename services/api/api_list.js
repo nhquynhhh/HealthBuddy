@@ -1,5 +1,5 @@
-const BASE_URL = 'https://premium-singularly-meerkat.ngrok-free.app';
-
+//const BASE_URL = 'https://premium-singularly-meerkat.ngrok-free.app';
+const BASE_URL = 'https://implicitly-charming-eft.ngrok-free.app';
 
 const login_api = {
 	url: `${BASE_URL}/api/login`,
@@ -51,6 +51,10 @@ const update_user_info = {
 	url: `${BASE_URL}/api/update-user`,
 	method: 'POST'
 }
+const save_calories = {
+	url: `${BASE_URL}/api/save-calories`,
+	method: 'POST'
+}
 
 const get_user_info = {
 	url: `${BASE_URL}/api/get-user`,
@@ -88,6 +92,7 @@ export {
 	otp_reset_password,
 	reset_password,
 	update_user_info,
+  save_calories,
 	get_user_info,
 	get_account_info,
 	get_dish_list,
