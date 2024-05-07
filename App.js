@@ -4,7 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { AppRouters } from './navigators/appRouters.jsx';
 import MainNavigator from './navigators/mainNavigator.jsx';
 import { AuthContext, AuthProvider } from './context/AuthContext.js';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer,  } from '@react-navigation/native';
+
 
 export default function App() {
 

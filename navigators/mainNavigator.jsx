@@ -24,6 +24,7 @@ import Premium from '../screens/premium/premium';
 import BMI from '../screens/bmi/bmi';
 import FoodDetails from '../screens/food_details/food_details';
 import Energy from '../screens/energy/energy';
+import Reminders from '../screens/reminders/reminders';
 
 import React, { useState } from 'react';
 
