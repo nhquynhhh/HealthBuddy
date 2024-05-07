@@ -6,13 +6,14 @@ import OtpTextInput from 'react-native-text-input-otp'
 import { colors } from '../../utils/colors';
 import { handleAuthenticatedAccount } from '../../services/authenticate/authenticated_account';
 import { AuthContext } from '../../context/AuthContext';
-
+import { useNavigation } from '@react-navigation/native';
 
 export default function Activation() {
 	const windowHeight = useWindowDimensions().height;
 	const windowWidth = useWindowDimensions().width;
 	const { isLogged, setLoginStatus } = useContext(AuthContext);
 	const [otp, setOtp] = React.useState('');
+	const navigation = useNavigation();
 
 	const handleActivation = async () => {
 		if (otp === "") {
@@ -21,7 +22,7 @@ export default function Activation() {
 		}
 		const result = await handleAuthenticatedAccount(otp);
 		if (result === true) {
-			setLoginStatus(true);
+			navigation.navigate('GetData');
 			Alert.alert('Thông báo', 'Kích hoạt thành công');
 		}
 		else {

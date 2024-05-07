@@ -14,16 +14,22 @@ export default function Personal() {
 	const windowWidth = useWindowDimensions().width;
 	const navigation = useNavigation();
 
-	const { removeAccessToken, removeRefreshToken, isLogged, setLoginStatus } = useContext(AuthContext);
+	const { removeAccessToken, removeRefreshToken, isLogged, setIsLogged, userInfo, account, setUserInfo, setAccount } = useContext(AuthContext);
 
 	const logout = () => {
-		setLoginStatus(false);
+		setIsLogged(false);
 		removeAccessToken();
 		removeRefreshToken();
 		removeAccessTokenAsync()
 		removeRefreshTokenAsync();
+		removeAccessTokenAsync();
+		removeRefreshTokenAsync();
 		console.log("Logout");
 	}
+
+	const accountType = account.has_subscription ? "PREMIUM" : "STANDARD";
+	const gender = userInfo.gender == 'male' ? 'Nam' : 'Nữ';
+
 	return (
 		<ScrollView style={{ backgroundColor: colors.white, marginBottom: 60 }}>
 			<View style={{ flexDirection: 'row', alignItems: 'center', padding: 16 }}>
@@ -32,9 +38,9 @@ export default function Personal() {
 				</View>
 				<View style={[styles.verticalLine, { marginRight: 15, marginLeft: 5 }]}></View>
 				<View style={{ flex: 1 }}>
-					<Text style={{ fontWeight: 'bold', fontSize: RFValue(16, 720), marginVertical: 2 }}>Alice</Text>
+					<Text style={{ fontWeight: 'bold', fontSize: RFValue(16, 720), marginVertical: 2 }}>{userInfo.username}</Text>
 					<Text style={{ marginVertical: 2, fontSize: RFValue(14, 720) }}>UserID: <Text style={{ fontWeight: 'bold', }}>123456789</Text></Text>
-					<Text style={{ marginVertical: 2, fontSize: RFValue(14, 720) }}>Loại tài khoản: <Text style={{ fontWeight: 'bold' }}>Free</Text></Text>
+					<Text style={{ marginVertical: 2, fontSize: RFValue(14, 720) }}>Loại tài khoản: <Text style={{ fontWeight: 'bold' }}>{accountType}</Text></Text>
 				</View>
 			</View>
 			<View style={{ padding: 15, borderWidth: 1.5, width: windowWidth * 0.9, alignSelf: 'center', borderRadius: 10, borderColor: colors.blue, marginVertical: 20 }}>
@@ -44,7 +50,7 @@ export default function Personal() {
 						<Text style={{ fontWeight: 'bold', fontSize: RFValue(14, 720), color: colors.blue }}>Thay đổi</Text>
 					</TouchableOpacity>
 				</View>
-				<Text style={{ marginVertical: 10, fontSize: RFValue(14, 720) }}>Tăng cân</Text>
+				<Text style={{ marginVertical: 10, fontSize: RFValue(14, 720) }}>{userInfo.aim}</Text>
 				<Text style={{ fontSize: RFValue(14, 720) }}>Cân nặng mong muốn: <Text style={{ fontWeight: 'bold' }}>55kg</Text></Text>
 			</View>
 			<View style={{ padding: 15, borderWidth: 1.5, width: windowWidth * 0.9, alignSelf: 'center', borderRadius: 10, borderColor: colors.blue, marginVertical: 5 }}>
@@ -58,23 +64,23 @@ export default function Personal() {
 					<DataTable>
 						<DataTable.Row>
 							<DataTable.Cell style={styles.tableHeader}>Tên người dùng</DataTable.Cell>
-							<DataTable.Cell style={styles.tableContent}>Alice</DataTable.Cell>
+							<DataTable.Cell style={styles.tableContent}>{userInfo.username}</DataTable.Cell>
 						</DataTable.Row>
 						<DataTable.Row>
 							<DataTable.Cell style={styles.tableHeader}>Giới tính</DataTable.Cell>
-							<DataTable.Cell style={styles.tableContent}>Nữ</DataTable.Cell>
+							<DataTable.Cell style={styles.tableContent}>{gender}</DataTable.Cell>
 						</DataTable.Row>
 						<DataTable.Row>
 							<DataTable.Cell style={styles.tableHeader}>Tuổi</DataTable.Cell>
-							<DataTable.Cell style={styles.tableContent}>20</DataTable.Cell>
+							<DataTable.Cell style={styles.tableContent}>{userInfo.age}</DataTable.Cell>
 						</DataTable.Row>
 						<DataTable.Row>
 							<DataTable.Cell style={styles.tableHeader}>Chiều cao</DataTable.Cell>
-							<DataTable.Cell style={styles.tableContent}>160 cm</DataTable.Cell>
+							<DataTable.Cell style={styles.tableContent}>{userInfo.height} cm</DataTable.Cell>
 						</DataTable.Row>
 						<DataTable.Row>
 							<DataTable.Cell style={styles.tableHeader}>Cân nặng</DataTable.Cell>
-							<DataTable.Cell style={styles.tableContent}>50 kg</DataTable.Cell>
+							<DataTable.Cell style={styles.tableContent}>{userInfo.weight} kg</DataTable.Cell>
 						</DataTable.Row>
 					</DataTable>
 				</View>
