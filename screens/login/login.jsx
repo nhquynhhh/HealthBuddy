@@ -11,6 +11,8 @@ import { AuthContext } from '../../context/AuthContext';
 import { getAccessToken, getRefreshToken } from '../../asyncStorage/auth';
 import { handleGetUserInfo } from '../../services/info/get_info';
 import { handleGetAccountInfo } from '../../services/account/get_account_info';
+import { handleGetDishList } from '../../services/dish/get_all_dishes';
+import { handleGetAllIngredients } from '../../services/ingredients/get_all_ingredients';
 
 export default function Login() {
 	const windowHeight = useWindowDimensions().height;
@@ -19,7 +21,7 @@ export default function Login() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [modalVisible, setModalVisible] = useState(false);
 
-	const { storeAccessToken, storeRefreshToken, isLogged, setIsLogged, setUserInfo, setAccount } = useContext(AuthContext);
+	const { storeAccessToken, storeRefreshToken, isLogged, setIsLogged, setUserInfo, setAccount, dishes, setDishes, ingredients, setIngredients } = useContext(AuthContext);
 	const [email, setEmail] = React.useState("");
 	const [password, setPassword] = React.useState("");
 
@@ -48,6 +50,10 @@ export default function Login() {
 			if (dishList) {
 				setDishes(dishList);
 			}
+			const ingredientList = await handleGetAllIngredients();
+			if (ingredientList) {
+				setIngredients(ingredientList);
+			}
 			setIsLogged(true);
 		}
 		else {
@@ -55,6 +61,10 @@ export default function Login() {
 			Alert.alert('Thông báo', 'Đăng nhập thất bại');
 		}
 	}
+
+
+
+	
 	return (
 		<KeyboardAvoidingView
 			behavior={Platform.OS === 'android' ? 'padding' : 'height'}

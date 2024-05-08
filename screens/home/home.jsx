@@ -1,6 +1,6 @@
 
 import { ScrollView, Text, View, Image, useWindowDimensions, StyleSheet, TouchableOpacity, FlatList } from 'react-native'
-import React, { Component, useContext, useEffect, useState } from 'react'
+import React, { Component, useContext, useEffect, useState, useCallback } from 'react'
 import { SearchBar, Icon, Divider } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
@@ -8,12 +8,27 @@ import * as Progress from 'react-native-progress';
 import { FlatGrid } from 'react-native-super-grid';
 import { colors } from '../../utils/colors';
 import { AuthContext } from '../../context/AuthContext';
+import {handleGetHomeFavoriteDishes} from '../../services/favorite/get_home_fav';
 
 export default function Home() {
 	const windowHeight = useWindowDimensions().height;
 	const windowWidth = useWindowDimensions().width;
 	const navigation = useNavigation();
-	const { userInfo, setUserInfo, account } = useContext(AuthContext);
+	const { userInfo } = useContext(AuthContext);
+	
+	const [idFavDishes, setIdFavDishes] = useState([]);
+
+	// useEffect(() => {
+	// 	const getFavoriteDishes = async () => {
+	// 		const response = await handleGetHomeFavoriteDishes(userInfo.id);
+	// 		if (response !== null) {
+	// 			setIdFavDishes(response);
+	// 			console.log("response", idFavDishes);
+	// 		}
+	// 	}
+	// 	getFavoriteDishes();
+	// }, []);
+
     user = {
         age: userInfo.age,
         weight: userInfo.weight,
