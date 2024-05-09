@@ -1,4 +1,4 @@
-import { ScrollView, Text, View, Image, useWindowDimensions, StyleSheet, TouchableOpacity } from 'react-native'
+import { ScrollView, Text, View, Image, useWindowDimensions, StyleSheet, TouchableOpacity, TextInput } from 'react-native'
 import React, { Component, useContext, useState } from 'react'
 import { SearchBar, Icon, Divider, Input, Button } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
@@ -9,13 +9,14 @@ import { colors } from '../../utils/colors';
 import { AuthContext } from '../../context/AuthContext';
 import { removeAccessTokenAsync, removeRefreshTokenAsync } from '../../asyncStorage/auth';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import RadioForm from 'react-native-simple-radio-button';
 
 export default function Personal() {
 	const windowHeight = useWindowDimensions().height;
 	const windowWidth = useWindowDimensions().width;
 	const navigation = useNavigation();
 
-	const { removeAccessToken, removeRefreshToken, isLogged, setIsLogged, userInfo, account, setUserInfo, setAccount } = useContext(AuthContext);
+	const { removeAccessToken, removeRefreshToken, isLogged, setIsLogged, userInfo, account, setUserInfo, setAccount} = useContext(AuthContext);
 
 	const logout = () => {
 		setIsLogged(false);
@@ -36,7 +37,11 @@ export default function Personal() {
 	}
 	const accountType = account.has_subscription ? "PREMIUM" : "STANDARD";
 	const gender = userInfo.gender == 'male' ? 'Nam' : 'Nữ';
-
+	const target = [
+		{ label: 'Giảm cân', value: 0 },
+		{ label: 'Duy trì cân nặng', value: 1 },
+		{ label: 'Tăng cân', value: 2 }
+	]
 	return (
 		<SafeAreaView style={{ backgroundColor: colors.white, marginBottom: 60 }}>
 		<ScrollView >
@@ -148,12 +153,44 @@ export default function Personal() {
 								color={colors.red} 
 							/>
 						</TouchableOpacity>
-						<View style={{ flexDirection: 'row', justifyContent: 'space-between' , padding: 20}}>
-							<Text style={{ fontWeight: 'bold', fontSize: RFValue(15, 720) }}>Mục tiêu của bạn</Text>
-
+						<View style={{ padding: 20, justifyContent: 'flex-start'}}>
+							<Text style={{ fontWeight: 'bold', fontSize: RFValue(20, 720) }}>Mục tiêu của bạn</Text>
 						</View>
-						<Text style={{ marginVertical: 10 }}>...</Text>
-						<Text style={{ fontSize: RFValue(14, 720) }}>Cân nặng mong muốn: <Text style={{ fontWeight: 'bold' }}>55kg</Text></Text>
+						<RadioForm
+							radio_props={target}
+							onPress={value => {
+								const selectedLabel = target.find(item => item.value === value)?.label;
+							}}
+							selectedLabelColor={colors.blue}
+							buttonSize={8}
+							buttonOuterSize={20}
+							borderWidth={1}
+							labelStyle={{ fontSize: 16, lineHeight: 30}}
+							style={{paddingLeft: 30}}
+						/>
+						<Text style={{ fontWeight: 'bold',fontSize: RFValue(20, 720), padding: 20 }}>Cân nặng mong muốn</Text>
+						<View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20, paddingBottom: 20}}>
+							<TextInput 
+								style={[styles.inputField, { paddingLeft: 20,paddingRight: 20,  borderColor: colors.blue, borderWidth: 1, borderRadius: 10 }]}
+								placeholder='Cân nặng'
+								keyboardType='numeric'
+							/>
+							<View style={{ marginLeft: 10 }}>
+								<Text style={{fontSize: RFValue(20, 720) }}>kg</Text>
+							</View>
+						</View>
+						<Button title={"XÁC NHẬN"}
+							style={styles.btnClick}
+							titleStyle={{ fontWeight: '700', fontSize: 20 }}
+							buttonStyle={{ minWidth: '70%', height: 45, borderRadius: 10 }}
+							ViewComponent={LinearGradient}
+							linearGradientProps={{
+								colors: [colors.blue, colors.lightBlue],
+								start: { x: 0, y: 0.5 },
+								end: { x: 1, y: 0.5 },
+							}}
+							onPress={closeModal}>
+						</Button>
 					</View>
 				</View>
 			</Modal>
@@ -188,10 +225,10 @@ const styles = StyleSheet.create({
 	modalContent: {
         backgroundColor: colors.white,
         borderRadius: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
 		padding: 20,
-		
+		borderColor: colors.lightBlue,
+		borderWidth: 5,
+		borderRadius: 10,
 		
     }
 })
