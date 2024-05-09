@@ -1,17 +1,18 @@
-import { save_calories } from './api_list';
+import { add_morning } from './api_list';
+import {getAccessToken
+} from '../../asyncStorage/auth';
 
-async function saveCalories(meals, authToken) {
-    const url = save_calories.url;
+
+async function save_calories_morning(breakfast) {
+    const authToken = await getAccessToken();
+    const url = add_morning.url;
     const headers = {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${authToken}`
     };
+    console.log('breakfast', url, breakfast);
     const data = {
-        morning_calo: meals.breakfast,
-        noon_calo: meals.lunch,
-        dinner_calo: meals.dinner,
-        snack_calo: meals.snacks,
-        exercise_calo: meals.workout
+        morning_calo: parseInt(breakfast)
     };
 
     try {
@@ -20,6 +21,7 @@ async function saveCalories(meals, authToken) {
             headers: headers,
             body: JSON.stringify(data)
         });
+        console.log(headers);
         if (!response.ok) {
             throw new Error('Failed to save calories');
         }
@@ -29,4 +31,4 @@ async function saveCalories(meals, authToken) {
     }
 }
 
-export { saveCalories };
+export { save_calories_morning };

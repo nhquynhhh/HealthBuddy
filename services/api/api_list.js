@@ -51,10 +51,30 @@ const update_user_info = {
 	url: `${BASE_URL}/api/update-user`,
 	method: 'POST'
 }
-const save_calories = {
-	url: `${BASE_URL}/api/save-calories`,
+const add_morning = {
+	url: `${BASE_URL}/api/statistic/add_morning`,
+	method: 'POST'
+}
+
+const add_noon = {
+	url: `${BASE_URL}/api/statistic/add_noon`,
+	method: 'POST'
+}
+
+const add_dinner = {
+	url: `${BASE_URL}/api/statistic/add_dinner`,
 	method: 'POST'
 }
 
 
-export { login_api, signup_api, logout_api, otp_required, check_acount, refresh_token, authenticated_account, otp_reset_password, reset_password, update_user_info, save_calories};
+const add_snack = {
+	url: `${BASE_URL}/api/statistic/add_snack`,
+	method: 'POST'
+}
+
+const add_exercise = {
+	url: `${BASE_URL}/api/statistic/add_exercise`,
+	method: 'POST'
+}
+
+export { login_api, signup_api, logout_api, otp_required, check_acount, refresh_token, authenticated_account, otp_reset_password, reset_password, update_user_info, add_morning, add_noon, add_dinner, add_snack, add_exercise};
