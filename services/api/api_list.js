@@ -1,5 +1,6 @@
-const BASE_URL = 'https://premium-singularly-meerkat.ngrok-free.app';
-
+// const BASE_URL = 'https://premium-singularly-meerkat.ngrok-free.app';
+// const BASE_URL = 'https://implicitly-charming-eft.ngrok-free.app';
+const BASE_URL = 'https://widely-discrete-glowworm.ngrok-free.app/';
 
 const login_api = {
 	url: `${BASE_URL}/api/login`,
@@ -51,6 +52,10 @@ const update_user_info = {
 	url: `${BASE_URL}/api/update-user`,
 	method: 'POST'
 }
+const save_calories = {
+	url: `${BASE_URL}/api/save-calories`,
+	method: 'POST'
+}
 
 const get_user_info = {
 	url: `${BASE_URL}/api/get-user`,
@@ -77,6 +82,26 @@ const get_recipe_by_dish_id = {
 	method: 'GET'
 }
 
+const change_favorite = {
+	url: `${BASE_URL}/api/change-favorite`,
+	method: 'POST'
+}
+
+const get_favorite_dishes = {
+	url: `${BASE_URL}/api/get-favorite-by-user-id/:id`,
+	method: 'GET'
+}
+
+const get_home_favorite_dishes = {
+	url: `${BASE_URL}/api/get-home-fav/:id`,
+	method: 'GET'
+}
+
+const get_fav_list = {
+	url: `${BASE_URL}/api/get-fav-list-by-user-id/:id`,
+	method: 'GET'
+}
+
 export {
 	login_api,
 	signup_api,
@@ -88,9 +113,14 @@ export {
 	otp_reset_password,
 	reset_password,
 	update_user_info,
+  save_calories,
 	get_user_info,
 	get_account_info,
 	get_dish_list,
 	get_all_ingredients,
-	get_recipe_by_dish_id
+	get_recipe_by_dish_id,
+	change_favorite,
+	get_favorite_dishes,
+	get_home_favorite_dishes,
+	get_fav_list
 };

@@ -1,22 +1,22 @@
-import React from "react";
+import React, {useEffect, useContext} from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native"
 import { handleGetRecipeByDishID } from "../../services/recipe/get_recipe_by_dish_id";
+import { AuthContext } from "../../context/AuthContext";
+import {handleGetFavoriteDishes} from '../../services/favorite/get_favorite_dishes';
 
 const FoodList = ({ FoodList }) => {
-	const navigation = useNavigation();
+	const navigation = useNavigation();	
+	const { userInfo } = useContext(AuthContext);
 	const onPressHandler = async () => {
-		// const response = await handleGetRecipeByDishID(FoodList.id);
-		// const recipe = await response.json();
-		console.log(FoodList.id);
 		const recipe = await handleGetRecipeByDishID(FoodList.id);
-		navigation.navigate("FoodDetails", { data: FoodList, recipe: recipe});
+		const response = await handleGetFavoriteDishes(userInfo.id);
+		navigation.navigate("FoodDetails", { data: FoodList, recipe: recipe, favoriteDishes: response });
 	}
 	return (
 		<TouchableOpacity onPress={onPressHandler} key={FoodList.id} style={styles.ContainerItem}>
 			<View style={styles.ContainerImage}>
 				<Image source={{ uri: FoodList?.img }} style={styles.image} />
-				<Image source={require('../../assets/img_favourite_check.png')} style={{ width: 20, height: 20, position: "absolute", right: 0 }} />
 			</View>
 			<View>
 				<Text style={{ fontWeight: "bold", padding: 8 }}>{FoodList?.name}</Text>
