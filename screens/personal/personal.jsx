@@ -29,11 +29,18 @@ export default function Personal() {
 		console.log("Logout");
 	}
 	const [isFormVisible, setIsFormVisible] = useState(false);
+	const [isModalVisible, setIsModalVisible] = useState(false);
 	const onPressHandler = () => {
 		setIsFormVisible(true);
 	}
 	const closeModal = () => {
 		setIsFormVisible(false);
+	}
+	const onPressHandler2 = () => {
+		setIsModalVisible(true);
+	}
+	const closeModal2 = () => {
+		setIsModalVisible(false);
 	}
 	const accountType = account.has_subscription ? "PREMIUM" : "STANDARD";
 	const gender = userInfo.gender == 'male' ? 'Nam' : 'Nữ';
@@ -69,7 +76,7 @@ export default function Personal() {
 			<View style={{ padding: 15, borderWidth: 1.5, width: windowWidth * 0.9, alignSelf: 'center', borderRadius: 10, borderColor: colors.blue, marginVertical: 5 }}>
 				<View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
 					<Text style={{ fontWeight: 'bold', fontSize: RFValue(15, 720) }}>Thông tin cá nhân</Text>
-					<TouchableOpacity>
+					<TouchableOpacity onPress={onPressHandler2}>
 						<Text style={{ fontWeight: 'bold', fontSize: RFValue(14, 720), color: colors.blue }}>Thay đổi</Text>
 					</TouchableOpacity>
 				</View>
@@ -137,7 +144,7 @@ export default function Personal() {
 
 		
 		</ScrollView>
-		{/* Modal */}
+		{/* Modal 1 */}
 			<Modal
 				visible={isFormVisible}
 				animationType="slide"
@@ -190,6 +197,53 @@ export default function Personal() {
 								end: { x: 1, y: 0.5 },
 							}}
 							onPress={closeModal}>
+						</Button>
+					</View>
+				</View>
+			</Modal>
+
+
+
+			{/* Modal 2 */}
+			<Modal
+				visible={isModalVisible}
+				animationType="slide"
+				transparent={true}
+			>
+				<View style={styles.modalContainer}>
+					<View style={[styles.modalContent,{width:windowWidth*0.9}]}>
+						<TouchableOpacity onPress={closeModal2} style={{ position: "absolute", top: 8, right: 8, zIndex: 1}}>
+							<Icon 
+								name="close" 
+								type="antdesign" 
+								size={25} 
+								color={colors.red} 
+							/>
+						</TouchableOpacity>
+						<View style={{ padding: 20, justifyContent: 'flex-start'}}>
+							<Text style={{ fontWeight: 'bold', fontSize: RFValue(20, 720) }}>Thay đổi các thông số</Text>
+						</View>
+						{/* <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20, paddingBottom: 20}}>
+							<TextInput 
+								style={[styles.inputField, { paddingLeft: 20,paddingRight: 20,  borderColor: colors.blue, borderWidth: 1, borderRadius: 10 }]}
+								placeholder='Cân nặng'
+								keyboardType='numeric'
+							/>
+							<View style={{ marginLeft: 10 }}>
+								<Text style={{fontSize: RFValue(20, 720) }}>kg</Text>
+							</View>
+						</View> */}
+						<Button title={"XÁC NHẬN"}
+							style={styles.btnClick}
+							titleStyle={{ fontWeight: '700', fontSize: 20 }}
+							buttonStyle={{ minWidth: '70%', height: 45, borderRadius: 10 }}
+							ViewComponent={LinearGradient}
+							linearGradientProps={{
+								colors: [colors.blue, colors.lightBlue],
+								start: { x: 0, y: 0.5 },
+								end: { x: 1, y: 0.5 },
+							}}
+							onPress={closeModal2}>
 						</Button>
 					</View>
 				</View>
