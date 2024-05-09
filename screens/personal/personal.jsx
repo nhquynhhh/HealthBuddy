@@ -26,6 +26,11 @@ export default function Personal() {
 		removeRefreshTokenAsync();
 		console.log("Logout");
 	}
+	
+	const onPressHandler = async () => {
+		navigation.navigate("Change");
+	}
+
 
 	const accountType = account.has_subscription ? "PREMIUM" : "STANDARD";
 	const gender = userInfo.gender == 'male' ? 'Nam' : 'Nữ';
@@ -46,7 +51,7 @@ export default function Personal() {
 			<View style={{ padding: 15, borderWidth: 1.5, width: windowWidth * 0.9, alignSelf: 'center', borderRadius: 10, borderColor: colors.blue, marginVertical: 20 }}>
 				<View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
 					<Text style={{ fontWeight: 'bold', fontSize: RFValue(15, 720) }}>Mục tiêu của bạn</Text>
-					<TouchableOpacity>
+					<TouchableOpacity onPress={onPressHandler}>
 						<Text style={{ fontWeight: 'bold', fontSize: RFValue(14, 720), color: colors.blue }}>Thay đổi</Text>
 					</TouchableOpacity>
 				</View>
