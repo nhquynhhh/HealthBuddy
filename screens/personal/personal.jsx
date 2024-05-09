@@ -1,13 +1,14 @@
 import { ScrollView, Text, View, Image, useWindowDimensions, StyleSheet, TouchableOpacity } from 'react-native'
-import React, { Component, useContext } from 'react'
+import React, { Component, useContext, useState } from 'react'
 import { SearchBar, Icon, Divider, Input, Button } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
-import { DataTable } from 'react-native-paper';
+import { DataTable, Modal } from 'react-native-paper';
 import { colors } from '../../utils/colors';
 import { AuthContext } from '../../context/AuthContext';
 import { removeAccessTokenAsync, removeRefreshTokenAsync } from '../../asyncStorage/auth';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Personal() {
 	const windowHeight = useWindowDimensions().height;
@@ -26,17 +27,19 @@ export default function Personal() {
 		removeRefreshTokenAsync();
 		console.log("Logout");
 	}
-	
-	const onPressHandler = async () => {
-		navigation.navigate("Change");
+	const [isFormVisible, setIsFormVisible] = useState(false);
+	const onPressHandler = () => {
+		setIsFormVisible(true);
 	}
-
-
+	const closeModal = () => {
+		setIsFormVisible(false);
+	}
 	const accountType = account.has_subscription ? "PREMIUM" : "STANDARD";
 	const gender = userInfo.gender == 'male' ? 'Nam' : 'Nữ';
 
 	return (
-		<ScrollView style={{ backgroundColor: colors.white, marginBottom: 60 }}>
+		<SafeAreaView style={{ backgroundColor: colors.white, marginBottom: 60 }}>
+		<ScrollView >
 			<View style={{ flexDirection: 'row', alignItems: 'center', padding: 16 }}>
 				<View style={{ padding: 10 }}>
 					<Image source={require('../../assets/img_avatar.png')} style={{ width: 60, height: 60, alignSelf: 'center' }}></Image>
@@ -126,7 +129,35 @@ export default function Personal() {
 				onPress={() => logout()}>
 			</Button>
 			<View style={{ paddingBottom: 70 }}></View>
+
+		
 		</ScrollView>
+		{/* Modal */}
+			<Modal
+				visible={isFormVisible}
+				animationType="slide"
+				transparent={true}
+			>
+				<View style={styles.modalContainer}>
+					<View style={[styles.modalContent,{width:windowWidth*0.9}]}>
+						<TouchableOpacity onPress={closeModal} style={{ position: "absolute", top: 8, right: 8, zIndex: 1}}>
+							<Icon 
+								name="close" 
+								type="antdesign" 
+								size={25} 
+								color={colors.red} 
+							/>
+						</TouchableOpacity>
+						<View style={{ flexDirection: 'row', justifyContent: 'space-between' , padding: 20}}>
+							<Text style={{ fontWeight: 'bold', fontSize: RFValue(15, 720) }}>Mục tiêu của bạn</Text>
+
+						</View>
+						<Text style={{ marginVertical: 10 }}>...</Text>
+						<Text style={{ fontSize: RFValue(14, 720) }}>Cân nặng mong muốn: <Text style={{ fontWeight: 'bold' }}>55kg</Text></Text>
+					</View>
+				</View>
+			</Modal>
+		</SafeAreaView>
 	)
 }
 
@@ -149,4 +180,18 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
+	modalContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+		height: '100%'
+    },
+	modalContent: {
+        backgroundColor: colors.white,
+        borderRadius: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+		padding: 20,
+		
+		
+    }
 })
