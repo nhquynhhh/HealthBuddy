@@ -307,7 +307,7 @@ export default function Statistics() {
         </TouchableOpacity>
       </View>
       <View style={[currentPage === 'dailyStatistic' ? styles.displayPage : styles.hidePage]}>
-        <TouchableOpacity style={{flexDirection: 'row', paddingTop: 20, alignSelf: 'center'}} onPress={handleCalendar}>
+        {/* <TouchableOpacity style={{flexDirection: 'row', paddingTop: 20, alignSelf: 'center'}} onPress={handleCalendar}>
           <Icon name='calendar-outline' type='ionicon' color={colors.blue}/>
           <Text style={{color: colors.blue, textAlignVertical: 'center', paddingHorizontal: 10, fontSize: RFValue(15,720), fontWeight: 'bold'}}>Chọn ngày</Text>
         </TouchableOpacity>
@@ -328,7 +328,7 @@ export default function Statistics() {
                 </TouchableOpacity>
               </View>
             </View>
-        </Modal>
+        </Modal> */}
         <View style={{padding: 15}}>
           <Calories></Calories>
         </View>
@@ -337,7 +337,7 @@ export default function Statistics() {
         </View>
       </View>
       <View style={[currentPage === 'monthlyStatistic' ? styles.displayPage : styles.hidePage]}>
-      <TouchableOpacity style={{flexDirection: 'row', paddingTop: 20, alignSelf: 'center'}} onPress={handleCalendar}>
+      {/* <TouchableOpacity style={{flexDirection: 'row', paddingTop: 20, alignSelf: 'center'}} onPress={handleCalendar}>
           <Icon name='calendar-outline' type='ionicon' color={colors.blue}/>
           <Text style={{color: colors.blue, textAlignVertical: 'center', paddingHorizontal: 10, fontSize: RFValue(15,720), fontWeight: 'bold'}}>Chọn tháng</Text>
         </TouchableOpacity>
@@ -358,7 +358,7 @@ export default function Statistics() {
                 </TouchableOpacity>
               </View>
             </View>
-        </Modal>
+        </Modal> */}
       </View>
       <View style={[currentPage === 'yearlyStatistic' ? styles.displayPage : styles.hidePage]}>
 
