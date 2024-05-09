@@ -4,43 +4,27 @@ import {
 	setRefreshToken,
 	getAccessToken,
 	getRefreshToken,
+	removeAccessTokenAsync,
+	removeRefreshTokenAsync
 } from "../asyncStorage/auth";
 import { handleLoginWithToken } from '../services/authenticate/login_with_token'
-
-
-
+import { he } from "date-fns/locale";
+import { handleGetUserInfo } from '../services/info/get_info';
+import { handleGetAccountInfo } from "../services/account/get_account_info";
+import { handleGetDishList } from '../services/dish/get_all_dishes';
+import { handleGetAllIngredients } from '../services/ingredients/get_all_ingredients';
+import { handleGetFavoriteDishes } from '../services/favorite/get_favorite_dishes';
 export const AuthContext = createContext();
-export const AuthProvider = ({ children }) => {
 
+export const AuthProvider = ({ children }) => {
 	const [accessTokenContext, setAccessTokenContext] = useState(null);
 	const [refreshTokenContext, setRefreshTokenContext] = useState(null);
 	const [isLogged, setIsLogged] = useState(false);
-	const [userInfo, setUserInfo] = useState({
-		account_id: null,
-		age: null,
-		height: null,
-		weight: null,
-		aim: null,
-		exercise: null,
-		username: null,
-		gender: null,
-	});
-	const [account, setAccount] = useState({
-		account_id: null,
-		email: null,
-		created_at: null,
-		authenticated: null,
-	})
-
-	// const checkToken = async () => {
-	// 	const refresh = await getRefreshToken();
-	// 	if (refresh !== null) {
-	// 		console.log('There is a refresh token in the storage')
-	// 		setRefresh_token(refresh);
-	// 		return true;
-	// 	}
-	// 	return false;
-	// }
+	const [userInfo, setUserInfo] = useState(null);
+	const [account, setAccount] = useState(null);
+	const [dishes, setDishes] = useState([]);
+	const [ingredients, setIngredients] = useState([]);
+	const [favoriteDishes, setFavoriteDishes] = useState([]);
 
 	useEffect(() => {
 		const checkLogin = async () => {
@@ -48,13 +32,34 @@ export const AuthProvider = ({ children }) => {
 			if (refresh_token) {
 				const isValidToken = await handleLoginWithToken(refresh_token);
 				if (isValidToken) {
+					const userInfo = await handleGetUserInfo();
+					if (userInfo) {
+						setUserInfo(userInfo);
+					}
+					const accountInfo = await handleGetAccountInfo();
+					if (accountInfo) {
+						setAccount(accountInfo);
+					}
+					const dishList = await handleGetDishList();
+					if (dishList) {
+						setDishes(dishList);
+					}
+					const ingredientsList = await handleGetAllIngredients();
+					if (ingredientsList) {
+						setIngredients(ingredientsList);
+					}
+					const favoriteDishes = await handleGetFavoriteDishes(userInfo.id);
+					if (favoriteDishes) {
+						setFavoriteDishes(favoriteDishes);
+					}
 					setAccessTokenContext(await getAccessToken());
 					setRefreshTokenContext(refresh_token);
 					setIsLogged(true);
 				}
+			} else {
+				return;
 			}
 		};
-
 		checkLogin();
 	}, []);
 
@@ -85,8 +90,16 @@ export const AuthProvider = ({ children }) => {
 		setIsLogged(status);
 	}
 
+	const setFavoriteDishesContext = (dishes) => {
+		setFavoriteDishes(dishes);
+	}
+
+	const addFavoriteDish = (dish) => {
+		setFavoriteDishes([...favoriteDishes, dish]);
+	}
+
 	return (
-		<AuthContext.Provider value={{ accessTokenContext, account, storeAccessToken, removeAccessToken, storeRefreshToken, removeRefreshToken, setAccountContext, refreshTokenContext, isLogged, setLoginStatus, userInfo, setUserInfo }}>
+		<AuthContext.Provider value={{ accessTokenContext, account, storeAccessToken, removeAccessToken, storeRefreshToken, removeRefreshToken, setAccountContext, refreshTokenContext, isLogged, setIsLogged, userInfo, setUserInfo, setAccount, dishes, setDishes, ingredients, setIngredients, favoriteDishes, setFavoriteDishes, setFavoriteDishesContext, addFavoriteDish, setLoginStatus }}>
 			{children}
 		</AuthContext.Provider>
 	);
