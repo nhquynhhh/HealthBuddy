@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, useWindowDimensions, Alert, Keyboard} from 'react-native'
+import { View, Text, Image, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, useWindowDimensions, Alert, Keyboard } from 'react-native'
 import React, { Component, useEffect, useState, useContext, useRef } from 'react'
 import { Icon, Button, Divider } from "react-native-elements";
 import { LinearGradient } from 'expo-linear-gradient';
@@ -23,6 +23,7 @@ export default function Activation() {
 			Alert.alert('Thông báo', 'Vui lòng nhập mã OTP');
 			return;
 		}
+		console.log(otp);
 		const result = await handleAuthenticatedAccount(otp);
 		if (result === true) {
 			navigation.navigate('GetData');
@@ -40,16 +41,16 @@ export default function Activation() {
 			<Text style={styles.headingText}>Kích hoạt tài khoản</Text>
 			<Text style={[styles.infoText, { paddingVertical: 10 }]}>Mã OTP đã được gửi đến email đăng ký.</Text>
 			<View style={{ width: '90%', paddingTop: 20 }}>
-			<OtpInput
-				autoFocus={true}
-				otp={otp}
-				onTextChange={setOtp}
-				numberOfInputs={6}
-				tintColor={colors.blue}
-				offTintColor={colors.gray}
-				secureTextEntry={false}
-				keyboardType="numeric"
-			/>
+				<OtpInput
+					autoFocus={true}
+					otp={otp}
+					onTextChange={setOtp}
+					numberOfInputs={6}
+					tintColor={colors.blue}
+					offTintColor={colors.gray}
+					secureTextEntry={false}
+					keyboardType="numeric"
+				/>
 
 			</View>
 
