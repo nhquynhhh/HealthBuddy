@@ -12,3 +12,16 @@ export const handleGetFavoriteDishes = async (id) => {
 		return null;
 	}
 }
+
+export const handleGetFavList = async (id) => {
+	try {
+		const response = await callGetFavList(id);
+		const result = await response.json();
+		if (response.ok) {
+			return result.favorites
+		}
+	} catch (error) {
+		console.log(error);
+		return null;
+	}
+}

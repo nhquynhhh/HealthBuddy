@@ -5,8 +5,9 @@ export const handleGetHomeFavoriteDishes = async (id) => {
 		const response = await callGetHomeFavoriteDishes(id);
 		const result = await response.json();
 		if (response.ok) {
-			console.log(result);
-			return result.favorites
+			data = result.favorites;
+			console.log(data);
+			return data;
 		}
 	} catch (error) {
 		console.log(error);

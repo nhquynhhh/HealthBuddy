@@ -30,6 +30,7 @@ import React, { useState } from 'react';
 
 const MainNavigator = () => {
 	const HomeStack = createNativeStackNavigator();
+	const [ShowBottomNavigator, setShowBottomNavigator] = useState(false);
 	function HomeStackScreens() {
 		return (
 			<HomeStack.Navigator screenOptions={{ headerTitleAlign: 'center', headerTitleStyle: { fontWeight: 'bold' } }}>

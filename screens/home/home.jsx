@@ -8,40 +8,52 @@ import * as Progress from 'react-native-progress';
 import { FlatGrid } from 'react-native-super-grid';
 import { colors } from '../../utils/colors';
 import { AuthContext } from '../../context/AuthContext';
-import {handleGetHomeFavoriteDishes} from '../../services/favorite/get_home_fav';
+import { handleGetHomeFavoriteDishes } from '../../services/favorite/get_home_fav';
+import { set } from 'date-fns';
 
 export default function Home() {
 	const windowHeight = useWindowDimensions().height;
 	const windowWidth = useWindowDimensions().width;
 	const navigation = useNavigation();
 	const { userInfo } = useContext(AuthContext);
-	
+
 	const [idFavDishes, setIdFavDishes] = useState([]);
+	const favDishList = [];
+	const [favDish, setFavDish] = React.useState([
+		{ name: 'Mì Ý Thịt Băm', image: { uri: 'https://www.marionskitchen.com/wp-content/uploads/2022/12/Filipino-Spaghetti-04.jpg' }, isFavorite: true },
+		{ name: 'Mì Ý Thịt Băm', image: { uri: 'https://www.marionskitchen.com/wp-content/uploads/2022/12/Filipino-Spaghetti-04.jpg' }, isFavorite: true },
+		{ name: 'Mì Ý Thịt Băm', image: { uri: 'https://www.marionskitchen.com/wp-content/uploads/2022/12/Filipino-Spaghetti-04.jpg' }, isFavorite: true },
+		{ name: 'Mì Ý Thịt Băm', image: { uri: 'https://www.marionskitchen.com/wp-content/uploads/2022/12/Filipino-Spaghetti-04.jpg' }, isFavorite: true },
+	]);
 
-	// useEffect(() => {
-	// 	const getFavoriteDishes = async () => {
-	// 		const response = await handleGetHomeFavoriteDishes(userInfo.id);
-	// 		if (response !== null) {
-	// 			setIdFavDishes(response);
-	// 			console.log("response", idFavDishes);
-	// 		}
-	// 	}
-	// 	getFavoriteDishes();
-	// }, []);
+	useEffect(() => {
+		const getFavoriteDishes = async () => {
+			const response = await handleGetHomeFavoriteDishes(userInfo.id);
+			console.log("response", response);
+			if (response.length > 0) {
+				response.map((item) => {
+					favDishList.push({ name: item, image: { uri: 'https://www.marionskitchen.com/wp-content/uploads/2022/12/Filipino-Spaghetti-04.jpg' }, isFavorite: true });
+				})
+				console.log("favDishList", favDishList);
+				setFavDish(favDishList);
+			}
+		}	
+		getFavoriteDishes();
+	}, []);
 
-    user = {
-        age: userInfo.age,
-        weight: userInfo.weight,
-        height: userInfo.height,
-        gender: userInfo.gender == 'male' ? 'nam' : 'nữ',
-    }
-    const BMI = (user?.weight/((user?.height*user?.height)/10000)).toFixed(1);
-    let energy;
-    if(user?.gender == "nam"){
-        energy = (6.25 * user?.height) + (10 * user?.weight) - (5 * user?.age) + 5;
-    }else {
-        energy = (6.25 * user?.height) + (10 + user?.weight) - (5 * user?.age) - 161;
-    }
+	user = {
+		age: userInfo.age,
+		weight: userInfo.weight,
+		height: userInfo.height,
+		gender: userInfo.gender == 'male' ? 'nam' : 'nữ',
+	}
+	const BMI = (user?.weight / ((user?.height * user?.height) / 10000)).toFixed(1);
+	let energy;
+	if (user?.gender == "nam") {
+		energy = (6.25 * user?.height) + (10 * user?.weight) - (5 * user?.age) + 5;
+	} else {
+		energy = (6.25 * user?.height) + (10 + user?.weight) - (5 * user?.age) - 161;
+	}
 	const caloriesNeeded = energy - 0;
 	const categories = [
 		{ image: require('../../assets/img_kcal_icon.png'), label: 'Kiểm soát\ncalories', screen: 'Calories', tab: '' },
@@ -54,17 +66,10 @@ export default function Home() {
 		{ image: require('../../assets/img_search_icon.png'), label: 'Tra cứu', screen: 'Search', tab: '' },
 	];
 
-	const [favDish, setFavDish] = React.useState([
-		{ name: 'Mì Ý Thịt Băm', image: { uri: 'https://www.marionskitchen.com/wp-content/uploads/2022/12/Filipino-Spaghetti-04.jpg' }, isFavorite: true },
-		{ name: 'Mì Ý Thịt Băm', image: { uri: 'https://www.marionskitchen.com/wp-content/uploads/2022/12/Filipino-Spaghetti-04.jpg' }, isFavorite: true },
-		{ name: 'Mì Ý Thịt Băm', image: { uri: 'https://www.marionskitchen.com/wp-content/uploads/2022/12/Filipino-Spaghetti-04.jpg' }, isFavorite: true },
-		{ name: 'Mì Ý Thịt Băm', image: { uri: 'https://www.marionskitchen.com/wp-content/uploads/2022/12/Filipino-Spaghetti-04.jpg' }, isFavorite: true },
-	]);
-
 	return (
 		<ScrollView style={{ backgroundColor: colors.white, marginBottom: 60 }} showsVerticalScrollIndicator={false}>
 			{/* Header */}
-			<View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20, width: windowWidth * 0.5, paddingLeft: 20, paddingTop: 20, paddingBottom: 10 }}>
+			<View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20, width: windowWidth * 0.8, paddingLeft: 20, paddingTop: 20, paddingBottom: 10 }}>
 				<Image source={require('../../assets/img_bare_logo.png')} style={{ width: 50, height: 50 }}></Image>
 				<Text style={{ textAlignVertical: 'center', fontSize: RFValue(20, 720), marginLeft: 15 }}><Text style={{ fontWeight: '800' }}>{userInfo.username}</Text>!</Text>
 			</View>

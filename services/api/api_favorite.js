@@ -1,4 +1,4 @@
-	import { change_favorite, get_favorite_dishes, get_home_favorite_dishes} from "./api_list";
+	import { change_favorite, get_favorite_dishes, get_home_favorite_dishes, get_fav_list} from "./api_list";
 import { getAccessToken } from "../../asyncStorage/auth";
 
 const callChangeFavorite = async (data) => {
@@ -45,4 +45,18 @@ const callGetHomeFavoriteDishes = async (id) => {
 	});
 }
 
-export { callChangeFavorite, callGetFavoriteDishes, callGetHomeFavoriteDishes };
+const callGetFavList = async (id) => {
+	const accessToken = await getAccessToken();
+	const url = get_fav_list.url.replace(':id', id);
+	const headers = {
+		'Content-Type': 'application/json',
+		'Authorization': `Bearer ${accessToken}`
+	};
+	const method = get_fav_list.method;
+	return fetch(url, {
+		method,
+		headers
+	});
+}
+
+export { callChangeFavorite, callGetFavoriteDishes, callGetHomeFavoriteDishes, callGetFavList };
