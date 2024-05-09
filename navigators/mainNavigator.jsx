@@ -43,7 +43,7 @@ const MainNavigator = () => {
 				<HomeStack.Screen name="MenuSuggestion" component={MenuSuggestion} options={{headerTitle: "Gợi ý thực đơn"}}/>
 				<HomeStack.Screen name="Search" component={Search} options={{headerTitle: "Tra cứu"}}/>
 				<HomeStack.Screen name="BMI" component={BMI} options={{ headerTitle: "BMI là gì ?"}} />
-				<HomeStack.Screen name="Energy" component={Energy} options={{ headerTitle: "BMI là gì ?" }} />
+				<HomeStack.Screen name="Energy" component={Energy} options={{ headerTitle: "Cách tính năng lượng" }} />
 				<HomeStack.Screen name="FoodDetails" component={FoodDetails}
 					options={({ route }) => ({ 
 						headerTitle: route.params.data.name
@@ -51,6 +51,15 @@ const MainNavigator = () => {
 				/>
 
 			</HomeStack.Navigator>
+		)
+	}
+
+	const NotiStack = createNativeStackNavigator();
+	function NotiStackScreens(){
+		return(
+			<NotiStack.Navigator screenOptions={{headerTitleAlign: 'center', headerTitleStyle:{fontWeight: 'bold'}}}>
+				<NotiStack.Screen name="Noti" component={Notifications} options={{headerTitle: "Thông báo"}}/>
+			</NotiStack.Navigator>
 		)
 	}
 
@@ -148,7 +157,7 @@ const MainNavigator = () => {
 						}
 					}} />
 				<Tab.Screen name="NotiTab"
-					component={Notifications}
+					component={NotiStackScreens}
 					options={{
 						tabBarIcon: ({ focused }) => {
 							return (
