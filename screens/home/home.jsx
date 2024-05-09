@@ -36,20 +36,21 @@ export default function Home() {
 		}
 	}
 	useEffect(() => {
+		console.log(userInfo);
 		getFavoriteDishes();
 	}, []);
 
-	useFocusEffect(
-		React.useCallback(() => {
-			setIsLoading(true);
-			console.log('Home screen is focused');
-			getFavoriteDishes();
-		}, [])
-	);
+	// useFocusEffect(
+	// 	React.useCallback(() => {
+	// 		setIsLoading(true);
+	// 		console.log('Home screen is focused');
+	// 		getFavoriteDishes();
+	// 	}, [])
+	// );
 
-	useEffect(() => {
+	// useEffect(() => {
 
-	}, [isLoading]);
+	// }, [isLoading]);
 
 	// useEffect(() => {
 	// 	setUpdatedFavDish(favDish); // Cập nhật state mới khi favDish thay đổi

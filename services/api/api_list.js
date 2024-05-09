@@ -1,6 +1,6 @@
-// const BASE_URL = 'https://premium-singularly-meerkat.ngrok-free.app';
+const BASE_URL = 'https://premium-singularly-meerkat.ngrok-free.app';
 // const BASE_URL = 'https://implicitly-charming-eft.ngrok-free.app';
-const BASE_URL = 'https://widely-discrete-glowworm.ngrok-free.app/';
+// const BASE_URL = 'https://widely-discrete-glowworm.ngrok-free.app/';
 
 const login_api = {
 	url: `${BASE_URL}/api/login`,
@@ -102,6 +102,11 @@ const get_fav_list = {
 	method: 'GET'
 }
 
+const get_calories = {
+	url: `${BASE_URL}/api/statistic/get-user-calories`,
+	method: 'GET'
+}
+
 export {
 	login_api,
 	signup_api,
@@ -113,7 +118,7 @@ export {
 	otp_reset_password,
 	reset_password,
 	update_user_info,
-  save_calories,
+	save_calories,
 	get_user_info,
 	get_account_info,
 	get_dish_list,
@@ -122,5 +127,6 @@ export {
 	change_favorite,
 	get_favorite_dishes,
 	get_home_favorite_dishes,
-	get_fav_list
+	get_fav_list,
+	get_calories
 };
