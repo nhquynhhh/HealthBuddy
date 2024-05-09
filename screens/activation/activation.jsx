@@ -1,8 +1,10 @@
-import { View, Text, Image, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, useWindowDimensions, Alert } from 'react-native'
-import React, { Component, useEffect, useState, useContext } from 'react'
+import { View, Text, Image, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, useWindowDimensions, Alert, Keyboard} from 'react-native'
+import React, { Component, useEffect, useState, useContext, useRef } from 'react'
 import { Icon, Button, Divider } from "react-native-elements";
 import { LinearGradient } from 'expo-linear-gradient';
-import OtpTextInput from 'react-native-text-input-otp'
+
+import { OtpInput } from "react-native-otp-entry";
+
 import { colors } from '../../utils/colors';
 import { handleAuthenticatedAccount } from '../../services/authenticate/authenticated_account';
 import { AuthContext } from '../../context/AuthContext';
@@ -14,6 +16,7 @@ export default function Activation() {
 	const { isLogged, setLoginStatus } = useContext(AuthContext);
 	const [otp, setOtp] = React.useState('');
 	const navigation = useNavigation();
+
 
 	const handleActivation = async () => {
 		if (otp === "") {
@@ -30,21 +33,24 @@ export default function Activation() {
 			Alert.alert('Thông báo', 'Kích hoạt thất bại');
 		}
 	}
-
 	return (
-		<View style={{ alignItems: 'center', paddingTop: 100 }}>
+		<View style={{ alignItems: 'center', paddingTop: 100, backgroundColor: colors.white }}>
 			<Image source={require('../../assets/img_email_verification.png')}
 				style={{ width: 200, height: 200 }}></Image>
 			<Text style={styles.headingText}>Kích hoạt tài khoản</Text>
 			<Text style={[styles.infoText, { paddingVertical: 10 }]}>Mã OTP đã được gửi đến email đăng ký.</Text>
 			<View style={{ width: '90%', paddingTop: 20 }}>
-				<OtpTextInput
-					otp={otp}
-					setOtp={setOtp}
-					digits={6}
-					style={{ backgroundColor: colors.white, borderTopWidth: 0, borderRightWidth: 0, borderLeftWidth: 0, borderBottomWidth: 2 }}
-					fontStyle={{ fontWeight: 'bold', color: colors.blue, fontSize: 20 }}>
-				</OtpTextInput>
+			<OtpInput
+				autoFocus={true}
+				otp={otp}
+				onTextChange={setOtp}
+				numberOfInputs={6}
+				tintColor={colors.blue}
+				offTintColor={colors.gray}
+				secureTextEntry={false}
+				keyboardType="numeric"
+			/>
+
 			</View>
 
 			<View style={{ flexDirection: 'row', paddingTop: 30 }}>

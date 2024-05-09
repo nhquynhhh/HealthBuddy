@@ -15,6 +15,7 @@ import { handleGetDishList } from '../services/dish/get_all_dishes';
 import { handleGetAllIngredients } from '../services/ingredients/get_all_ingredients';
 import { handleGetFavoriteDishes } from '../services/favorite/get_favorite_dishes';
 export const AuthContext = createContext();
+
 export const AuthProvider = ({ children }) => {
 	const [accessTokenContext, setAccessTokenContext] = useState(null);
 	const [refreshTokenContext, setRefreshTokenContext] = useState(null);
@@ -98,7 +99,7 @@ export const AuthProvider = ({ children }) => {
 	}
 
 	return (
-		<AuthContext.Provider value={{ accessTokenContext, account, storeAccessToken, removeAccessToken, storeRefreshToken, removeRefreshToken, setAccountContext, refreshTokenContext, isLogged, setIsLogged, userInfo, setUserInfo, setAccount, dishes, setDishes, ingredients, setIngredients, favoriteDishes, setFavoriteDishes, setFavoriteDishesContext, addFavoriteDish }}>
+		<AuthContext.Provider value={{ accessTokenContext, account, storeAccessToken, removeAccessToken, storeRefreshToken, removeRefreshToken, setAccountContext, refreshTokenContext, isLogged, setIsLogged, userInfo, setUserInfo, setAccount, dishes, setDishes, ingredients, setIngredients, favoriteDishes, setFavoriteDishes, setFavoriteDishesContext, addFavoriteDish, setLoginStatus }}>
 			{children}
 		</AuthContext.Provider>
 	);
