@@ -1,21 +1,27 @@
 
 
-import { View, Text, Image, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, useWindowDimensions, ScrollView, Platform, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Alert } from 'react-native'
+import { View, Text, Image, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, useWindowDimensions, ScrollView, Platform, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Alert, ActivityIndicator, Modal } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
-import React, { Component, useContext } from 'react'
+import React, { Component, useContext, useState } from 'react'
 import { Icon, Button, Divider } from "react-native-elements";
 import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from '../../utils/colors'
 import { handleLogin } from '../../services/authenticate/login'
 import { AuthContext } from '../../context/AuthContext';
 import { getAccessToken, getRefreshToken } from '../../asyncStorage/auth';
+import { handleGetUserInfo } from '../../services/info/get_info';
+import { handleGetAccountInfo } from '../../services/account/get_account_info';
+import { handleGetDishList } from '../../services/dish/get_all_dishes';
+import { handleGetAllIngredients } from '../../services/ingredients/get_all_ingredients';
 
 export default function Login() {
 	const windowHeight = useWindowDimensions().height;
 	const windowWidth = useWindowDimensions().width;
 	const navigation = useNavigation();
+	const [isLoading, setIsLoading] = useState(false);
+	const [modalVisible, setModalVisible] = useState(false);
 
-	const { storeAccessToken, storeRefreshToken, isLogged, setLoginStatus } = useContext(AuthContext);
+	const { storeAccessToken, storeRefreshToken, isLogged, setIsLogged, setUserInfo, setAccount, dishes, setDishes, ingredients, setIngredients } = useContext(AuthContext);
 	const [email, setEmail] = React.useState("");
 	const [password, setPassword] = React.useState("");
 
@@ -32,15 +38,33 @@ export default function Login() {
 		}
 		const result = await handleLogin(email, password);
 		if (result === true) {
-			setLoginStatus(true);
-			storeAccessToken(await getAccessToken());
-			storeRefreshToken(await getRefreshToken());
+			const data = await handleGetUserInfo();
+			if (data) {
+				setUserInfo(data);
+			}
+			const accountInfo = await handleGetAccountInfo();
+			if (accountInfo) {
+				setAccount(accountInfo);
+			}
+			const dishList = await handleGetDishList();
+			if (dishList) {
+				setDishes(dishList);
+			}
+			const ingredientList = await handleGetAllIngredients();
+			if (ingredientList) {
+				setIngredients(ingredientList);
+			}
+			setIsLogged(true);
 		}
 		else {
-			setLoginStatus(false);
+			setIsLogged(false);
 			Alert.alert('Thông báo', 'Đăng nhập thất bại');
 		}
 	}
+
+
+
+	
 	return (
 		<KeyboardAvoidingView
 			behavior={Platform.OS === 'android' ? 'padding' : 'height'}
@@ -131,6 +155,12 @@ export default function Login() {
 }
 
 const styles = StyleSheet.create({
+	centeredView: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+		backgroundColor: 'rgba(0, 0, 0, 0.2)'
+	},
 	loginLogo: {
 		width: 75,
 		height: 75
@@ -188,5 +218,6 @@ const styles = StyleSheet.create({
 	},
 	scrollView: {
 	}
+
 
 })

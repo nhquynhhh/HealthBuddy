@@ -1,80 +1,85 @@
-import React from "react";
-import { Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import {useNavigation} from "@react-navigation/native"
+import React, {useEffect, useContext} from "react";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useNavigation } from "@react-navigation/native"
+import { handleGetRecipeByDishID } from "../../services/recipe/get_recipe_by_dish_id";
+import { AuthContext } from "../../context/AuthContext";
+import {handleGetFavoriteDishes} from '../../services/favorite/get_favorite_dishes';
 
-const FoodList = ({FoodList}) => {
-    const navigation = useNavigation();
-    const  onPressHandler=()=>{
-        navigation.navigate("FoodDetails", { data: FoodList });
-    }
-    return ( 
-        <TouchableOpacity onPress={onPressHandler} key={FoodList.id} style = {styles.ContainerItem}>
-                <View style = {styles.ContainerImage}>
-                    <Image source={{uri: FoodList?.img}} style= {styles.image}/>
-                    <Image source={require('../../assets/img_favourite_check.png')} style={{width: 20, height: 20, position: "absolute", right: 0}}/>
-                </View>
-                <View>
-                    <Text style={{fontWeight: "bold", padding: 8}}>{FoodList?.name}</Text>
-                    <View style={styles.ContainerNutrients}>
-                        <View>
-                            <Text style={styles.ContainerTextNutrients}>{FoodList?.calo}</Text>
-                            <Text style={styles.text}>calo</Text>
-                        </View>
-                        <View>
-                            <Text style={styles.ContainerTextNutrients}>{FoodList?.carb}</Text>
-                            <Text style={styles.text}>carb</Text>
-                        </View>
-                        <View>
-                            <Text style={styles.ContainerTextNutrients}>{FoodList?.protein}</Text>
-                            <Text style={styles.text}>protein</Text>
-                        </View>
-                        <View>
-                            <Text style={styles.ContainerTextNutrients}>{FoodList?.fat}</Text>
-                            <Text style={styles.text}>fat</Text>
-                        </View>
-                    </View>
-                </View>
-        </TouchableOpacity>
-     );
+const FoodList = ({ FoodList }) => {
+	const navigation = useNavigation();	
+	const { userInfo } = useContext(AuthContext);
+	const onPressHandler = async () => {
+		const recipe = await handleGetRecipeByDishID(FoodList.id);
+		const response = await handleGetFavoriteDishes(userInfo.id);
+		navigation.navigate("FoodDetails", { data: FoodList, recipe: recipe, favoriteDishes: response });
+	}
+	return (
+		<TouchableOpacity onPress={onPressHandler} key={FoodList.id} style={styles.ContainerItem}>
+			<View style={styles.ContainerImage}>
+				<Image source={{ uri: FoodList?.img }} style={styles.image} />
+			</View>
+			<View>
+				<Text style={{ fontWeight: "bold", padding: 8 }}>{FoodList?.name}</Text>
+				<View style={styles.ContainerNutrients}>
+					<View>
+						<Text style={styles.ContainerTextNutrients}>{FoodList?.calo}</Text>
+						<Text style={styles.text}>calo</Text>
+					</View>
+					<View>
+						<Text style={styles.ContainerTextNutrients}>{FoodList?.carb}</Text>
+						<Text style={styles.text}>carb</Text>
+					</View>
+					<View>
+						<Text style={styles.ContainerTextNutrients}>{FoodList?.protein}</Text>
+						<Text style={styles.text}>protein</Text>
+					</View>
+					<View>
+						<Text style={styles.ContainerTextNutrients}>{FoodList?.fat}</Text>
+						<Text style={styles.text}>fat</Text>
+					</View>
+				</View>
+			</View>
+		</TouchableOpacity>
+	);
 }
 
 
 // CSS
 
 const styles = StyleSheet.create({
-    ContainerItem: {
-        backgroundColor: "#fff",
-        width: "45%",
-        height: 202,
-        marginBottom: 20,
-        borderRadius: 10,
-        elevation: 4,
-        borderWidth: 1,
-        borderColor: "#D8D8D8",
-    },
-    ContainerImage: {
-        height: "60%",
-    },
-    image: {
-        width:"100%",
-        height:"100%",
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10,
-    },
-    ContainerNutrients: {
-        display: "flex",
-        justifyContent: "space-around",
-        flexDirection: "row",
-    },
-    ContainerTextNutrients: {
-        fontWeight: "700",
-        color: "#008dda",
-        textAlign: "center",
-        fontSize: 12,
-    },
-    text: {
-        fontSize: 10,
-    }
+	ContainerItem: {
+		backgroundColor: "#fff",
+		width: "45%",
+		height: 202,
+		marginBottom: 20,
+		borderRadius: 10,
+		elevation: 4,
+		borderWidth: 1,
+		borderColor: "#D8D8D8",
+	},
+	ContainerImage: {
+		height: "60%",
+	},
+	image: {
+		width: "100%",
+		height: "100%",
+		borderTopLeftRadius: 10,
+		borderTopRightRadius: 10,
+	},
+	ContainerNutrients: {
+		display: "flex",
+		justifyContent: "space-around",
+		flexDirection: "row",
+	},
+	ContainerTextNutrients: {
+		fontWeight: "700",
+		color: "#008dda",
+		textAlign: "center",
+		fontSize: 12,
+	},
+	text: {
+		fontSize: 10,
+	}
 })
 
 export default FoodList;

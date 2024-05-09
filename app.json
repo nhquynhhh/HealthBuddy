@@ -26,6 +26,11 @@
     },
     "web": {
       "favicon": "./assets/img_bare_logo.png"
-    }
+    },
+    "expo-notifications":
+    {
+      "icon": "./assets/img_bare_logo.png",
+      "color": "#000000"
+    }  
   }
 }

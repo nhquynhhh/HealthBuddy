@@ -1,4 +1,4 @@
-import { callUpdateUserInfoAPI } from "../api/api_user_info";
+import { callUpdateUserInfoAPI, callGetUserInfoAPI } from "../api/api_user_info";
 import { getAccessToken, getRefreshToken } from '../../asyncStorage/auth';
 
 const handleUpdateUserInfo = async (props) => {
