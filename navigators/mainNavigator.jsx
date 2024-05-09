@@ -24,7 +24,8 @@ import Premium from '../screens/premium/premium';
 import BMI from '../screens/bmi/bmi';
 import FoodDetails from '../screens/food_details/food_details';
 import Energy from '../screens/energy/energy';
-
+import Reminders from '../screens/reminders/reminders';
+import Change from '../screens/change/change';
 import React, { useState } from 'react';
 
 const MainNavigator = () => {
@@ -42,6 +43,7 @@ const MainNavigator = () => {
 				<HomeStack.Screen name="FavouriteFood" component={FavouriteFood} options={{headerTitle: "Món ăn yêu thích"}}/>
 				<HomeStack.Screen name="MenuSuggestion" component={MenuSuggestion} options={{headerTitle: "Gợi ý thực đơn"}}/>
 				<HomeStack.Screen name="Search" component={Search} options={{headerTitle: "Tra cứu"}}/>
+				<HomeStack.Screen name="Change" component={Change} options={{headerTitle: "Thay đổi thông tin"}}/>
 				<HomeStack.Screen name="BMI" component={BMI} options={{ headerTitle: "BMI là gì ?"}} />
 				<HomeStack.Screen name="Energy" component={Energy} options={{ headerTitle: "Cách tính năng lượng" }} />
 				<HomeStack.Screen name="FoodDetails" component={FoodDetails}
