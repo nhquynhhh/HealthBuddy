@@ -1,4 +1,4 @@
-const BASE_URL = 'https://premium-singularly-meerkat.ngrok-free.app';
+const BASE_URL = 'https://widely-discrete-glowworm.ngrok-free.app/';
 
 
 const login_api = {
