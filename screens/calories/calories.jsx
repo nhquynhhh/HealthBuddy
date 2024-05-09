@@ -7,6 +7,8 @@ import DatePicker, {getToday, getFormatedDate} from 'react-native-modern-datepic
 import { format } from 'date-fns';
 import { LiquidGauge } from 'react-native-liquid-gauge';
 import ToastManager, { Toast } from 'toastify-react-native'
+import { saveCalories } from '../../services/api/api_save_calories'
+import { Button } from '@rneui/themed'
 
 export default function Calories() {
     const windowHeight = useWindowDimensions().height;
@@ -31,8 +33,12 @@ export default function Calories() {
     const [caloValueSnacks, setCaloValueSnacks] = useState('');
     const [caloValueWorkout, setCaloValueWorkout] = useState('');
     const [consumedCalories, setConsumedCalories] = useState(defaultCalories);
-    const handleCaloBreakfastChange = (caloValueBreakfast) => {
+    const handleCaloBreakfastChange = async () => {
       setCaloValueBreakfast(caloValueBreakfast);
+      const result = await saveCalories(caloValueBreakfast);
+      const calories = parseInt(caloValueBreakfast);
+      updateConsumedCalories(calories);
+      setCaloValueBreakfast('');
     };
     const handleCaloLunchChange = (caloValueLunch) => {
       setCaloValueLunch(caloValueLunch);
@@ -46,7 +52,8 @@ export default function Calories() {
     const handleCaloWorkoutChange = (caloValueWorkout) => {
       setCaloValueWorkout(caloValueWorkout);
     };
-    const handleCaloBreakfastSubmit = () => {
+    const handleCaloBreakfastSubmit = async () => {
+      const result = await saveCalories(caloValueBreakfast);
       const calories = parseInt(caloValueBreakfast);
       updateConsumedCalories(calories);
       setCaloValueBreakfast('');
@@ -107,6 +114,7 @@ export default function Calories() {
             <Text style={{color: colors.blue, textAlignVertical: 'center', paddingHorizontal: 10, fontSize: RFValue(15,720), fontWeight: 'bold'}}>Chọn ngày</Text>
           </TouchableOpacity>
           <Text style={{alignSelf: 'center', paddingTop: 10, fontSize: RFValue(15, 720), fontWeight: 'bold'}}>{selectDate}</Text>
+          {/* <Button title="Solid" onPress={handleCaloBreakfastChange}/> */}
           <Modal
             animationType='slide'
             transparent={true}
@@ -157,8 +165,8 @@ export default function Calories() {
               <TextInput style={styles.inputMeal}
                 placeholder='Nhập lượng calories'
                 keyboardType='numeric'
-                onChangeText={handleCaloBreakfastChange}
                 onSubmitEditing={handleCaloBreakfastSubmit}
+                onChangeText={setCaloValueBreakfast}
                 value={caloValueBreakfast}/>
             </View>
         </View>

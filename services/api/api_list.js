@@ -52,8 +52,29 @@ const update_user_info = {
 	url: `${BASE_URL}/api/update-user`,
 	method: 'POST'
 }
-const save_calories = {
-	url: `${BASE_URL}/api/save-calories`,
+const add_morning = {
+	url: `${BASE_URL}/api/statistic/add_morning`,
+	method: 'POST'
+}
+
+const add_noon = {
+	url: `${BASE_URL}/api/statistic/add_noon`,
+	method: 'POST'
+}
+
+const add_dinner = {
+	url: `${BASE_URL}/api/statistic/add_dinner`,
+	method: 'POST'
+}
+
+
+const add_snack = {
+	url: `${BASE_URL}/api/statistic/add_snack`,
+	method: 'POST'
+}
+
+const add_exercise = {
+	url: `${BASE_URL}/api/statistic/add_exercise`,
 	method: 'POST'
 }
 
@@ -128,5 +149,5 @@ export {
 	get_favorite_dishes,
 	get_home_favorite_dishes,
 	get_fav_list,
-	get_calories
+	get_calories,add_morning, add_noon, add_dinner, add_snack, add_exercise
 };
