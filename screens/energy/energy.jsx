@@ -1,6 +1,6 @@
 import { SafeAreaView, View, Text, StyleSheet, ScrollView, Image } from "react-native";
 import React from "react";
-import { colors } from "../../colors";
+import { colors } from "../../utils/colors";
 
 function Energy() {
     return ( 

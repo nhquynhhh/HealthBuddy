@@ -3,4 +3,8 @@ const isEmail = (email) => {
 	return emailRegex.test(email);
 };
 
+const validToken = (token) => {
+	
+}
+
 export { isEmail };

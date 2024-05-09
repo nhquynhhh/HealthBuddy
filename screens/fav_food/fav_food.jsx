@@ -1,7 +1,7 @@
 import React from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import Foodlist from "../food_list/food_list"
-import { colors } from "../../colors";
+import { colors } from "../../utils/colors";
 
 function FavouriteFood() {
      wishListItems = [

@@ -1,7 +1,6 @@
 import { check_acount } from "./api_list";
 
-const check_acount_api = (props) => {
-	const { email } = props;
+const callCheckAccount = (email) => {
 	const url = check_acount.url + `?email=${email}`;
 	const headers = {
 		'Content-Type': 'application/json'
@@ -13,4 +12,4 @@ const check_acount_api = (props) => {
 	});
 }
 
-export { check_acount_api };
+export { callCheckAccount };

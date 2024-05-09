@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import React, { Component, useContext } from 'react'
 import { Icon, Button, Divider } from "react-native-elements";
 import { LinearGradient } from 'expo-linear-gradient';
-import { colors } from '../../colors'
+import { colors } from '../../utils/colors'
 import { handleLogin } from '../../services/authenticate/login'
 import { AuthContext } from '../../context/AuthContext';
 import { getAccessToken, getRefreshToken } from '../../asyncStorage/auth';
@@ -32,9 +32,9 @@ export default function Login() {
 		}
 		const result = await handleLogin(email, password);
 		if (result === true) {
+			setLoginStatus(true);
 			storeAccessToken(await getAccessToken());
 			storeRefreshToken(await getRefreshToken());
-			setLoginStatus(true);
 		}
 		else {
 			setLoginStatus(false);

@@ -14,7 +14,7 @@ export default function App() {
 			{
 				<AuthProvider>
 					<NavigationContainer>
-						<MainNavigator />
+						<AppRouters />
 					</NavigationContainer>
 				</AuthProvider>
 			}
