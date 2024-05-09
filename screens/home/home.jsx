@@ -2,7 +2,7 @@
 import { ScrollView, Text, View, Image, useWindowDimensions, StyleSheet, TouchableOpacity, FlatList } from 'react-native'
 import React, { Component, useContext, useEffect, useState, useCallback } from 'react'
 import { SearchBar, Icon, Divider } from 'react-native-elements';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import * as Progress from 'react-native-progress';
 import { FlatGrid } from 'react-native-super-grid';
@@ -20,26 +20,41 @@ export default function Home() {
 	const [idFavDishes, setIdFavDishes] = useState([]);
 	const favDishList = [];
 	const [favDish, setFavDish] = React.useState([
-		{ name: 'Mì Ý Thịt Băm', image: { uri: 'https://www.marionskitchen.com/wp-content/uploads/2022/12/Filipino-Spaghetti-04.jpg' }, isFavorite: true },
-		{ name: 'Mì Ý Thịt Băm', image: { uri: 'https://www.marionskitchen.com/wp-content/uploads/2022/12/Filipino-Spaghetti-04.jpg' }, isFavorite: true },
-		{ name: 'Mì Ý Thịt Băm', image: { uri: 'https://www.marionskitchen.com/wp-content/uploads/2022/12/Filipino-Spaghetti-04.jpg' }, isFavorite: true },
-		{ name: 'Mì Ý Thịt Băm', image: { uri: 'https://www.marionskitchen.com/wp-content/uploads/2022/12/Filipino-Spaghetti-04.jpg' }, isFavorite: true },
 	]);
+	const [isLoading, setIsLoading] = useState(false);
+	const [updatedFavDish, setUpdatedFavDish] = useState([]);
 
+	const getFavoriteDishes = async () => {
+		const response = await handleGetHomeFavoriteDishes(userInfo.id);
+		console.log("response", response);
+		if (response.length > 0) {
+			response.map((item) => {
+				favDishList.push({ name: item, image: { uri: 'https://www.marionskitchen.com/wp-content/uploads/2022/12/Filipino-Spaghetti-04.jpg' }, isFavorite: true });
+			})
+			console.log("favDishList", favDishList);
+			setFavDish(favDishList);
+		}
+	}
 	useEffect(() => {
-		const getFavoriteDishes = async () => {
-			const response = await handleGetHomeFavoriteDishes(userInfo.id);
-			console.log("response", response);
-			if (response.length > 0) {
-				response.map((item) => {
-					favDishList.push({ name: item, image: { uri: 'https://www.marionskitchen.com/wp-content/uploads/2022/12/Filipino-Spaghetti-04.jpg' }, isFavorite: true });
-				})
-				console.log("favDishList", favDishList);
-				setFavDish(favDishList);
-			}
-		}	
 		getFavoriteDishes();
 	}, []);
+
+	useFocusEffect(
+		React.useCallback(() => {
+			setIsLoading(true);
+			console.log('Home screen is focused');
+			getFavoriteDishes();
+		}, [])
+	);
+
+	useEffect(() => {
+
+	}, [isLoading]);
+
+	// useEffect(() => {
+	// 	setUpdatedFavDish(favDish); // Cập nhật state mới khi favDish thay đổi
+	// }, [favDish]);
+
 
 	user = {
 		age: userInfo.age,

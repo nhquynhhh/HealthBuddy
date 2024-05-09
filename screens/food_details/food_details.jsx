@@ -21,8 +21,10 @@ function FoodDetails({ route }) {
 		user_id = userInfo.id;
 		dish_id = data?.id;
 		type = isFavorite ? 0 : 1;
+		console.log(isFavorite);
+		console.log(type);
 		const response = await handleChangeFavorite({ user_id, dish_id, type });
-		const {  message } = response;
+		const { message } = response;
 		setIsFavorite(!isFavorite);
 		Alert.alert('Thông báo', message);
 	}
@@ -38,7 +40,7 @@ function FoodDetails({ route }) {
 			}
 		});
 		if (isFavoriteFound) {
-			setIsFavorite(true); 
+			setIsFavorite(true);
 		}
 	}, []);
 
