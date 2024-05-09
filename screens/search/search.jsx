@@ -111,7 +111,7 @@ function Search() {
 						width: 100, height: 45, borderRadius: 20,
 						backgroundColor: isIngredient ? colors.lightBlue : colors.gray
 					}}
-					containerStyle={{ }}
+					containerStyle={{}}
 				/>
 			</View>
 			<View style={styles.searchContainer}>
@@ -136,13 +136,13 @@ function Search() {
 					<View style={styles.ListContainer}>
 						{filteredWishListItems.length > 0 ? (
 							filteredWishListItems.map((item) => (
-								<FoodList key={item.dish.id} FoodList={item.dish} />
+								<FoodList key={item.dish.id} FoodList={item.dish} Dish={isDish ? true : false} />
 							))
 						) : isSearchQuery ? (
 							<NoResults height={400} />
 						) : (
 							ListItems.map((item) => (
-								<FoodList key={item.dish.id} FoodList={item.dish} />
+								<FoodList key={item.dish.id} FoodList={item.dish} Dish={isDish ? true : false} />
 							))
 						)}
 					</View>

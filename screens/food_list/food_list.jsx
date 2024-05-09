@@ -1,18 +1,29 @@
-import React, {useEffect, useContext} from "react";
+import React, { useEffect, useContext } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useNavigation } from "@react-navigation/native"
+import { useNavigation, useIsFocused } from "@react-navigation/native"
 import { handleGetRecipeByDishID } from "../../services/recipe/get_recipe_by_dish_id";
 import { AuthContext } from "../../context/AuthContext";
-import {handleGetFavoriteDishes} from '../../services/favorite/get_favorite_dishes';
+import { handleGetFavoriteDishes } from '../../services/favorite/get_favorite_dishes';
 
-const FoodList = ({ FoodList }) => {
-	const navigation = useNavigation();	
+const FoodList = ({ FoodList, Dish }) => {
+	const navigation = useNavigation();
 	const { userInfo } = useContext(AuthContext);
 	const onPressHandler = async () => {
+		if (!Dish) return;
 		const recipe = await handleGetRecipeByDishID(FoodList.id);
 		const response = await handleGetFavoriteDishes(userInfo.id);
 		navigation.navigate("FoodDetails", { data: FoodList, recipe: recipe, favoriteDishes: response });
 	}
+
+	const isFocused = useIsFocused();
+
+	useEffect(() => {
+		if (isFocused) {
+			handleGetFavoriteDishes(userInfo.id);
+		}
+
+	}, [isFocused]);
+
 	return (
 		<TouchableOpacity onPress={onPressHandler} key={FoodList.id} style={styles.ContainerItem}>
 			<View style={styles.ContainerImage}>
