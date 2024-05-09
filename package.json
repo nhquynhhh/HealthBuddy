@@ -34,6 +34,7 @@
     "react-day-picker": "^8.10.1",
     "react-native": "0.74.1",
     "react-native-circular-progress-indicator": "^4.4.2",
+    "react-native-confirmation-code-input": "^1.0.4",
     "react-native-elements": "^3.4.3",
     "react-native-gesture-handler": "~2.16.1",
     "react-native-gifted-charts": "^1.4.9",
