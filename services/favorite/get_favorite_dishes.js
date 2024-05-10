@@ -1,4 +1,4 @@
-import { callGetFavoriteDishes } from "../api/api_favorite";
+import { callGetFavoriteDishes, callGetFavList } from "../api/api_favorite";
 
 export const handleGetFavoriteDishes = async (id) => {
 	try {

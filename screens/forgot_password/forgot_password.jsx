@@ -1,19 +1,20 @@
-import { View, Text, Image, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, useWindowDimensions, Alert } from 'react-native'
+import { View, Text, Image, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, useWindowDimensions, Alert, ScrollView } from 'react-native'
 import React, { Component, useEffect, useState } from 'react'
 import { Icon, Button, Divider } from "react-native-elements";
 import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from '../../utils/colors';
+import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { isEmail } from '../../utils/validation';
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 import { handleCheckAccount } from '../../services/authenticate/check_account';
 import { callOTPPassAPI } from '../../services/authenticate/required_otp';
+import Login from '../login/login';
 
 export default function ForgotPassword({ navigation }) {
 	const windowHeight = useWindowDimensions().height;
 	const windowWidth = useWindowDimensions().width;
-
 	const [email, setEmail] = React.useState("");
-
 
 	const handleFotgotPassword = async (email) => {
 		if (email === "") {
@@ -32,39 +33,43 @@ export default function ForgotPassword({ navigation }) {
 		}
 	}
 	return (
-		<View style={{ alignItems: 'center', paddingTop: windowHeight / 5 }}>
-			<Image source={require('../../assets/img_forgot_password.png')}
-				style={{ width: 200, height: 200 }}>
-			</Image>
-			<Text style={styles.headingText}>Quên mật khẩu</Text>
-			<Text style={[styles.infoText, { textAlign: 'center', lineHeight: 22 }]}>Mã OTP đặt lại mật khẩu sẽ được gửi đến email bạn đăng ký.</Text>
+		<ScrollView style={{ backgroundColor: colors.white, flexShrink: 1, height: '100%' }}>
+			<TouchableOpacity onPress={() => {navigation.navigate('Login')}}>
+				<Text style={{paddingVertical: 70, paddingLeft: 20, color: colors.blue, fontSize: RFValue(14, 720), fontWeight: 'bold'}}>Quay lại</Text>
+			</TouchableOpacity>
+			<View style={{ alignItems: 'center', flexShrink: 1 }}>
+				<Image source={require('../../assets/img_forgot_password.png')}
+					style={{ width: 200, height: 200 }}>
+				</Image>
+				<Text style={styles.headingText}>Quên mật khẩu</Text>
+				<Text style={[styles.infoText, { textAlign: 'center', lineHeight: 22, width: '70%' }]}>Mã OTP đặt lại mật khẩu sẽ được gửi đến email bạn đăng ký.</Text>
+				<SafeAreaView style={[styles.inputFieldContainer, { marginTop: 30, marginBottom: 30 }]}>
+					<Icon style={styles.iconBlue}
+						name="email"
+						type='fontisto'
+						color={colors.blue}>
+					</Icon>
+					<TextInput style={[styles.inputField, {flex: 1}]}
+						placeholder='Nhập email'
+						onChangeText={setEmail}
+						value={email}>
+					</TextInput>
+				</SafeAreaView>
 
-			<SafeAreaView style={[styles.inputFieldContainer, { marginTop: 30, marginBottom: 30 }]}>
-				<Icon style={styles.iconBlue}
-					name="email"
-					type='fontisto'
-					color={colors.blue}>
-				</Icon>
-				<TextInput style={styles.inputField}
-					placeholder='Nhập email'
-					onChangeText={setEmail}
-					value={email}>
-				</TextInput>
-			</SafeAreaView>
-
-			<Button title={"XÁC NHẬN"}
-				style={styles.btnClick}
-				titleStyle={{ fontWeight: '700', fontSize: 20 }}
-				buttonStyle={{ minWidth: '95%', height: 42, borderRadius: 10 }}
-				ViewComponent={LinearGradient}
-				linearGradientProps={{
-					colors: [colors.blue, colors.lightBlue],
-					start: { x: 0, y: 0.5 },
-					end: { x: 1, y: 0.5 },
-				}}
-				onPress={() => handleFotgotPassword(email)}>
-			</Button>
-		</View>
+				<Button title={"XÁC NHẬN"}
+					style={styles.btnClick}
+					titleStyle={{ fontWeight: '700', fontSize: 20 }}
+					buttonStyle={{ minWidth: '95%', height: 42, borderRadius: 10 }}
+					ViewComponent={LinearGradient}
+					linearGradientProps={{
+						colors: [colors.blue, colors.lightBlue],
+						start: { x: 0, y: 0.5 },
+						end: { x: 1, y: 0.5 },
+					}}
+					onPress={() => handleFotgotPassword(email)}>
+				</Button>
+			</View>
+		</ScrollView>
 	)
 }
 

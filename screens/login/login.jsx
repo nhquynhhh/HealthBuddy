@@ -61,14 +61,11 @@ export default function Login() {
 			Alert.alert('Thông báo', 'Đăng nhập thất bại');
 		}
 	}
-
-
-
 	
 	return (
 		<KeyboardAvoidingView
 			behavior={Platform.OS === 'android' ? 'padding' : 'height'}
-			style={styles.container}>
+			style={[styles.container, {backgroundColor: colors.white}]}>
 			<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 				<ScrollView contentContainerStyle={{ alignItems: 'center' }} showsVerticalScrollIndicator={false}>
 					<Image source={require('../../assets/img_bare_logo.png')}
