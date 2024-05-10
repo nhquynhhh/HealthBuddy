@@ -1,7 +1,7 @@
 import { ScrollView, Text, View, Image, useWindowDimensions, StyleSheet, TouchableOpacity, FlatList } from 'react-native'
 import React, { Component, useContext, useEffect, useState, useCallback } from 'react'
 import { SearchBar, Icon, Divider } from 'react-native-elements';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { useNavigation, useFocusEffect, useIsFocused } from '@react-navigation/native';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import * as Progress from 'react-native-progress';
 import { FlatGrid } from 'react-native-super-grid';
@@ -9,13 +9,15 @@ import { colors } from '../../utils/colors';
 import { AuthContext } from '../../context/AuthContext';
 import { handleGetHomeFavoriteDishes } from '../../services/favorite/get_home_fav';
 import { set } from 'date-fns';
+import { handleGetCalories } from '../../services/calories/get_calories'
+import { call_get_water } from '../../services/api/api_water';
 
 export default function Home() {
 	const windowHeight = useWindowDimensions().height;
 	const windowWidth = useWindowDimensions().width;
 	const navigation = useNavigation();
 	const { userInfo } = useContext(AuthContext);
-
+	const isFocused = useIsFocused();
 	const [idFavDishes, setIdFavDishes] = useState([]);
 	const favDishList = [];
 	const [favDish, setFavDish] = React.useState([
@@ -34,10 +36,29 @@ export default function Home() {
 			setFavDish(favDishList);
 		}
 	}
+
+	const [calories, setCalories] = useState(null);
+
+	const getCalories = async () => {
+		const response = await handleGetCalories();
+		if (response !== 0) {
+			setCalories(response.total_morning_calo + response.total_noon_calo + response.total_dinner_calo + response.total_snack_calo - response.total_exercise_calo)
+		}
+	}
+
+
 	useEffect(() => {
 		console.log(userInfo);
 		getFavoriteDishes();
+		getCalories();
 	}, []);
+
+	useEffect(() => {
+		if (isFocused) {
+			getFavoriteDishes();
+			getCalories();
+		}
+	}, [isFocused]);
 
 	// useFocusEffect(
 	// 	React.useCallback(() => {
@@ -135,8 +156,8 @@ export default function Home() {
 			{/* Today's calories */}
 			<View style={{ padding: 20, borderWidth: 1, width: windowWidth * 0.9, alignSelf: 'center', borderRadius: 10, borderColor: colors.gray, marginVertical: 20 }}>
 				<Text style={styles.headerBox}>Lượng calories hôm nay</Text>
-				<Text style={{ textAlign: 'right', fontSize: RFValue(12, 720), marginBottom: 15 }}>Hoàn thành: <Text style={{ color: colors.blue, fontWeight: 'bold' }}>50%</Text></Text>
-				<Progress.Bar progress={0.5}
+				<Text style={{ textAlign: 'right', fontSize: RFValue(12, 720), marginBottom: 15 }}>Hoàn thành: <Text style={{ color: colors.blue, fontWeight: 'bold' }}>{((calories / caloriesNeeded) * 100).toFixed(2)} %</Text></Text>
+				<Progress.Bar progress={calories / caloriesNeeded}
 					width={RFValue(280, 720)}
 					height={6}
 					unfilledColor={colors.gray}
@@ -149,12 +170,12 @@ export default function Home() {
 				</View>
 				<View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15 }}>
 					<Text style={{ fontSize: RFValue(13, 720) }}>Calories đã hấp thụ:</Text>
-					<Text style={{ fontWeight: 'bold' }}>0 calories</Text>
+					<Text style={{ fontWeight: 'bold' }}>{calories} calories</Text>
 				</View>
 				<Divider style={{ backgroundColor: colors.gray, height: 0.2, marginTop: 15 }}></Divider>
 				<View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15, fontSize: RFValue(13, 720) }}>
 					<Text style={{ fontWeight: 'bold' }}>Cần thêm:</Text>
-					<Text style={{ fontWeight: 'bold', color: colors.blue, fontSize: RFValue(14, 720) }}>{caloriesNeeded} calories</Text>
+					<Text style={{ fontWeight: 'bold', color: colors.blue, fontSize: RFValue(14, 720) }}>{caloriesNeeded - calories} calories</Text>
 				</View>
 				<TouchableOpacity onPress={() => { navigation.navigate('Calories') }}>
 					<Text style={{ textAlign: 'right', marginTop: 15, fontStyle: 'italic', color: colors.darkGray }}>Chi tiết {'\u25BA'}</Text>
