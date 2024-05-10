@@ -54,7 +54,7 @@ export default function Signup() {
 		}
 	}
 	return (
-		<SafeAreaView style={[{ alignItems: 'center', backgroundColor: colors.white }, styles.container]}>
+		<View style={[{ alignItems: 'center', backgroundColor: colors.white, height: '100%' }, styles.container]}>
 			<Image source={require('../../assets/img_bare_logo.png')}
 				style={styles.signupLogo}
 			/>
@@ -171,7 +171,7 @@ export default function Signup() {
 					<Text style={{ color: colors.blue, fontWeight: '600' }}>Đăng nhập</Text>
 				</TouchableOpacity>
 			</View>
-		</SafeAreaView>
+		</View>
 	)
 }
 
