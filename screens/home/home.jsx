@@ -38,11 +38,16 @@ export default function Home() {
 	}
 
 	const [calories, setCalories] = useState(null);
+	const [caloWorkOut, setCaloWorkOut] = useState(null);
 
 	const getCalories = async () => {
 		const response = await handleGetCalories();
 		if (response !== 0) {
-			setCalories(response.total_morning_calo + response.total_noon_calo + response.total_dinner_calo + response.total_snack_calo - response.total_exercise_calo)
+			setCalories(response.total_morning_calo + response.total_noon_calo + response.total_dinner_calo + response.total_snack_calo);
+			setCaloWorkOut(response.total_exercise_calo);
+		} else {
+			setCalories(0);
+			setCaloWorkOut(0);
 		}
 	}
 
@@ -90,7 +95,7 @@ export default function Home() {
 	} else {
 		energy = (6.25 * user?.height) + (10 + user?.weight) - (5 * user?.age) - 161;
 	}
-	const caloriesNeeded = energy - 0;
+	const caloriesNeeded = (energy - 0).toFixed(0);
 	const categories = [
 		{ image: require('../../assets/img_kcal_icon.png'), label: 'Kiểm soát\ncalories', screen: 'Calories', tab: '' },
 		{ image: require('../../assets/img_water_icon.png'), label: 'Theo dõi\nuống nước', screen: 'Water', tab: '' },
@@ -108,7 +113,7 @@ export default function Home() {
 			<View style={{ flexDirection: 'row', marginTop: 20, paddingLeft: 20, paddingTop: 20, paddingBottom: 10 }}>
 				<Image source={require('../../assets/img_bare_logo.png')} style={{ width: 50, height: 50 }}></Image>
 				<Text style={{ textAlignVertical: 'center', fontSize: RFValue(16, 720), marginLeft: 15 }}>Xin chào, {"\n"}
-				<Text style={{ fontWeight: '800', fontSize: RFValue(18, 720) }}>{userInfo.username}</Text></Text>
+					<Text style={{ fontWeight: '800', fontSize: RFValue(18, 720) }}>{userInfo.username}</Text></Text>
 			</View>
 			{/* Divider */}
 			<Divider style={{ backgroundColor: colors.gray, height: 0.5 }}></Divider>
@@ -156,26 +161,30 @@ export default function Home() {
 			{/* Today's calories */}
 			<View style={{ padding: 20, borderWidth: 1, width: windowWidth * 0.9, alignSelf: 'center', borderRadius: 10, borderColor: colors.gray, marginVertical: 20 }}>
 				<Text style={styles.headerBox}>Lượng calories hôm nay</Text>
-				<Text style={{ textAlign: 'right', fontSize: RFValue(12, 720), marginBottom: 15 }}>Hoàn thành: <Text style={{ color: colors.blue, fontWeight: 'bold' }}>{((calories / caloriesNeeded) * 100).toFixed(2)} %</Text></Text>
-				<Progress.Bar progress={calories / caloriesNeeded}
+				<Text style={{ textAlign: 'right', fontSize: RFValue(12, 720), marginBottom: 15 }}>Hoàn thành: <Text style={{ color: colors.blue, fontWeight: 'bold' }}>{(((calories - caloWorkOut) / caloriesNeeded) * 100).toFixed(2)} %</Text></Text>
+				<Progress.Bar progress={(calories - caloWorkOut) / caloriesNeeded}
 					width={RFValue(280, 720)}
 					height={6}
 					unfilledColor={colors.gray}
 					borderWidth={0}
-					color={colors.green}
+					color={((calories - caloWorkOut) / caloriesNeeded) > 1 ? colors.red : colors.green}
 					style={{ alignSelf: 'center' }} />
 				<View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15 }}>
 					<Text style={{ fontSize: RFValue(13, 720) }}>Mục tiêu:</Text>
-					<Text style={{ fontWeight: 'bold' }}>{energy} calories</Text>
+					<Text style={{ fontWeight: 'bold' }}>{energy.toFixed(0)} calories</Text>
 				</View>
 				<View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15 }}>
 					<Text style={{ fontSize: RFValue(13, 720) }}>Calories đã hấp thụ:</Text>
 					<Text style={{ fontWeight: 'bold' }}>{calories} calories</Text>
 				</View>
+				<View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15 }}>
+					<Text style={{ fontSize: RFValue(13, 720) }}>Calories vận động:</Text>
+					<Text style={{ fontWeight: 'bold' }}>{caloWorkOut} calories</Text>
+				</View>
 				<Divider style={{ backgroundColor: colors.gray, height: 0.2, marginTop: 15 }}></Divider>
 				<View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15, fontSize: RFValue(13, 720) }}>
 					<Text style={{ fontWeight: 'bold' }}>Cần thêm:</Text>
-					<Text style={{ fontWeight: 'bold', color: colors.blue, fontSize: RFValue(14, 720) }}>{caloriesNeeded - calories} calories</Text>
+					<Text style={{ fontWeight: 'bold', color: colors.blue, fontSize: RFValue(14, 720) }}>{caloriesNeeded - (calories - caloWorkOut)} calories</Text>
 				</View>
 				<TouchableOpacity onPress={() => { navigation.navigate('Calories') }}>
 					<Text style={{ textAlign: 'right', marginTop: 15, fontStyle: 'italic', color: colors.darkGray }}>Chi tiết {'\u25BA'}</Text>

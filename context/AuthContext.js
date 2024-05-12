@@ -14,6 +14,7 @@ import { handleGetAccountInfo } from "../services/account/get_account_info";
 import { handleGetDishList } from '../services/dish/get_all_dishes';
 import { handleGetAllIngredients } from '../services/ingredients/get_all_ingredients';
 import { handleGetFavoriteDishes } from '../services/favorite/get_favorite_dishes';
+import { handleGetCalories } from "../services/calories/get_calories";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -25,6 +26,8 @@ export const AuthProvider = ({ children }) => {
 	const [dishes, setDishes] = useState([]);
 	const [ingredients, setIngredients] = useState([]);
 	const [favoriteDishes, setFavoriteDishes] = useState([]);
+	const [calories, setCalories] = useState(null);
+	const [water, setWater] = useState(0);
 
 	useEffect(() => {
 		const checkLogin = async () => {

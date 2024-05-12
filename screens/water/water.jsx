@@ -61,11 +61,15 @@ export default function Calories() {
 	const showToastsEqual = () => {
 		Toast.success('Bạn đã uống đủ lượng nước mục tiêu!\nHãy duy trì để cơ thể luôn khỏe mạnh nhé 🤩')
 	}
-	if (waterValue > targetWater) {
-		showToastsMore();
-	} else if (waterValue === targetWater) {
-		showToastsEqual();
-	}
+
+	useEffect(() => {
+		if (waterValue > targetWater) {
+			showToastsMore();
+		} else if (waterValue === targetWater) {
+			showToastsEqual();
+		}
+
+	}, [waterValue]);
 
 	return (
 		<ScrollView style={{ backgroundColor: colors.white, marginBottom: 60 }}>
