@@ -1,20 +1,22 @@
 import { useNavigation } from "@react-navigation/native";
-import React, {useContext} from "react";
+import React, {useContext, useState} from "react";
 import { View, Text,StyleSheet, TouchableOpacity, SafeAreaView, Image} from "react-native";
-// import Header from "./header";
 import { colors } from "../../utils/colors";
 import { Icon } from "react-native-elements";
 import { AuthContext } from '../../context/AuthContext';
+import { Modal } from "react-native-paper";
+import Clock from "../clock/clock";
 
 
 function BodyIndex({user}) {
 	const { userInfo, account } = useContext(AuthContext);
     user = {
-        age: userInfo.age,
-        weight: userInfo.weight,
-        height: userInfo.height,
-        gender: userInfo.gender == 'male' ? 'nam' : 'nữ',
+        age: userInfo?.age,
+        weight: userInfo?.weight,
+        height: userInfo?.height,
+        gender: userInfo?.gender == 'male' ? 'nam' : 'nữ',
     }
+    const [isModalVisible, setIsModalVisible] = useState(false);
     const BMI = (user?.weight/((user?.height*user?.height)/10000)).toFixed(1);
     let energy;
     if(user?.gender == "nam"){
@@ -47,8 +49,12 @@ function BodyIndex({user}) {
     const onPressHandler = (title) => {
         navigation.navigate(title);
     }
+    const handleClockClose = () => {
+        setIsModalVisible(false);
+      };
     return ( 
         <SafeAreaView style={{height: "100%", backgroundColor: colors.white}}>
+            
             <View style={styles.BodyContainer}>
                 <Image source={require('../../assets/img_body.png')} style={{width: 40, height: 100, marginRight: 30}}/>
                 <View>
@@ -121,8 +127,10 @@ function BodyIndex({user}) {
                         <Text>ml</Text>
                     </View>
                     <TouchableOpacity
-                        // onPress={()=>onPressHandler("BMI")}
                         style={{justifyContent:"center", alignItems: "center", flexDirection: "row"}}
+                        onPress = {() => {
+                            setIsModalVisible(true)
+                        }}
                     >
                         <Icon
                                 name="access-alarm"
@@ -136,6 +144,7 @@ function BodyIndex({user}) {
                         </Text>
                     </TouchableOpacity>
                 </View>
+                {isModalVisible && <Clock onClose={handleClockClose} />}
             </View>   
         </SafeAreaView>
      );
