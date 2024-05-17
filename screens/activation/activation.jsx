@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, useWindowDimensions, Alert, Keyboard } from 'react-native'
+import { View, Text, Image, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, useWindowDimensions, Alert, Keyboard, ScrollView } from 'react-native'
 import React, { Component, useEffect, useState, useContext, useRef } from 'react'
 import { Icon, Button, Divider } from "react-native-elements";
 import { LinearGradient } from 'expo-linear-gradient';
@@ -35,45 +35,47 @@ export default function Activation() {
 		}
 	}
 	return (
-		<View style={{ alignItems: 'center', paddingTop: 100, backgroundColor: colors.white }}>
-			<Image source={require('../../assets/img_email_verification.png')}
-				style={{ width: 200, height: 200 }}></Image>
-			<Text style={styles.headingText}>Kích hoạt tài khoản</Text>
-			<Text style={[styles.infoText, { paddingVertical: 10 }]}>Mã OTP đã được gửi đến email đăng ký.</Text>
-			<View style={{ width: '90%', paddingTop: 20 }}>
-				<OtpInput
-					autoFocus={true}
-					otp={otp}
-					onTextChange={setOtp}
-					numberOfInputs={6}
-					tintColor={colors.blue}
-					offTintColor={colors.gray}
-					secureTextEntry={false}
-					keyboardType="numeric"
-				/>
+		<ScrollView style={{ backgroundColor: colors.white, flexShrink: 1, height: '100%' }}>
+			<View style={{ alignItems: 'center', paddingTop: 100, backgroundColor: colors.white }}>
+				<Image source={require('../../assets/img_email_verification.png')}
+					style={{ width: 200, height: 200 }}></Image>
+				<Text style={styles.headingText}>Kích hoạt tài khoản</Text>
+				<Text style={[styles.infoText, { paddingVertical: 10 }]}>Mã OTP đã được gửi đến email đăng ký.</Text>
+				<View style={{ width: '90%', paddingTop: 20 }}>
+					<OtpInput
+						autoFocus={true}
+						otp={otp}
+						onTextChange={setOtp}
+						numberOfInputs={6}
+						tintColor={colors.blue}
+						offTintColor={colors.gray}
+						secureTextEntry={false}
+						keyboardType="numeric"
+					/>
 
+				</View>
+
+				<View style={{ flexDirection: 'row', paddingTop: 30 }}>
+					<Text style={{ fontSize: 15 }}>Chưa nhận được OTP? </Text>
+					<TouchableOpacity>
+						<Text style={{ color: colors.blue, fontWeight: 'bold', fontSize: 15 }}>Gửi lại.</Text>
+					</TouchableOpacity>
+				</View>
+
+				<Button title={"KÍCH HOẠT"}
+					style={styles.btnClick}
+					titleStyle={{ fontWeight: '700', fontSize: 20 }}
+					buttonStyle={{ minWidth: '95%', height: 45, borderRadius: 10, marginTop: 15 }}
+					ViewComponent={LinearGradient}
+					linearGradientProps={{
+						colors: [colors.blue, colors.lightBlue],
+						start: { x: 0, y: 0.5 },
+						end: { x: 1, y: 0.5 },
+					}}
+					onPress={() => handleActivation()}>
+				</Button>
 			</View>
-
-			<View style={{ flexDirection: 'row', paddingTop: 30 }}>
-				<Text style={{ fontSize: 15 }}>Chưa nhận được OTP? </Text>
-				<TouchableOpacity>
-					<Text style={{ color: colors.blue, fontWeight: 'bold', fontSize: 15 }}>Gửi lại.</Text>
-				</TouchableOpacity>
-			</View>
-
-			<Button title={"KÍCH HOẠT"}
-				style={styles.btnClick}
-				titleStyle={{ fontWeight: '700', fontSize: 20 }}
-				buttonStyle={{ minWidth: '95%', height: 45, borderRadius: 10, marginTop: 15 }}
-				ViewComponent={LinearGradient}
-				linearGradientProps={{
-					colors: [colors.blue, colors.lightBlue],
-					start: { x: 0, y: 0.5 },
-					end: { x: 1, y: 0.5 },
-				}}
-				onPress={() => handleActivation()}>
-			</Button>
-		</View>
+		</ScrollView>
 	)
 }
 

@@ -128,6 +128,17 @@ const get_calories = {
 	method: 'GET'
 }
 
+const save_water = {
+	url: `${BASE_URL}/api/statistic/add_water`,
+	method: 'POST'
+
+}
+
+const get_water = {
+	url: `${BASE_URL}/api/statistic/get-user-water`,
+	method: 'GET'
+}
+
 export {
 	login_api,
 	signup_api,
@@ -139,7 +150,6 @@ export {
 	otp_reset_password,
 	reset_password,
 	update_user_info,
-	save_calories,
 	get_user_info,
 	get_account_info,
 	get_dish_list,
@@ -149,5 +159,5 @@ export {
 	get_favorite_dishes,
 	get_home_favorite_dishes,
 	get_fav_list,
-	get_calories,add_morning, add_noon, add_dinner, add_snack, add_exercise
+	get_calories, add_morning, add_noon, add_dinner, add_snack, add_exercise, save_water, get_water
 };

@@ -25,7 +25,6 @@ import BMI from '../screens/bmi/bmi';
 import FoodDetails from '../screens/food_details/food_details';
 import Energy from '../screens/energy/energy';
 import Reminders from '../screens/reminders/reminders';
-import Change from '../screens/change/change';
 import React, { useState } from 'react';
 
 const MainNavigator = () => {
@@ -36,14 +35,13 @@ const MainNavigator = () => {
 			<HomeStack.Navigator screenOptions={{ headerTitleAlign: 'center', headerTitleStyle: { fontWeight: 'bold' } }}>
 				<HomeStack.Screen name="Home" component={Home} options={{ headerShown: false }} />
 				<HomeStack.Screen name="Calories" component={Calories} options={{ headerTitle: "Kiểm soát Calories" }} />
-				<HomeStack.Screen name="Water" component={Reminders} options={{ headerTitle: "Theo dõi uống nước" }} />
+				<HomeStack.Screen name="Water" component={Water} options={{ headerTitle: "Theo dõi uống nước" }} />
 				<WorkoutStack.Screen name="Workout" component={WorkoutStackScreens} options={{ headerShown: false }} />
 				<HomeStack.Screen name="BodyIndex" component={BodyIndex} options={{ headerTitle: "Chỉ số cơ thể" }} />
 				<HomeStack.Screen name="Statistics" component={StatisticsStackScreens} options={{ headerShown: false }} />
 				<HomeStack.Screen name="FavouriteFood" component={FavouriteFood} options={{ headerTitle: "Món ăn yêu thích" }} />
 				<HomeStack.Screen name="MenuSuggestion" component={MenuSuggestion} options={{ headerTitle: "Gợi ý thực đơn" }} />
 				<HomeStack.Screen name="Search" component={Search} options={{ headerTitle: "Tra cứu" }} />
-				<HomeStack.Screen name="Change" component={Change} options={{ headerTitle: "Thay đổi thông tin" }} />
 				<HomeStack.Screen name="BMI" component={BMI} options={{ headerTitle: "BMI là gì ?" }} />
 				<HomeStack.Screen name="Energy" component={Energy} options={{ headerTitle: "Cách tính năng lượng" }} />
 				<HomeStack.Screen name="FoodDetails" component={FoodDetails}

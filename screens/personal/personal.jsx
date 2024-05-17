@@ -1,20 +1,22 @@
-import { ScrollView, Text, View, Image, useWindowDimensions, StyleSheet, TouchableOpacity } from 'react-native'
-import React, { Component, useContext } from 'react'
+import { ScrollView, Text, View, Image, useWindowDimensions, StyleSheet, TouchableOpacity, TextInput } from 'react-native'
+import React, { Component, useContext, useState } from 'react'
 import { SearchBar, Icon, Divider, Input, Button } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
-import { DataTable } from 'react-native-paper';
+import { DataTable, Modal } from 'react-native-paper';
 import { colors } from '../../utils/colors';
 import { AuthContext } from '../../context/AuthContext';
 import { removeAccessTokenAsync, removeRefreshTokenAsync } from '../../asyncStorage/auth';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import RadioForm from 'react-native-simple-radio-button';
 
 export default function Personal() {
 	const windowHeight = useWindowDimensions().height;
 	const windowWidth = useWindowDimensions().width;
 	const navigation = useNavigation();
 
-	const { removeAccessToken, removeRefreshToken, isLogged, setIsLogged, userInfo, account, setUserInfo, setAccount } = useContext(AuthContext);
+	const { removeAccessToken, removeRefreshToken, isLogged, setIsLogged, userInfo, account, setUserInfo, setAccount} = useContext(AuthContext);
 
 	const logout = () => {
 		setIsLogged(false);
@@ -26,17 +28,30 @@ export default function Personal() {
 		removeRefreshTokenAsync();
 		console.log("Logout");
 	}
-	
-	const onPressHandler = async () => {
-		navigation.navigate("Change");
+	const [isFormVisible, setIsFormVisible] = useState(false);
+	const [isModalVisible, setIsModalVisible] = useState(false);
+	const onPressHandler = () => {
+		setIsFormVisible(true);
 	}
-
-
+	const closeModal = () => {
+		setIsFormVisible(false);
+	}
+	const onPressHandler2 = () => {
+		setIsModalVisible(true);
+	}
+	const closeModal2 = () => {
+		setIsModalVisible(false);
+	}
 	const accountType = account.has_subscription ? "PREMIUM" : "STANDARD";
 	const gender = userInfo.gender == 'male' ? 'Nam' : 'Nữ';
-
+	const target = [
+		{ label: 'Giảm cân', value: 0 },
+		{ label: 'Duy trì cân nặng', value: 1 },
+		{ label: 'Tăng cân', value: 2 }
+	]
 	return (
-		<ScrollView style={{ backgroundColor: colors.white, marginBottom: 60 }}>
+		<SafeAreaView style={{ backgroundColor: colors.white, marginBottom: 60 }}>
+		<ScrollView >
 			<View style={{ flexDirection: 'row', alignItems: 'center', padding: 16 }}>
 				<View style={{ padding: 10 }}>
 					<Image source={require('../../assets/img_avatar.png')} style={{ width: 60, height: 60, alignSelf: 'center' }}></Image>
@@ -61,7 +76,7 @@ export default function Personal() {
 			<View style={{ padding: 15, borderWidth: 1.5, width: windowWidth * 0.9, alignSelf: 'center', borderRadius: 10, borderColor: colors.blue, marginVertical: 5 }}>
 				<View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
 					<Text style={{ fontWeight: 'bold', fontSize: RFValue(15, 720) }}>Thông tin cá nhân</Text>
-					<TouchableOpacity>
+					<TouchableOpacity onPress={onPressHandler2}>
 						<Text style={{ fontWeight: 'bold', fontSize: RFValue(14, 720), color: colors.blue }}>Thay đổi</Text>
 					</TouchableOpacity>
 				</View>
@@ -126,7 +141,114 @@ export default function Personal() {
 				onPress={() => logout()}>
 			</Button>
 			<View style={{ paddingBottom: 70 }}></View>
+
+		
 		</ScrollView>
+		{/* Modal 1 */}
+			<Modal
+				visible={isFormVisible}
+				animationType="slide"
+				transparent={true}
+			>
+				<View style={styles.modalContainer}>
+					<View style={[styles.modalContent,{width:windowWidth*0.9}]}>
+						<TouchableOpacity onPress={closeModal} style={{ position: "absolute", top: 8, right: 8, zIndex: 1}}>
+							<Icon 
+								name="close" 
+								type="antdesign" 
+								size={25} 
+								color={colors.red} 
+							/>
+						</TouchableOpacity>
+						<View style={{ padding: 20, justifyContent: 'flex-start'}}>
+							<Text style={{ fontWeight: 'bold', fontSize: RFValue(20, 720) }}>Mục tiêu của bạn</Text>
+						</View>
+						<RadioForm
+							radio_props={target}
+							onPress={value => {
+								const selectedLabel = target.find(item => item.value === value)?.label;
+							}}
+							selectedLabelColor={colors.blue}
+							buttonSize={8}
+							buttonOuterSize={20}
+							borderWidth={1}
+							labelStyle={{ fontSize: 16, lineHeight: 30}}
+							style={{paddingLeft: 30}}
+						/>
+						<Text style={{ fontWeight: 'bold',fontSize: RFValue(20, 720), padding: 20 }}>Cân nặng mong muốn</Text>
+						<View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20, paddingBottom: 20}}>
+							<TextInput 
+								style={[styles.inputField, { paddingLeft: 20,paddingRight: 20,  borderColor: colors.blue, borderWidth: 1, borderRadius: 10 }]}
+								placeholder='Cân nặng'
+								keyboardType='numeric'
+							/>
+							<View style={{ marginLeft: 10 }}>
+								<Text style={{fontSize: RFValue(20, 720) }}>kg</Text>
+							</View>
+						</View>
+						<Button title={"XÁC NHẬN"}
+							style={styles.btnClick}
+							titleStyle={{ fontWeight: '700', fontSize: 20 }}
+							buttonStyle={{ minWidth: '70%', height: 45, borderRadius: 10 }}
+							ViewComponent={LinearGradient}
+							linearGradientProps={{
+								colors: [colors.blue, colors.lightBlue],
+								start: { x: 0, y: 0.5 },
+								end: { x: 1, y: 0.5 },
+							}}
+							onPress={closeModal}>
+						</Button>
+					</View>
+				</View>
+			</Modal>
+
+
+
+			{/* Modal 2 */}
+			<Modal
+				visible={isModalVisible}
+				animationType="slide"
+				transparent={true}
+			>
+				<View style={styles.modalContainer}>
+					<View style={[styles.modalContent,{width:windowWidth*0.9}]}>
+						<TouchableOpacity onPress={closeModal2} style={{ position: "absolute", top: 8, right: 8, zIndex: 1}}>
+							<Icon 
+								name="close" 
+								type="antdesign" 
+								size={25} 
+								color={colors.red} 
+							/>
+						</TouchableOpacity>
+						<View style={{ padding: 20, justifyContent: 'flex-start'}}>
+							<Text style={{ fontWeight: 'bold', fontSize: RFValue(20, 720) }}>Thay đổi các thông số</Text>
+						</View>
+						{/* <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20, paddingBottom: 20}}>
+							<TextInput 
+								style={[styles.inputField, { paddingLeft: 20,paddingRight: 20,  borderColor: colors.blue, borderWidth: 1, borderRadius: 10 }]}
+								placeholder='Cân nặng'
+								keyboardType='numeric'
+							/>
+							<View style={{ marginLeft: 10 }}>
+								<Text style={{fontSize: RFValue(20, 720) }}>kg</Text>
+							</View>
+						</View> */}
+						<Button title={"XÁC NHẬN"}
+							style={styles.btnClick}
+							titleStyle={{ fontWeight: '700', fontSize: 20 }}
+							buttonStyle={{ minWidth: '70%', height: 45, borderRadius: 10 }}
+							ViewComponent={LinearGradient}
+							linearGradientProps={{
+								colors: [colors.blue, colors.lightBlue],
+								start: { x: 0, y: 0.5 },
+								end: { x: 1, y: 0.5 },
+							}}
+							onPress={closeModal2}>
+						</Button>
+					</View>
+				</View>
+			</Modal>
+		</SafeAreaView>
 	)
 }
 
@@ -149,4 +271,18 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
+	modalContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+		height: '100%'
+    },
+	modalContent: {
+        backgroundColor: colors.white,
+        borderRadius: 10,
+		padding: 20,
+		borderColor: colors.lightBlue,
+		borderWidth: 5,
+		borderRadius: 10,
+		
+    }
 })
