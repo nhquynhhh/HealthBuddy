@@ -1,0 +1,15 @@
+export const workout = [
+    {id: 1, title: '180 Jump Squat', equipment: 'Không', calo: 8, impact: 'Bụng, lưng dưới, đùi', image: 'https://www.spotebi.com/wp-content/uploads/2016/12/180-jump-squat-exercise-illustration-spotebi.gif', screen: 'WorkoutDetail1'},
+    {id: 2, title: 'Crunches', equipment: 'Không', calo: 7, impact: 'Bụng', image: 'https://www.spotebi.com/wp-content/uploads/2014/10/crunches-exercise-illustration.gif', screen: 'WorkoutDetail2'},
+    {id: 3, title: 'Jump Rope', equipment: 'Dây nhảy', calo: 7, impact: 'Chân, bụng, lưng, vai', image: 'https://www.spotebi.com/wp-content/uploads/2014/10/jump-rope-exercise-illustration.gif', screen: 'WorkoutDetail3'},
+    {id: 4, title: 'Plank', equipment: 'Không', calo: 10, impact: 'Bụng, lưng dưới', image: 'https://www.spotebi.com/wp-content/uploads/2014/10/plank-exercise-illustration.gif', screen: 'WorkoutDetail4'},
+    {id: 5, title: 'Reverse Ball Overhead', equipment: 'Bóng', calo: 5, impact: 'Vai, mông, ngực', image: 'https://www.spotebi.com/wp-content/uploads/2017/06/reverse-lunge-medicine-ball-overhead-press-exercise-illustration-spotebi.gif', screen: 'WorkoutDetail5'},
+  ];
+
+const detail = [
+  {detail: '- 2 đầu gối hơi gập, 2 chân giơ hơi cao lên để thân người và chân tạo thành hình chữ V.  {"\n"}- Để thân người hơi nghiêng về phía sau, 2 tay duỗi thẳng về phía trước hoặc đan vào nhau để trước ngực, ngang với chiều cao của vai.  {"\n"}- Giữ nguyên mông trên sàn. Vặn thân người và 2 tay sang trái, đồng thời hơi vặn 2 đầu gối sang phải.  {"\n"}- Lặp lại động tác tương tự với bên phải. Rồi quay trở lại vị trí ban đầu. Lưu ý, trong toàn bộ các động tác tập luyện, bạn cần giữ nguyên vị trí 2 tay và căng cứng cơ bụng.'},
+  {detail: '- Nằm ngửa, gập đầu gối, lưng và bàn chân phẳng, hai tay đỡ đầu. {"\n"} - Nâng vai lên, siết chặt cơ bụng và giữ trong 1 đến 2 giây. {"\n"} - Từ từ quay lại vị trí bắt đầu và lặp lại cho đến khi hoàn tất.'},
+  {detail: '- Giữ dây đồng thời giữ tay ngang hông. {"\n"} - Xoay cổ tay để vung dây và nhảy. {"\n"} - Nhảy bằng cả hai chân cùng lúc, lần lượt từng chân một, xen kẽ giữa các chân, v.v. {"\n"} - Lặp lại cho đến khi hoàn thành.'},
+  {detail: '- Vào tư thế chống đẩy, khuỷu tay đặt dưới vai và hai chân rộng bằng hông. {"\n"} - Cong khuỷu tay và dồn trọng lượng lên cẳng tay và ngón chân, giữ cơ thể thành một đường thẳng. {"\n"} - Giữ càng lâu càng tốt.'},
+  {detail: '- Đứng hai chân rộng bằng hông và cầm quả bóng trong tay phải ngang vai.   {"\n"} - Lùi lại một bước bằng chân phải và gập đầu gối cho đến khi đầu gối sau ở ngay trên sàn.   {"\n"} - Đứng dậy, đưa bóng lên, qua đầu rồi chuyển sang tay trái.   {"\n"} - Lùi lại một bước bằng chân trái, hạ quả bóng xuống ngang vai và tiến về phía trước.   {"\n"} - Đứng dậy, đưa bóng lên, qua đầu rồi chuyển sang tay phải.   {"\n"} - Lặp lại cho đến khi tập hợp xong.'},
+]
