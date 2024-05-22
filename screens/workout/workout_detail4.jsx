@@ -54,7 +54,7 @@ export default function WorkoutDetail4() {
 
     const handleCaloWorkoutSubmit = () => {
         const minutesElapsed = elapsedTime / (1000 * 60);
-        const caloriesBurned = Math.round(minutesElapsed * 80);
+        const caloriesBurned = Math.round(minutesElapsed * 8);
 
         const result = save_calories_exercise(caloriesBurned);
     };
