@@ -1,20 +1,22 @@
 import { useNavigation } from "@react-navigation/native";
-import React, {useContext} from "react";
+import React, {useContext, useState} from "react";
 import { View, Text,StyleSheet, TouchableOpacity, SafeAreaView, Image} from "react-native";
-// import Header from "./header";
 import { colors } from "../../utils/colors";
 import { Icon } from "react-native-elements";
 import { AuthContext } from '../../context/AuthContext';
+import { Modal } from "react-native-paper";
+import Clock from "../clock/clock";
 
 
-function BodyIndex({user}) {
+function BodyIndex({ user }) {
 	const { userInfo, account } = useContext(AuthContext);
     user = {
-        age: userInfo.age,
-        weight: userInfo.weight,
-        height: userInfo.height,
-        gender: userInfo.gender == 'male' ? 'nam' : 'nữ',
+        age: userInfo?.age,
+        weight: userInfo?.weight,
+        height: userInfo?.height,
+        gender: userInfo?.gender == 'male' ? 'nam' : 'nữ',
     }
+    const [isModalVisible, setIsModalVisible] = useState(false);
     const BMI = (user?.weight/((user?.height*user?.height)/10000)).toFixed(1);
     let energy;
     if(user?.gender == "nam"){
@@ -47,8 +49,12 @@ function BodyIndex({user}) {
     const onPressHandler = (title) => {
         navigation.navigate(title);
     }
+    const handleClockClose = () => {
+        setIsModalVisible(false);
+      };
     return ( 
         <SafeAreaView style={{height: "100%", backgroundColor: colors.white}}>
+            
             <View style={styles.BodyContainer}>
                 <Image source={require('../../assets/img_body.png')} style={{width: 40, height: 100, marginRight: 30}}/>
                 <View>
@@ -121,8 +127,10 @@ function BodyIndex({user}) {
                         <Text>ml</Text>
                     </View>
                     <TouchableOpacity
-                        // onPress={()=>onPressHandler("BMI")}
                         style={{justifyContent:"center", alignItems: "center", flexDirection: "row"}}
+                        onPress = {() => {
+                            setIsModalVisible(true)
+                        }}
                     >
                         <Icon
                                 name="access-alarm"
@@ -136,50 +144,51 @@ function BodyIndex({user}) {
                         </Text>
                     </TouchableOpacity>
                 </View>
+                {isModalVisible && <Clock onClose={handleClockClose} />}
             </View>   
         </SafeAreaView>
      );
 }
 
 const styles = StyleSheet.create({
-    ContainerIngredient: {
-        display: "flex",
-        justifyContent: "center",
-        flexWrap: "nowrap",
-        marginTop: 20,
-        paddingHorizontal: 20,
-        
-    },
-    ContainerItem: {
-        backgroundColor: colors.white,
-        height: "auto",
-        borderRadius: 10,
-        elevation: 2,
-        borderWidth: 1,
-        borderColor: "#D8D8D8",
-        padding: 10, 
-        marginVertical: 10,
-    },
-    BodyContainer: {
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "center",
-        paddingTop: 20,
-        right: "5%"
-    },
-    Text: {
-        fontWeight: "bold",
-        fontSize: 15
-    },
-    alignItems: {
-        alignItems: "center",
-    },
-    textIndex: {
-        color: colors.blue,
-        fontWeight: "bold",
-        fontSize: 20,
-        padding: 5,
-    }
+	ContainerIngredient: {
+		display: "flex",
+		justifyContent: "center",
+		flexWrap: "nowrap",
+		marginTop: 20,
+		paddingHorizontal: 20,
+
+	},
+	ContainerItem: {
+		backgroundColor: colors.white,
+		height: "auto",
+		borderRadius: 10,
+		elevation: 2,
+		borderWidth: 1,
+		borderColor: "#D8D8D8",
+		padding: 10,
+		marginVertical: 10,
+	},
+	BodyContainer: {
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		paddingTop: 20,
+		right: "5%"
+	},
+	Text: {
+		fontWeight: "bold",
+		fontSize: 15
+	},
+	alignItems: {
+		alignItems: "center",
+	},
+	textIndex: {
+		color: colors.blue,
+		fontWeight: "bold",
+		fontSize: 20,
+		padding: 5,
+	}
 });
 
 export default BodyIndex;

@@ -17,6 +17,7 @@ export default function Calories() {
 	const windowHeight = useWindowDimensions().height;
 	const windowWidth = useWindowDimensions().width;
 	const { userInfo } = useContext(AuthContext);
+	const [consumedCalories, setConsumedCalories] = useState(defaultCalories);
 
 	useEffect(() => {
 		const getCalories = async () => {
@@ -24,15 +25,23 @@ export default function Calories() {
 			console.log("response", response);
 			if (response !== 0) {
 				setConsumedCalories(response.total_morning_calo + response.total_noon_calo + response.total_dinner_calo + response.total_snack_calo - response.total_exercise_calo)
-				setCaloValueBreakfast(response.total_morning_calo.toString());
-				setCaloValueLunch(response.total_noon_calo.toString());
-				setCaloValueDinner(response.total_dinner_calo.toString());
-				setCaloValueSnacks(response.total_snack_calo.toString());
-				setCaloValueWorkout(response.total_exercise_calo.toString());
+				// setCaloValueBreakfast(response.total_morning_calo.toString());
+				// setCaloValueLunch(response.total_noon_calo.toString());
+				// setCaloValueDinner(response.total_dinner_calo.toString());
+				// setCaloValueSnacks(response.total_snack_calo.toString());
+				// setCaloValueWorkout(response.total_exercise_calo.toString());
+			} else {
+				setConsumedCalories(0);
+				// setCaloValueBreakfast('');
+				// setCaloValueLunch('');
+				// setCaloValueDinner('');
+				// setCaloValueSnacks('');
+				// setCaloValueWorkout('');
 			}
 		}
 		getCalories();
 	}, []);
+
 
 	user = {
 		age: userInfo.age,
@@ -43,9 +52,9 @@ export default function Calories() {
 
 	let energy;
 	if (user?.gender == "nam") {
-		energy = (6.25 * user?.height) + (10 * user?.weight) - (5 * user?.age) + 5;
+		energy = ((6.25 * user?.height) + (10 * user?.weight) - (5 * user?.age) + 5).toFixed(0);
 	} else {
-		energy = (6.25 * user?.height) + (10 + user?.weight) - (5 * user?.age) - 161;
+		energy = ((6.25 * user?.height) + (10 + user?.weight) - (5 * user?.age) - 161).toFixed(0);
 	}
 
 	const today = new Date();
@@ -66,7 +75,6 @@ export default function Calories() {
 	const [caloValueDinner, setCaloValueDinner] = useState('');
 	const [caloValueSnacks, setCaloValueSnacks] = useState('');
 	const [caloValueWorkout, setCaloValueWorkout] = useState('');
-	const [consumedCalories, setConsumedCalories] = useState(defaultCalories);
 	const handleCaloBreakfastChange = async () => {
 		setCaloValueBreakfast(caloValueBreakfast);
 		const result = await save_calories_morning(caloValueBreakfast);
@@ -130,11 +138,14 @@ export default function Calories() {
 	const showToastsEqual = () => {
 		Toast.success('Bạn đã đạt được số calo mục tiêu!\nLàm tốt lắm 🥳')
 	}
-	if (consumedCalories > targetCalories) {
-		showToastsMore();
-	} else if (consumedCalories === targetCalories) {
-		showToastsEqual();
-	}
+	useEffect(() => {
+		if (consumedCalories > targetCalories) {
+			showToastsMore();
+		} else if (consumedCalories === targetCalories) {
+			showToastsEqual();
+		}
+	}, [consumedCalories]);
+
 
 	return (
 		<ScrollView style={{ backgroundColor: colors.white, marginBottom: 60 }}>

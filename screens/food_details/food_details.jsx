@@ -113,6 +113,7 @@ function FoodDetails({ route }) {
 const styles = StyleSheet.create({
 	DetailsContainer: {
 		paddingBottom: 100,
+
 	},
 	ContainerIngredient: {
 		display: "flex",
@@ -148,6 +149,7 @@ const styles = StyleSheet.create({
 		borderWidth: 1,
 		borderColor: "#D8D8D8",
 		padding: 10,
+
 	},
 	ContainerTextNutrients: {
 		fontWeight: "700",
