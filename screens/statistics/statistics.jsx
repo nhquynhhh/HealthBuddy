@@ -7,6 +7,7 @@ import { colors } from '../../utils/colors';
 import DatePicker, { getToday, getFormatedDate } from 'react-native-modern-datepicker';
 // import { BarChart, LineChart } from 'react-native-gifted-charts';
 import { handleGetStatic } from '../../services/statistic/get_statistic';
+import { handleGetStaticWater } from '../../services/water/get_statistic_water';
 import { LineChart } from 'react-native-chart-kit';
 
 export default function Statistics() {
@@ -21,6 +22,7 @@ export default function Statistics() {
   const [dataLabel, setDataLabel] = useState([""])
   const [dataCalo, setDataCalo] = useState([0])
   const [tdee, setTDEE] = useState(0);
+  const [dataWater, setDataWater] = useState([0])
 
   const today = new Date();
   const defaultDate = getFormatedDate(today.setDate(today.getDate()), 'YYYY/MM/DD');
@@ -58,13 +60,29 @@ export default function Statistics() {
       console.log('Error fetching data');
     }
   }
+
+    const handleGetUserWater = async () => {
+    const res = await handleGetStaticWater(numDate)
+    if (res !== 0) {
+      const dateValues = res.data.map(item => item.date);
+      const waterValues = res.data.map(item => item.total_water);
+      setDataWater(waterValues)
+    }
+    else {
+      console.log('Error fetching data');
+    }
+  }
+
   const fetchData = async () => {
     await handleGetUserData();
+    await handleGetUserWater();
   }
 
   useEffect(() => {
     fetchData()
   }, [numDate])
+
+
   useEffect(() => {
     fetchData()
   }, [])
@@ -76,6 +94,15 @@ export default function Statistics() {
       color: (opacity = 1) => `rgba(26, 140, 3, ${opacity})`,
     }],
   }
+
+  const temp_water = {
+    labels: numDate > 7 ? [] : dataLabel.map(item => item.substring(0, 5)),
+    datasets: [{
+      data: dataWater,
+      color: (opacity = 1) => `rgba(26, 140, 3, ${opacity})`,
+    }],
+  }
+
 
 
   const Calories = () => {
@@ -330,6 +357,20 @@ export default function Statistics() {
             },
           }}
         /> */}
+        {
+          <LineChart data={temp_water} width={390} height={220} yAxisLabel={''}
+            chartConfig={{
+              backgroundGradientFrom: '#fff',
+              backgroundGradientTo: '#fff',
+              decimalPlaces: 0,
+              color: (opacity = 1) => `rgba(26, 140, 3, ${opacity})`,
+              labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+              style: { borderRadius: 16, },
+              propsForDots: { r: '6', strokeWidth: '2', stroke: '#1A8C03', fill: '#fff' },
+            }}
+            bezier
+            style={{ marginVertical: 8, borderRadius: 16, }} />
+        }
       </View>
     );
   };

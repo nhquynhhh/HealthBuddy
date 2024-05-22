@@ -144,6 +144,12 @@ const get_statistic = {
 	method: 'GET'
 }
 
+const get_statistic_water = {	
+	url: `${BASE_URL}/api/statistic/get-sevendays-water`,
+	method: 'GET'
+}
+
+
 export {
 	login_api,
 	signup_api,
@@ -164,5 +170,5 @@ export {
 	get_favorite_dishes,
 	get_home_favorite_dishes,
 	get_fav_list,
-	get_calories, add_morning, add_noon, add_dinner, add_snack, add_exercise, save_water, get_water,get_statistic
+	get_calories, add_morning, add_noon, add_dinner, add_snack, add_exercise, save_water, get_water,get_statistic,get_statistic_water
 };
