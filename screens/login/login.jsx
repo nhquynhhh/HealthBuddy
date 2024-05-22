@@ -62,13 +62,10 @@ export default function Login() {
 		}
 	}
 
-
-
-	
 	return (
 		<KeyboardAvoidingView
 			behavior={Platform.OS === 'android' ? 'padding' : 'height'}
-			style={styles.container}>
+			style={[styles.container, { backgroundColor: colors.white }]}>
 			<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 				<ScrollView contentContainerStyle={{ alignItems: 'center' }} showsVerticalScrollIndicator={false}>
 					<Image source={require('../../assets/img_bare_logo.png')}
@@ -122,7 +119,7 @@ export default function Login() {
 					<Button title={"ĐĂNG NHẬP"}
 						style={styles.btnClick}
 						titleStyle={{ fontWeight: '700', fontSize: 20 }}
-						buttonStyle={{ minWidth: '95%', height: 42, borderRadius: 10 }}
+						buttonStyle={{ minWidth: '95%', height: 45, borderRadius: 10 }}
 						ViewComponent={LinearGradient}
 						linearGradientProps={{
 							colors: [colors.blue, colors.lightBlue],
@@ -188,6 +185,7 @@ const styles = StyleSheet.create({
 	},
 	inputField: {
 		fontSize: 15,
+		width: '80%',
 	},
 	iconBlue: {
 		color: colors.blue,

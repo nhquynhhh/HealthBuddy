@@ -6,10 +6,9 @@ export const handleChangeFavorite = async (data) => {
 		const response = await callChangeFavorite(data);
 		const result = await response.json();
 		if (response.ok) {
-			const {favorites, message} = result;
-			return {favorites, message};
+			const { favorites, message } = result;
+			return { favorites, message };
 		}
-		return message;
 	} catch (error) {
 		console.log(error);
 		return null;

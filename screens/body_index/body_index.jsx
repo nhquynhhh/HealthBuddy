@@ -8,7 +8,7 @@ import { Modal } from "react-native-paper";
 import Clock from "../clock/clock";
 
 
-function BodyIndex({user}) {
+function BodyIndex({ user }) {
 	const { userInfo, account } = useContext(AuthContext);
     user = {
         age: userInfo?.age,
@@ -151,44 +151,44 @@ function BodyIndex({user}) {
 }
 
 const styles = StyleSheet.create({
-    ContainerIngredient: {
-        display: "flex",
-        justifyContent: "center",
-        flexWrap: "nowrap",
-        marginTop: 20,
-        paddingHorizontal: 20,
-        
-    },
-    ContainerItem: {
-        backgroundColor: colors.white,
-        height: "auto",
-        borderRadius: 10,
-        elevation: 2,
-        borderWidth: 1,
-        borderColor: "#D8D8D8",
-        padding: 10, 
-        marginVertical: 10,
-    },
-    BodyContainer: {
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "center",
-        paddingTop: 20,
-        right: "5%"
-    },
-    Text: {
-        fontWeight: "bold",
-        fontSize: 15
-    },
-    alignItems: {
-        alignItems: "center",
-    },
-    textIndex: {
-        color: colors.blue,
-        fontWeight: "bold",
-        fontSize: 20,
-        padding: 5,
-    }
+	ContainerIngredient: {
+		display: "flex",
+		justifyContent: "center",
+		flexWrap: "nowrap",
+		marginTop: 20,
+		paddingHorizontal: 20,
+
+	},
+	ContainerItem: {
+		backgroundColor: colors.white,
+		height: "auto",
+		borderRadius: 10,
+		elevation: 2,
+		borderWidth: 1,
+		borderColor: "#D8D8D8",
+		padding: 10,
+		marginVertical: 10,
+	},
+	BodyContainer: {
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		paddingTop: 20,
+		right: "5%"
+	},
+	Text: {
+		fontWeight: "bold",
+		fontSize: 15
+	},
+	alignItems: {
+		alignItems: "center",
+	},
+	textIndex: {
+		color: colors.blue,
+		fontWeight: "bold",
+		fontSize: 20,
+		padding: 5,
+	}
 });
 
 export default BodyIndex;

@@ -21,13 +21,11 @@ export const AppRouters = () => {
 
 		return () => clearTimeout(timeout);
 	}, []);
-	
+
 	return (
 		<>
 			{
-				isShowSplash ? <SplashScreen /> : (
-					isLogged ? <MainNavigator /> : <AuthNavigator />
-				)
+				isLogged ? <MainNavigator /> : <AuthNavigator />
 			}
 
 		</>

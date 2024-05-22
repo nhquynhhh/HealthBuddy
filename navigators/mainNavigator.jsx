@@ -33,33 +33,41 @@ const MainNavigator = () => {
 	function HomeStackScreens() {
 		return (
 			<HomeStack.Navigator screenOptions={{ headerTitleAlign: 'center', headerTitleStyle: { fontWeight: 'bold' } }}>
-				<HomeStack.Screen name="Home" component={Home} options={{headerShown: false}}/> 
-				<HomeStack.Screen name="Calories" component={Calories} options={{headerTitle: "Kiểm soát Calories"}}/>
-				<HomeStack.Screen name="Water" component={Water} options={{headerTitle: "Theo dõi uống nước"}}/>
-				<WorkoutStack.Screen name="Workout" component={WorkoutStackScreens} options={{headerShown: false}}/>
-				<HomeStack.Screen name="BodyIndex" component={BodyIndex} options={{headerTitle: "Chỉ số cơ thể"}}/>
-				<HomeStack.Screen name="Statistics" component={StatisticsStackScreens} options={{headerShown: false}}/>
-				<HomeStack.Screen name="FavouriteFood" component={FavouriteFood} options={{headerTitle: "Món ăn yêu thích"}}/>
-				<HomeStack.Screen name="MenuSuggestion" component={MenuSuggestion} options={{headerTitle: "Gợi ý thực đơn"}}/>
-				<HomeStack.Screen name="Search" component={Search} options={{headerTitle: "Tra cứu"}}/>
-				<HomeStack.Screen name="BMI" component={BMI} options={{ headerTitle: "BMI là gì ?"}} />
-				<HomeStack.Screen name="Energy" component={Energy} options={{ headerTitle: "BMI là gì ?" }} />
+				<HomeStack.Screen name="Home" component={Home} options={{ headerShown: false }} />
+				<HomeStack.Screen name="Calories" component={Calories} options={{ headerTitle: "Kiểm soát Calories" }} />
+				<HomeStack.Screen name="Water" component={Water} options={{ headerTitle: "Theo dõi uống nước" }} />
+				<WorkoutStack.Screen name="Workout" component={WorkoutStackScreens} options={{ headerShown: false }} />
+				<HomeStack.Screen name="BodyIndex" component={BodyIndex} options={{ headerTitle: "Chỉ số cơ thể" }} />
+				<HomeStack.Screen name="Statistics" component={StatisticsStackScreens} options={{ headerShown: false }} />
+				<HomeStack.Screen name="FavouriteFood" component={FavouriteFood} options={{ headerTitle: "Món ăn yêu thích" }} />
+				<HomeStack.Screen name="MenuSuggestion" component={MenuSuggestion} options={{ headerTitle: "Gợi ý thực đơn" }} />
+				<HomeStack.Screen name="Search" component={Search} options={{ headerTitle: "Tra cứu" }} />
+				<HomeStack.Screen name="BMI" component={BMI} options={{ headerTitle: "BMI là gì ?" }} />
+				<HomeStack.Screen name="Energy" component={Energy} options={{ headerTitle: "Cách tính năng lượng" }} />
 				<HomeStack.Screen name="FoodDetails" component={FoodDetails}
-					options={({ route }) => ({ 
+					options={({ route }) => ({
 						headerTitle: route.params.data.name
 					})}
 				/>
-
 			</HomeStack.Navigator>
 		)
 	}
 
+	const NotiStack = createNativeStackNavigator();
+	function NotiStackScreens() {
+		return (
+			<NotiStack.Navigator screenOptions={{ headerTitleAlign: 'center', headerTitleStyle: { fontWeight: 'bold' } }}>
+				<NotiStack.Screen name="Noti" component={Notifications} options={{ headerTitle: "Thông báo" }} />
+			</NotiStack.Navigator>
+		)
+	}
+
 	const PersonalStack = createNativeStackNavigator();
-	function PersonalStackScreens(){
-		return(
-			<PersonalStack.Navigator screenOptions={{headerTitleAlign: 'center', headerTitleStyle:{fontWeight: 'bold'}}}>
-				<PersonalStack.Screen name="Personal" component={Personal} options={{headerTitle: "Tài khoản của tôi"}}/>
-				<PersonalStack.Screen name="Premium" component={Premium} options={{headerTitle: "Nâng cấp tài khoản"}}/>
+	function PersonalStackScreens() {
+		return (
+			<PersonalStack.Navigator screenOptions={{ headerTitleAlign: 'center', headerTitleStyle: { fontWeight: 'bold' } }}>
+				<PersonalStack.Screen name="Personal" component={Personal} options={{ headerTitle: "Tài khoản của tôi" }} />
+				<PersonalStack.Screen name="Premium" component={Premium} options={{ headerTitle: "Nâng cấp tài khoản" }} />
 			</PersonalStack.Navigator>
 		)
 	}
@@ -75,10 +83,10 @@ const MainNavigator = () => {
 	}
 
 	const StatisticsStack = createNativeStackNavigator();
-	function StatisticsStackScreens(){
-		return(
-			<StatisticsStack.Navigator screenOptions={{headerTitleAlign: 'center', headerTitleStyle:{fontWeight: 'bold'}}}>
-				<StatisticsStack.Screen name="StatisticsStack" component={Statistics} options={{headerTitle: "Thống kê chi tiết"}}/>
+	function StatisticsStackScreens() {
+		return (
+			<StatisticsStack.Navigator screenOptions={{ headerTitleAlign: 'center', headerTitleStyle: { fontWeight: 'bold' } }}>
+				<StatisticsStack.Screen name="StatisticsStack" component={Statistics} options={{ headerTitle: "Thống kê chi tiết" }} />
 			</StatisticsStack.Navigator>
 		)
 	}
@@ -148,7 +156,7 @@ const MainNavigator = () => {
 						}
 					}} />
 				<Tab.Screen name="NotiTab"
-					component={Notifications}
+					component={NotiStackScreens}
 					options={{
 						tabBarIcon: ({ focused }) => {
 							return (
@@ -171,9 +179,9 @@ const MainNavigator = () => {
 							)
 						}
 					}} />
-					
-			</Tab.Navigator> 
-			
+
+			</Tab.Navigator>
+
 
 		)
 	}
