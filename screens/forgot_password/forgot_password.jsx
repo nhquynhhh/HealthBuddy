@@ -29,13 +29,15 @@ export default function ForgotPassword({ navigation }) {
 				navigation.navigate('OTPForgotPassword');
 				const result = await callOTPPassAPI(email);
 				return;
+			} else {
+				Alert.alert("Thông báo", "Không tìm thấy tài khoản")
 			}
 		}
 	}
 	return (
 		<ScrollView style={{ backgroundColor: colors.white, flexShrink: 1, height: '100%' }}>
-			<TouchableOpacity onPress={() => {navigation.navigate('Login')}}>
-				<Text style={{paddingVertical: 70, paddingLeft: 20, color: colors.blue, fontSize: RFValue(14, 720), fontWeight: 'bold'}}>Quay lại</Text>
+			<TouchableOpacity onPress={() => { navigation.navigate('Login') }}>
+				<Text style={{ paddingVertical: 70, paddingLeft: 20, color: colors.blue, fontSize: RFValue(14, 720), fontWeight: 'bold' }}>Quay lại</Text>
 			</TouchableOpacity>
 			<View style={{ alignItems: 'center', flexShrink: 1 }}>
 				<Image source={require('../../assets/img_forgot_password.png')}
@@ -49,7 +51,7 @@ export default function ForgotPassword({ navigation }) {
 						type='fontisto'
 						color={colors.blue}>
 					</Icon>
-					<TextInput style={[styles.inputField, {flex: 1}]}
+					<TextInput style={[styles.inputField, { flex: 1 }]}
 						placeholder='Nhập email'
 						onChangeText={setEmail}
 						value={email}>
@@ -59,7 +61,7 @@ export default function ForgotPassword({ navigation }) {
 				<Button title={"XÁC NHẬN"}
 					style={styles.btnClick}
 					titleStyle={{ fontWeight: '700', fontSize: 20 }}
-					buttonStyle={{ minWidth: '95%', height: 42, borderRadius: 10 }}
+					buttonStyle={{ minWidth: '95%', height: 45, borderRadius: 10 }}
 					ViewComponent={LinearGradient}
 					linearGradientProps={{
 						colors: [colors.blue, colors.lightBlue],

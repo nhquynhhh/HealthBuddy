@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, useWindowDimensions, Alert } from 'react-native'
+import { View, Text, Image, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, useWindowDimensions, Alert, ScrollView } from 'react-native'
 import React, { Component, useEffect, useState } from 'react'
 import { Icon, Button, Divider } from "react-native-elements";
 import { LinearGradient } from 'expo-linear-gradient';
@@ -54,124 +54,126 @@ export default function Signup() {
 		}
 	}
 	return (
-		<View style={[{ alignItems: 'center', backgroundColor: colors.white, height: '100%' }, styles.container]}>
-			<Image source={require('../../assets/img_bare_logo.png')}
-				style={styles.signupLogo}
-			/>
-			<Text style={styles.headingText}>Đăng ký</Text>
-			<Text style={styles.infoText}>Nhập thông tin của bạn</Text>
+		<ScrollView style={{ backgroundColor: colors.white, flexShrink: 1, height: '100%' }}>
+			<View style={[{ alignItems: 'center', backgroundColor: colors.white, height: '100%' }, styles.container]}>
+				<Image source={require('../../assets/img_bare_logo.png')}
+					style={styles.signupLogo}
+				/>
+				<Text style={styles.headingText}>Đăng ký</Text>
+				<Text style={styles.infoText}>Nhập thông tin của bạn</Text>
 
-			<Text style={styles.describeText}>Tên của bạn</Text>
-			<SafeAreaView style={styles.inputFieldContainer}>
-				<Icon style={styles.iconBlue}
-					name="person-outline"
-					type='ionicon'
-					color={colors.blue}>
-				</Icon>
-				<TextInput style={styles.inputField}
-					placeholder='Nhập tên người dùng'
-					maxLength={20}
-					onChangeText={(username) => {
-						if (username.length >= 20) {
-							Alert.alert('Thông báo', 'Tên người dùng không được quá 20 ký tự.');
-						} else {
-							setUsername(username);
-						}
+				<Text style={styles.describeText}>Tên của bạn</Text>
+				<SafeAreaView style={styles.inputFieldContainer}>
+					<Icon style={styles.iconBlue}
+						name="person-outline"
+						type='ionicon'
+						color={colors.blue}>
+					</Icon>
+					<TextInput style={styles.inputField}
+						placeholder='Nhập tên người dùng'
+						maxLength={20}
+						onChangeText={(username) => {
+							if (username.length >= 20) {
+								Alert.alert('Thông báo', 'Tên người dùng không được quá 20 ký tự.');
+							} else {
+								setUsername(username);
+							}
+						}}
+						value={username}>
+					</TextInput>
+				</SafeAreaView>
+
+				<Text style={styles.describeText}>Email</Text>
+				<SafeAreaView style={styles.inputFieldContainer}>
+					<Icon style={styles.iconBlue}
+						name="email"
+						type='fontisto'
+						color={colors.blue}>
+					</Icon>
+					<TextInput style={styles.inputField}
+						placeholder='Nhập email'
+						onChangeText={setEmail}
+						value={email}>
+					</TextInput>
+				</SafeAreaView>
+
+				<Text style={styles.describeText}>Nhập mật khẩu</Text>
+				<SafeAreaView style={styles.inputFieldContainer}>
+					<Icon style={styles.iconBlue}
+						name="lock-outline"
+						type='material-community'
+						color={colors.blue}>
+					</Icon>
+					<TextInput style={styles.inputField}
+						placeholder='Nhập mật khẩu'
+						maxLength={20}
+						onChangeText={setPassword}
+						value={password}
+						secureTextEntry={!passwordIsVisible}>
+					</TextInput>
+					<TouchableOpacity
+						style={styles.passwordVisibleButton}
+						onPress={() => setPasswordIsVisible(!passwordIsVisible)}
+					>
+						<Icon
+							name={passwordIsVisible ? "eye-outline" : "eye-off-outline"}
+							size={24}
+							color={colors.blue}
+							type='ionicon'
+						/>
+					</TouchableOpacity>
+				</SafeAreaView>
+
+				<Text style={styles.describeText}>Xác nhận mật khẩu</Text>
+				<SafeAreaView style={styles.inputFieldContainer}>
+					<Icon style={styles.iconBlue}
+						name="lock-outline"
+						type='material-community'
+						color={colors.blue}>
+					</Icon>
+					<TextInput style={styles.inputField}
+						placeholder='Xác nhận mật khẩu'
+						onChangeText={setPasswordConfirm}
+						value={passwordConfirm}
+						secureTextEntry={!passwordConfirmIsVisible}>
+					</TextInput>
+					<TouchableOpacity
+						style={styles.passwordVisibleButton}
+						onPress={() => setPasswordConfirmIsVisible(!passwordConfirmIsVisible)}
+					>
+						<Icon
+							name={passwordConfirmIsVisible ? "eye-outline" : "eye-off-outline"}
+							size={24}
+							color={colors.blue}
+							type='ionicon'
+						/>
+					</TouchableOpacity>
+				</SafeAreaView>
+
+				<Button title={"ĐĂNG KÝ"}
+					style={styles.btnClick}
+					titleStyle={{ fontWeight: '700', fontSize: 20 }}
+					buttonStyle={{ minWidth: '95%', height: 42, borderRadius: 10, marginTop: 15 }}
+					ViewComponent={LinearGradient}
+					linearGradientProps={{
+						colors: [colors.blue, colors.lightBlue],
+						start: { x: 0, y: 0.5 },
+						end: { x: 1, y: 0.5 },
 					}}
-					value={username}>
-				</TextInput>
-			</SafeAreaView>
+					onPress={() => handleSignUp()}>
+				</Button>
 
-			<Text style={styles.describeText}>Email</Text>
-			<SafeAreaView style={styles.inputFieldContainer}>
-				<Icon style={styles.iconBlue}
-					name="email"
-					type='fontisto'
-					color={colors.blue}>
-				</Icon>
-				<TextInput style={styles.inputField}
-					placeholder='Nhập email'
-					onChangeText={setEmail}
-					value={email}>
-				</TextInput>
-			</SafeAreaView>
+				<Divider style={{ marginTop: 30, height: 1, backgroundColor: colors.blue, width: windowWidth / 2 }}>
+				</Divider>
 
-			<Text style={styles.describeText}>Nhập mật khẩu</Text>
-			<SafeAreaView style={styles.inputFieldContainer}>
-				<Icon style={styles.iconBlue}
-					name="lock-outline"
-					type='material-community'
-					color={colors.blue}>
-				</Icon>
-				<TextInput style={styles.inputField}
-					placeholder='Nhập mật khẩu'
-					maxLength={20}
-					onChangeText={setPassword}
-					value={password}
-					secureTextEntry={!passwordIsVisible}>
-				</TextInput>
-				<TouchableOpacity
-					style={styles.passwordVisibleButton}
-					onPress={() => setPasswordIsVisible(!passwordIsVisible)}
-				>
-					<Icon
-						name={passwordIsVisible ? "eye-outline" : "eye-off-outline"}
-						size={24}
-						color={colors.blue}
-						type='ionicon'
-					/>
-				</TouchableOpacity>
-			</SafeAreaView>
-
-			<Text style={styles.describeText}>Xác nhận mật khẩu</Text>
-			<SafeAreaView style={styles.inputFieldContainer}>
-				<Icon style={styles.iconBlue}
-					name="lock-outline"
-					type='material-community'
-					color={colors.blue}>
-				</Icon>
-				<TextInput style={styles.inputField}
-					placeholder='Xác nhận mật khẩu'
-					onChangeText={setPasswordConfirm}
-					value={passwordConfirm}
-					secureTextEntry={!passwordConfirmIsVisible}>
-				</TextInput>
-				<TouchableOpacity
-					style={styles.passwordVisibleButton}
-					onPress={() => setPasswordConfirmIsVisible(!passwordConfirmIsVisible)}
-				>
-					<Icon
-						name={passwordConfirmIsVisible ? "eye-outline" : "eye-off-outline"}
-						size={24}
-						color={colors.blue}
-						type='ionicon'
-					/>
-				</TouchableOpacity>
-			</SafeAreaView>
-
-			<Button title={"ĐĂNG KÝ"}
-				style={styles.btnClick}
-				titleStyle={{ fontWeight: '700', fontSize: 20 }}
-				buttonStyle={{ minWidth: '95%', height: 42, borderRadius: 10, marginTop: 15 }}
-				ViewComponent={LinearGradient}
-				linearGradientProps={{
-					colors: [colors.blue, colors.lightBlue],
-					start: { x: 0, y: 0.5 },
-					end: { x: 1, y: 0.5 },
-				}}
-				onPress={() => handleSignUp()}>
-			</Button>
-
-			<Divider style={{ marginTop: 30, height: 1, backgroundColor: colors.blue, width: windowWidth / 2 }}>
-			</Divider>
-
-			<View style={{ flexDirection: 'row', marginTop: 30 }}>
-				<Text>Đã có tài khoản? </Text>
-				<TouchableOpacity onPress={() => navigation.navigate('Login')}>
-					<Text style={{ color: colors.blue, fontWeight: '600' }}>Đăng nhập</Text>
-				</TouchableOpacity>
+				<View style={{ flexDirection: 'row', marginTop: 30 }}>
+					<Text>Đã có tài khoản? </Text>
+					<TouchableOpacity onPress={() => navigation.navigate('Login')}>
+						<Text style={{ color: colors.blue, fontWeight: '600' }}>Đăng nhập</Text>
+					</TouchableOpacity>
+				</View>
 			</View>
-		</View>
+		</ScrollView>
 	)
 }
 
@@ -204,6 +206,7 @@ const styles = StyleSheet.create({
 	},
 	inputField: {
 		fontSize: 15,
+		width: '80%',
 	},
 	iconBlue: {
 		color: colors.blue,
