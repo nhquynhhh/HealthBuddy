@@ -6,7 +6,7 @@ import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import { colors } from '../../utils/colors';
 
 
-export default function WorkoutDetail() {
+export default function WorkoutDetail5() {
     const windowHeight = useWindowDimensions().height;
     const windowWidth = useWindowDimensions().width;
 
@@ -52,13 +52,20 @@ export default function WorkoutDetail() {
         return `${hours}:${minutes}:${seconds}`;
     }
 
+    const handleCaloWorkoutSubmit = () => {
+        const minutesElapsed = elapsedTime / (1000 * 60);
+        const caloriesBurned = Math.round(minutesElapsed * 80);
+
+        const result = save_calories_exercise(caloriesBurned);
+    };
+
     return (
         <ScrollView style={{backgroundColor: colors.white, marginBottom: 60}}>
             <View style={{marginTop: 20, marginBottom: 10}}>
-                <Image source={{uri: 'https://www.spotebi.com/wp-content/uploads/2016/12/180-jump-squat-exercise-illustration-spotebi.gif'}} style={{width: 150, height: 200, alignSelf: 'center'}} />
+                <Image source={{uri: 'https://www.spotebi.com/wp-content/uploads/2017/06/reverse-lunge-medicine-ball-overhead-press-exercise-illustration-spotebi.gif'}} style={{width: 150, height: 200, alignSelf: 'center'}} />
             </View>
             <View style={{marginBottom: 20}}>
-                <Text style={{textAlign: 'center', fontWeight: 'bold', fontSize: RFValue(19, 720), color: colors.blue}}>180 Jump Squat</Text>
+                <Text style={{textAlign: 'center', fontWeight: 'bold', fontSize: RFValue(19, 720), color: colors.blue}}>Reverse Ball Overhead</Text>
             </View>
             <View style={{flexDirection: 'row', alignSelf: 'center', borderWidth: 1, borderColor: colors.blue}}>
                 <View style={{backgroundColor: colors.blue, flexDirection: 'row', padding: 15}}>
@@ -87,17 +94,19 @@ export default function WorkoutDetail() {
             </View>
             <View style={{backgroundColor: colors.blue, alignSelf: 'center', padding: 15, width: windowWidth * 0.8, marginVertical: 20, borderRadius: 15, marginTop: 30}}>
                 <Text style={{color: colors.white, textDecorationLine: 'underline', fontWeight: 'bold', fontSize: RFValue(16, 720)}}>Thông tin chung</Text>
-                <Text style={{paddingVertical: 5, color: colors.white, fontSize: RFValue(14, 720)}}><Text style={{fontWeight: 'bold'}}>Dụng cụ:</Text> Không</Text>
-                <Text style={{paddingVertical: 5, color: colors.white, fontSize: RFValue(14, 720)}}><Text style={{fontWeight: 'bold'}}>Calories tiêu hao:</Text> 8 calo / phút</Text>
-                <Text style={{paddingVertical: 5, color: colors.white, fontSize: RFValue(14, 720)}}><Text style={{fontWeight: 'bold'}}>Tác động:</Text> Bụng, lưng dưới, đùi</Text>
+                <Text style={{paddingVertical: 5, color: colors.white, fontSize: RFValue(14, 720)}}><Text style={{fontWeight: 'bold'}}>Dụng cụ:</Text> Bóng</Text>
+                <Text style={{paddingVertical: 5, color: colors.white, fontSize: RFValue(14, 720)}}><Text style={{fontWeight: 'bold'}}>Calories tiêu hao:</Text> 5 calo / phút</Text>
+                <Text style={{paddingVertical: 5, color: colors.white, fontSize: RFValue(14, 720)}}><Text style={{fontWeight: 'bold'}}>Tác động:</Text> Vai, mông, ngực</Text>
             </View>
             <View style={{alignSelf: 'center', padding: 15, width: windowWidth * 0.8, marginVertical: 10, borderWidth: 1, borderColor: colors.gray, borderRadius: 15}}>
                 <Text style={{textDecorationLine: 'underline', fontWeight: 'bold', fontSize: RFValue(16, 720), marginBottom: 15}}>Chi tiết bài tập</Text>
                 <Text style={{flexWrap: 'wrap', lineHeight: 30, textAlign: 'justify', fontSize: RFValue(14, 720)}}>
-                    - 2 đầu gối hơi gập, 2 chân giơ hơi cao lên để thân người và chân tạo thành hình chữ V.
-                    {"\n"}- Để thân người hơi nghiêng về phía sau, 2 tay duỗi thẳng về phía trước hoặc đan vào nhau để trước ngực, ngang với chiều cao của vai.
-                    {"\n"}- Giữ nguyên mông trên sàn. Vặn thân người và 2 tay sang trái, đồng thời hơi vặn 2 đầu gối sang phải.
-                    {"\n"}- Lặp lại động tác tương tự với bên phải. Rồi quay trở lại vị trí ban đầu. Lưu ý, trong toàn bộ các động tác tập luyện, bạn cần giữ nguyên vị trí 2 tay và căng cứng cơ bụng.
+                - Đứng hai chân rộng bằng hông và cầm quả bóng trong tay phải ngang vai.
+                {"\n"}- Lùi lại một bước bằng chân phải và gập đầu gối cho đến khi đầu gối sau ở ngay trên sàn.
+                {"\n"}- Đứng dậy, đưa bóng lên, qua đầu rồi chuyển sang tay trái.
+                {"\n"}- Lùi lại một bước bằng chân trái, hạ quả bóng xuống ngang vai và tiến về phía trước.
+                {"\n"}- Đứng dậy, đưa bóng lên, qua đầu rồi chuyển sang tay phải.
+                {"\n"}- Lặp lại cho đến khi tập xong.
                 </Text>
             </View>
             <View style={{paddingBottom: 60}}></View>
