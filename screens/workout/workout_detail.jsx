@@ -4,6 +4,7 @@ import { SearchBar, Icon, Divider } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import { colors } from '../../utils/colors';
+import { save_calories_morning, save_calories_lunch, save_calories_dinner, save_calories_exercise, save_calories_snack } from '../../services/api/api_save_calories'
 
 
 export default function WorkoutDetail() {
@@ -52,6 +53,13 @@ export default function WorkoutDetail() {
         return `${hours}:${minutes}:${seconds}`;
     }
 
+    const handleCaloWorkoutSubmit = () => {
+        const minutesElapsed = elapsedTime / (1000 * 60);
+        const caloriesBurned = Math.round(minutesElapsed * 80);
+
+        const result = save_calories_exercise(caloriesBurned);
+    };
+
     return (
         <ScrollView style={{backgroundColor: colors.white, marginBottom: 60}}>
             <View style={{marginTop: 20, marginBottom: 10}}>
@@ -84,6 +92,11 @@ export default function WorkoutDetail() {
                     <Text style={{fontSize: RFValue(20, 720), fontWeight: 'bold', textAlignVertical: 'center', color: colors.red}}>00</Text>
                     <Text style={{fontSize: RFValue(16, 720), textAlignVertical: 'center'}}> calo</Text>
                 </View>
+            </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 20 }}>
+                <TouchableOpacity style={{ backgroundColor: colors.blue, padding: 15, borderRadius: 10 }} onPress={handleCaloWorkoutSubmit}>
+                    <Text style={{ color: colors.white, fontWeight: 'bold', fontSize: RFValue(16, 720) }}>Submit</Text>
+                </TouchableOpacity>
             </View>
             <View style={{backgroundColor: colors.blue, alignSelf: 'center', padding: 15, width: windowWidth * 0.8, marginVertical: 20, borderRadius: 15, marginTop: 30}}>
                 <Text style={{color: colors.white, textDecorationLine: 'underline', fontWeight: 'bold', fontSize: RFValue(16, 720)}}>Thông tin chung</Text>
