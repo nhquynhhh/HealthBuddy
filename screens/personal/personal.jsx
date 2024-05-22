@@ -39,9 +39,6 @@ export default function Personal() {
 	const onPressHandler2 = () => {
 		setIsModalVisible(true);
 	}
-	const closeModal2 = () => {
-		setIsModalVisible(false);
-	}
 	const accountType = account.has_subscription ? "PREMIUM" : "STANDARD";
 	const gender = userInfo.gender == 'male' ? 'Nam' : 'Nữ';
 	const target = [
@@ -212,7 +209,7 @@ export default function Personal() {
 			>
 				<View style={styles.modalContainer}>
 					<View style={[styles.modalContent,{width:windowWidth*0.9}]}>
-						<TouchableOpacity onPress={closeModal2} style={{ position: "absolute", top: 8, right: 8, zIndex: 1}}>
+						<TouchableOpacity onPress={closeModal} style={{ position: "absolute", top: 8, right: 8, zIndex: 1}}>
 							<Icon 
 								name="close" 
 								type="antdesign" 
@@ -220,19 +217,84 @@ export default function Personal() {
 								color={colors.red} 
 							/>
 						</TouchableOpacity>
-						<View style={{ padding: 20, justifyContent: 'flex-start'}}>
-							<Text style={{ fontWeight: 'bold', fontSize: RFValue(20, 720) }}>Thay đổi các thông số</Text>
+						<View style={{ padding: 20, justifyContent: 'flex-start', justifyContent:"center", alignItems:"center"}}>
+							<Text style={{ fontWeight: 'bold', fontSize: RFValue(20, 720) }}>Thông tin cá nhân</Text>
 						</View>
-						{/* <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20, paddingBottom: 20}}>
-							<TextInput 
-								style={[styles.inputField, { paddingLeft: 20,paddingRight: 20,  borderColor: colors.blue, borderWidth: 1, borderRadius: 10 }]}
-								placeholder='Cân nặng'
-								keyboardType='numeric'
-							/>
-							<View style={{ marginLeft: 10 }}>
-								<Text style={{fontSize: RFValue(20, 720) }}>kg</Text>
-							</View>
-						</View> */}
+						
+						<View style={{marginBottom: 20}}>
+							<DataTable>
+								<DataTable.Row>
+									<DataTable.Cell style={styles.tableHeader}>Tên người dùng</DataTable.Cell>
+									<DataTable.Cell style={styles.tableContent}>
+										<TextInput 
+											style={[styles.inputField, { paddingLeft: 15, paddingRight: 15, width:"100%", borderColor: colors.blue, borderWidth: 1, borderRadius: 10 }]}
+											placeholder='Họ tên'
+											keyboardType='text'
+										/>
+									</DataTable.Cell>
+								</DataTable.Row>
+								<DataTable.Row>
+									<DataTable.Cell style={styles.tableHeader}>Giới tính</DataTable.Cell>
+									<DataTable.Cell style={styles.tableContent}>
+										<View style={{justifyContent: 'center', flexDirection:'row'}}>
+											<RadioButton
+												value="male"
+												color={colors.blue}
+												status={ checked === 'male' ? 'checked' : 'unchecked' }
+												onPress={() => setChecked('male')}
+											/>
+											<TouchableOpacity
+											style={{justifyContent:'center', alignContent:'center'}}
+											 onPress={() => setChecked('male')}>
+												<Text style={checked=='male'?{color: colors.blue}:{color:colors.black}}>Nam</Text>
+											</TouchableOpacity>
+											<RadioButton
+												value="female"
+												color={colors.red}
+												status={ checked === 'female' ? 'checked' : 'unchecked' }
+												onPress={() => setChecked('female')}
+											/>
+											<TouchableOpacity
+											style={{justifyContent:'center', alignContent:'center'}}
+											 onPress={() => setChecked('female')}>
+												<Text style={checked=='female'?{color: colors.red}:{color:colors.black}}>Nữ</Text>
+											</TouchableOpacity>
+										</View>
+
+									</DataTable.Cell>
+								</DataTable.Row>
+								<DataTable.Row>
+									<DataTable.Cell style={styles.tableHeader}>Tuổi</DataTable.Cell>
+									<DataTable.Cell style={styles.tableContent}>
+										<TextInput 
+											style={[styles.inputField, { paddingLeft: 15, paddingRight: 15, width:"100%", borderColor: colors.blue, borderWidth: 1, borderRadius: 10 }]}
+											placeholder='Tuổi'
+											keyboardType='numeric'
+										/>
+									</DataTable.Cell>
+								</DataTable.Row>
+								<DataTable.Row>
+									<DataTable.Cell style={styles.tableHeader}>Chiều cao</DataTable.Cell>
+									<DataTable.Cell style={styles.tableContent}>
+										<TextInput 
+											style={[styles.inputField, { paddingLeft: 15, paddingRight: 15, width:"100%", borderColor: colors.blue, borderWidth: 1, borderRadius: 10 }]}
+											placeholder='Chiều cao(cm)'
+											keyboardType='numeric'
+										/>
+									</DataTable.Cell>
+								</DataTable.Row>
+								<DataTable.Row>
+									<DataTable.Cell style={styles.tableHeader}>Cân nặng</DataTable.Cell>
+									<DataTable.Cell style={styles.tableContent}>
+										<TextInput 
+											style={[styles.inputField, { paddingLeft: 15, paddingRight: 15, width:"100%", borderColor: colors.blue, borderWidth: 1, borderRadius: 10 }]}
+											placeholder='Cân nặng(kg)'
+											keyboardType='numeric'
+										/>
+									</DataTable.Cell>
+								</DataTable.Row>
+							</DataTable>
+						</View>
 						<Button title={"XÁC NHẬN"}
 							style={styles.btnClick}
 							titleStyle={{ fontWeight: '700', fontSize: 20 }}
@@ -243,7 +305,7 @@ export default function Personal() {
 								start: { x: 0, y: 0.5 },
 								end: { x: 1, y: 0.5 },
 							}}
-							onPress={closeModal2}>
+							onPress={closeModal}>
 						</Button>
 					</View>
 				</View>
