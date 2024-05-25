@@ -1,4 +1,4 @@
-import { ScrollView, Text, View, Image, useWindowDimensions, StyleSheet, TouchableOpacity, FlatList } from 'react-native'
+import { ScrollView, Text, View, Image, useWindowDimensions, StyleSheet, TouchableOpacity, FlatList, Alert } from 'react-native'
 import React, { Component, useContext, useEffect, useState, useCallback } from 'react'
 import { SearchBar, Icon, Divider } from 'react-native-elements';
 import { useNavigation, useFocusEffect, useIsFocused } from '@react-navigation/native';
@@ -11,6 +11,7 @@ import { handleGetHomeFavoriteDishes } from '../../services/favorite/get_home_fa
 import { set } from 'date-fns';
 import { handleGetCalories } from '../../services/calories/get_calories'
 import { call_get_water } from '../../services/api/api_water';
+import { handleGetUserInfo } from '../../services/info/get_info';
 
 export default function Home() {
 	const windowHeight = useWindowDimensions().height;
@@ -20,12 +21,13 @@ export default function Home() {
 	const isFocused = useIsFocused();
 	const [idFavDishes, setIdFavDishes] = useState([]);
 	const favDishList = [];
-	const [favDish, setFavDish] = React.useState([
-	]);
+	const [favDish, setFavDish] = React.useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [updatedFavDish, setUpdatedFavDish] = useState([]);
+	const [isPremium, setIsPremium] = useState(false);
 
 	const getFavoriteDishes = async () => {
+		setFavDish([]);
 		const response = await handleGetHomeFavoriteDishes(userInfo.id);
 		console.log("response", response);
 		if (response.length > 0) {
@@ -51,36 +53,25 @@ export default function Home() {
 		}
 	}
 
+	const getUserInfo = async () => {
+		const response = await handleGetUserInfo();
+		if (response) {
+			setIsPremium(response.has_subscription);
+		}
+	}
 
 	useEffect(() => {
-		console.log(userInfo);
-		getFavoriteDishes();
+		// getFavoriteDishes();
 		getCalories();
+		getUserInfo();
 	}, []);
 
 	useEffect(() => {
 		if (isFocused) {
-			getFavoriteDishes();
 			getCalories();
+			getUserInfo();
 		}
 	}, [isFocused]);
-
-	// useFocusEffect(
-	// 	React.useCallback(() => {
-	// 		setIsLoading(true);
-	// 		console.log('Home screen is focused');
-	// 		getFavoriteDishes();
-	// 	}, [])
-	// );
-
-	// useEffect(() => {
-
-	// }, [isLoading]);
-
-	// useEffect(() => {
-	// 	setUpdatedFavDish(favDish); // Cập nhật state mới khi favDish thay đổi
-	// }, [favDish]);
-
 
 	user = {
 		age: userInfo.age,
@@ -128,9 +119,7 @@ export default function Home() {
 								<TouchableOpacity
 									style={[styles.iconContainer, { width: windowWidth * 0.96 / 4 }]}
 									onPress={() => {
-
 										navigation.navigate(item.tab, item.screen)
-
 									}}
 								>
 									<View style={styles.roundContainer}>
@@ -143,7 +132,13 @@ export default function Home() {
 							return (
 								<TouchableOpacity
 									style={[styles.iconContainer, { width: windowWidth * 0.96 / 4 }]}
-									onPress={() => navigation.navigate(item.screen)}
+									onPress={() => {
+										if (item.screen == 'MenuSuggestion' && !isPremium) {
+											Alert.alert('Thông báo', 'Chức năng này chỉ dành cho tài khoản Premium', [{ text: 'OK' }])
+											return;
+										}
+										navigation.navigate(item.screen)
+									}}
 								>
 									<View style={styles.roundContainer}>
 										<Image source={item.image} style={styles.image} />

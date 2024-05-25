@@ -1,7 +1,7 @@
 import { ScrollView, Text, View, Image, useWindowDimensions, StyleSheet, TouchableOpacity, TextInput } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { SearchBar, Icon, Divider, Input, Button } from 'react-native-elements';
-import { useNavigation,useFocusEffect, useIsFocused } from '@react-navigation/native';
+import { useNavigation, useFocusEffect, useIsFocused } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import { DataTable, Modal, RadioButton } from 'react-native-paper';
@@ -10,14 +10,14 @@ import { AuthContext } from '../../context/AuthContext';
 import { removeAccessTokenAsync, removeRefreshTokenAsync } from '../../asyncStorage/auth';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import RadioForm from 'react-native-simple-radio-button';
-import { handleUpdateUserInfo } from '../../services/info/update_info';
+import { handleGetUserInfo } from '../../services/info/get_info';
 
 export default function Personal() {
 	const windowHeight = useWindowDimensions().height;
 	const windowWidth = useWindowDimensions().width;
 	const navigation = useNavigation();
 	const isFocused = useIsFocused();
-
+	const [expiredDate, setExpiredDate] = useState('');
 	const { removeAccessToken, removeRefreshToken, isLogged, setIsLogged, userInfo, account, setUserInfo, setAccount } = useContext(AuthContext);
 
 	const logout = () => {
@@ -44,7 +44,7 @@ export default function Personal() {
 	const closeModal2 = () => {
 		setIsModalVisible(false);
 	}
-	const [accountType, setAccountType] = useState(account.has_subscription ? "PREMIUM" : "STANDARD");
+	const [accountType, setAccountType] = useState(userInfo.has_subscription ? "PREMIUM" : "STANDARD");
 	const [checked, setChecked] = useState(userInfo.gender);
 	const [gender, setGender] = useState(userInfo.gender == 'male' ? 'Nam' : 'Nữ');
 
@@ -60,7 +60,7 @@ export default function Personal() {
 
 	const target = [
 		{ label: 'Giảm cân', value: 0 },
-		{ label: 'Duy trì cân nặng', value: 1},
+		{ label: 'Duy trì cân nặng', value: 1 },
 		{ label: 'Tăng cân', value: 2 }
 	]
 	const loadData = async () => {
@@ -69,6 +69,14 @@ export default function Personal() {
 		setWeight(userInfo.weight);
 		setTargetSelected(userInfo.aim);
 		setGender(userInfo.gender == 'male' ? 'Nam' : 'Nữ')
+		const response = await handleGetUserInfo();
+		if (response) {
+			setAccountType(response.has_subscription ? "PREMIUM" : "STANDARD");
+			const date = new Date(response.expired_date);
+			const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+			const formattedDate = new Intl.DateTimeFormat('vi-VN', options).format(date);
+			setExpiredDate(formattedDate);
+		}
 	}
 
 	const updateInfoFromTemp = () => {
@@ -89,29 +97,16 @@ export default function Personal() {
 		loadData();
 	}
 
-	const handleUpdateUser = async () => {
-		const props = {
-			age: age,
-			weight: weight,
-			height: height,
-			aim: targetSelected,
-			gender: checked
-		}
-		const result = await handleUpdateUserInfo(props);
-		if (result !== null) {
-			setUserInfo(result);
-		} else {
-			Alert.alert('Thông báo', 'Cập nhật thông tin thất bại');
-		}
-	}
-
 	useEffect(() => {
-		loadData();	
+		loadData();
+		console.log(userInfo);
 	}, [])
 
 	useEffect(() => {
 		if (isFocused) {
 			loadData();
+			console.log(account.has_subscription ? "PREMIUM" : "STANDARD");
+			console.log(userInfo);
 		}
 	}, [isFocused]);
 
@@ -176,8 +171,26 @@ export default function Personal() {
 					</View>
 				</View>
 
-				{ accountType === "STANDARD" &&
-				<TouchableOpacity style={{ padding: 15, width: windowWidth * 0.9, alignSelf: 'center' }} onPress={() => { navigation.navigate('Premium') }}>
+				{accountType === "STANDARD" ?
+					<TouchableOpacity style={{ padding: 15, width: windowWidth * 0.9, alignSelf: 'center' }} onPress={() => { navigation.navigate('Premium') }}>
+						<View style={{ alignItems: 'center' }}>
+							<LinearGradient
+								colors={[colors.blue, colors.lightBlue]}
+								start={{ x: 0, y: 0.5 }}
+								end={{ x: 1, y: 0.5 }}
+								style={{ borderRadius: 15, padding: 10, width: windowWidth * 0.9, marginTop: 5, alignSelf: 'center', flexDirection: 'row', alignItems: 'center' }}>
+								<Image source={require('../../assets/img_premium.png')} style={{ width: 60, height: 60, marginRight: 20, marginLeft: 15 }}></Image>
+								<Text style={{ color: colors.white, textAlign: 'left', lineHeight: 25 }}>
+									<Text style={{ fontWeight: 'bold', fontSize: RFValue(15, 720) }}>Nâng cấp tài khoản PREMIUM{"\n"}</Text>
+									<Text style={{ fontStyle: 'italic' }}>
+										chỉ từ 50.000₫ / tháng {"\n"}
+										để trải nghiệm tiện ích
+										<Text style={{ fontWeight: 'bold' }}> không giới hạn</Text>
+									</Text>
+								</Text>
+							</LinearGradient>
+						</View>
+					</TouchableOpacity> :
 					<View style={{ alignItems: 'center' }}>
 						<LinearGradient
 							colors={[colors.blue, colors.lightBlue]}
@@ -186,17 +199,15 @@ export default function Personal() {
 							style={{ borderRadius: 15, padding: 10, width: windowWidth * 0.9, marginTop: 5, alignSelf: 'center', flexDirection: 'row', alignItems: 'center' }}>
 							<Image source={require('../../assets/img_premium.png')} style={{ width: 60, height: 60, marginRight: 20, marginLeft: 15 }}></Image>
 							<Text style={{ color: colors.white, textAlign: 'left', lineHeight: 25 }}>
-								<Text style={{ fontWeight: 'bold', fontSize: RFValue(15, 720) }}>Nâng cấp tài khoản PREMIUM{"\n"}</Text>
+								<Text style={{ fontWeight: 'bold', fontSize: RFValue(14, 720) }}>Thành viên PREMIUM{"\n"}</Text>
 								<Text style={{ fontStyle: 'italic' }}>
-									chỉ từ 50.000₫ / tháng {"\n"}
-									để trải nghiệm tiện ích
-									<Text style={{ fontWeight: 'bold' }}> không giới hạn</Text>
+									Tài khoản hết hạn vào ngày 
+									<Text style={{ fontWeight: 'bold' }}> {expiredDate} {"\n"}</Text>
 								</Text>
 							</Text>
 						</LinearGradient>
 					</View>
-				</TouchableOpacity>
-				}	
+				}
 				<Divider style={{ marginVertical: 15, height: 1, backgroundColor: colors.blue, width: windowWidth / 2, alignSelf: 'center' }}>
 				</Divider>
 				<Button title={"  ĐĂNG XUẤT"}
@@ -212,9 +223,9 @@ export default function Personal() {
 					}}
 					onPress={() => logout()}>
 				</Button>
-				<View style={{ paddingBottom: 70 }}></View>
+				<View style={{ paddingBottom: 70 }}>
 
-
+				</View>
 			</ScrollView>
 			{/* Modal 1 */}
 			<Modal
@@ -271,7 +282,7 @@ export default function Personal() {
 							}}
 							onPress={() => {
 								closeModal();
-								
+
 								updateUserInfo();
 							}}>
 						</Button>
@@ -309,7 +320,7 @@ export default function Personal() {
 											placeholder='Họ tên'
 											keyboardType='text'
 											value={userInfo.username}
-											editable={false} 
+											editable={false}
 										/>
 									</DataTable.Cell>
 								</DataTable.Row>
@@ -354,7 +365,7 @@ export default function Personal() {
 											onChangeText={text => {
 												const numericValue = parseInt(text);
 												setTempAge(isNaN(numericValue) ? '' : numericValue); // Đảm bảo chỉ có số mới được chấp nhận
-											  }}											
+											}}
 										/>
 									</DataTable.Cell>
 								</DataTable.Row>
@@ -369,7 +380,7 @@ export default function Personal() {
 											onChangeText={text => {
 												const numericValue = parseInt(text);
 												setTempHeight(isNaN(numericValue) ? '' : numericValue); // Đảm bảo chỉ có số mới được chấp nhận
-											  }
+											}
 											}
 										/>
 									</DataTable.Cell>
@@ -385,7 +396,7 @@ export default function Personal() {
 											onChangeText={text => {
 												const numericValue = parseInt(text);
 												setTempWeight(isNaN(numericValue) ? '' : numericValue); // Đảm bảo chỉ có số mới được chấp nhận
-											  }
+											}
 											}
 										/>
 									</DataTable.Cell>

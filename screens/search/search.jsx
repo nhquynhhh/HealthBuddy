@@ -6,6 +6,10 @@ import { Button, Icon } from "react-native-elements";
 import { colors } from "../../utils/colors";
 import { AuthContext } from '../../context/AuthContext';
 import { set } from "date-fns";
+import { handleGetDishList } from "../../services/dish/get_all_dishes";
+import { CardDishComponent } from "../CardDishComponent";
+import GradientCircleNextButton from "../GradientCircleNextButton";
+import GradientCirclePreviousButton from "../GradientCirclePreviousButton";
 
 function Search() {
 	const { dishes, setDishes } = useContext(AuthContext);
@@ -15,65 +19,76 @@ function Search() {
 	const [listIngredients, setListIngredients] = useState([]);
 	const [isLoading, setIsLoading] = useState(true);
 	const [isDish, setIsDish] = useState(true);
-	const [isIngredient, setIsIngredient] = useState();
+	const [isIngredient, setIsIngredient] = useState(false);
 	const [isSearchQuery, setSearchQuery] = useState("");
 
+	const [pagination, setPagination] = useState({
+		current_page: 1,
+		page_size: 10,
+		total_items: 0,
+		total_pages: 0,
+	});
+
 	useEffect(() => {
-		setIsDish(true);
-		setIsIngredient(false);
-		setListItems([]);
-		setListDishes(dishes);
-		setListIngredients(ingredients);
 		setIsLoading(true);
-		loadData();
-	}, []);
-
-	useEffect(() => {
-		loadData();
-	}, [isDish, isIngredient]);
-
-	const loadData = () => {
-		let dataToLoad = [];
-		if (isDish) {
-			dataToLoad = listDishes.map(item => ({
-				dish: {
-					id: item.id,
-					img: "https://www.thatlangon.com/wp-content/uploads/2020/04/spaghetti-bolognese-106560-1-scaled.jpeg",
-					name: item.name,
-					calo: item.calo,
-					protein: item.protein,
-					carb: item.carb,
-					fat: item.fat
-				}
-			}));
-		} else if (isIngredient) {
-			dataToLoad = listIngredients.map(item => ({
-				dish: {
-					id: item.id,
-					img: "https://www.thatlangon.com/wp-content/uploads/2020/04/spaghetti-bolognese-106560-1-scaled.jpeg",
-					name: item.name,
-					calo: item.calo,
-					protein: item.protein,
-					carb: item.carb,
-					fat: item.fat
-				}
-			}));
-		}
-		setListItems(dataToLoad);
+		getDishList();
 		setIsLoading(false);
-	};
+	}, [pagination.current_page]);
+
+	// useEffect(() => {
+	// 	setIsLoading(true);
+	// 	getDishList();
+	// 	setIsLoading(false);
+	// }, [isDish, isIngredient]);
+
+
+	const getDishList = async () => {
+		const { current_page, page_size } = pagination;
+		if (isDish) {
+			const response = await handleGetDishList(current_page, page_size);
+			setListItems(response.dishes);
+			setPagination(response.pagination);
+		}
+		// let dataToLoad = [];
+		// if (isDish) {
+		// 	dataToLoad = listDishes.map(item => ({
+		// 		dish: {
+		// 			id: item.id,
+		// 			img: "https://www.thatlangon.com/wp-content/uploads/2020/04/spaghetti-bolognese-106560-1-scaled.jpeg",
+		// 			name: item.name,
+		// 			calo: item.calo,
+		// 			protein: item.protein,
+		// 			carb: item.carb,
+		// 			fat: item.fat
+		// 		}
+		// 	}));
+		// } else if (isIngredient) {
+		// 	dataToLoad = listIngredients.map(item => ({
+		// 		dish: {
+		// 			id: item.id,
+		// 			img: "https://www.thatlangon.com/wp-content/uploads/2020/04/spaghetti-bolognese-106560-1-scaled.jpeg",
+		// 			name: item.name,
+		// 			calo: item.calo,
+		// 			protein: item.protein,
+		// 			carb: item.carb,
+		// 			fat: item.fat
+		// 		}
+		// 	}));
+		// }
+		// setListItems(dataToLoad);
+		// console.log("listItems", dataToLoad);
+	}
 
 	const handleSearch = (text) => {
 		setSearchQuery(text);
 	};
 
 	const filteredWishListItems = ListItems.filter(item =>
-		item.dish.name.toLowerCase().includes(isSearchQuery.toLowerCase())
+		item.name.toLowerCase().includes(isSearchQuery.toLowerCase())
 	);
 
-
 	return (
-		<SafeAreaView style={{ height: "100%", backgroundColor: colors.white, paddingBottom: 100 }}>
+		<View style={{ height: "100%", backgroundColor: colors.white }}>
 			<View style={styles.btnContainer}>
 				<Button
 					title={"Món ăn"}
@@ -136,19 +151,45 @@ function Search() {
 					<View style={styles.ListContainer}>
 						{filteredWishListItems.length > 0 ? (
 							filteredWishListItems.map((item) => (
-								<FoodList key={item.dish.id} FoodList={item.dish} Dish={isDish ? true : false} />
+								// <FoodList key={item.id} FoodList={item} Dish={isDish ? true : false} />
+								<CardDishComponent key={item.id} dish={item} />
 							))
 						) : isSearchQuery ? (
 							<NoResults height={400} />
 						) : (
 							ListItems.map((item) => (
-								<FoodList key={item.dish.id} FoodList={item.dish} Dish={isDish ? true : false} />
+								<FoodList key={item.id} FoodList={item} Dish={isDish ? true : false} />
 							))
 						)}
 					</View>
 				)}
 			</ScrollView>
-		</SafeAreaView>
+			<View style={{paddingBottom: 100}}>
+			<View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: "center" }}>
+                {pagination.current_page > 1 && (
+                    <GradientCirclePreviousButton 
+                        onPress={() => setPagination((prev) => ({
+                            ...prev,
+                            current_page: prev.current_page - 1,
+                        }))}
+                        colors={['#FF1E3F', '#FF7E06']}
+                    />
+                )}
+                {pagination.current_page && 
+                    <Text style={{fontWeight: "bold"}}>Trang {pagination.current_page}</Text>
+                    }
+                {pagination.current_page < pagination.total_pages && (
+                    <GradientCircleNextButton
+                        onPress={() => setPagination((prev) => ({
+                            ...prev,
+                            current_page: prev.current_page + 1,
+                        }))}
+                        colors={['#FF1E3F', '#FF7E06']}
+                    /> 
+                )}
+            </View>
+			</View>
+		</View>
 	);
 }
 const styles = StyleSheet.create({
@@ -185,12 +226,13 @@ const styles = StyleSheet.create({
 		marginTop: 10,
 	},
 	ListContainer: {
-		display: "flex",
-		flexWrap: "wrap",
-		flexDirection: "row",
-		justifyContent: "space-between",
-		paddingHorizontal: 30,
-		paddingTop: 10,
+		// display: "flex",
+		// flexWrap: "wrap",
+		// flexDirection: "row",
+		// justifyContent: "space-between",
+		// paddingHorizontal: 30,
+		// paddingTop: 10,
+		display: "flex", flexDirection: "row", gap: 15, flexWrap: "wrap", padding: 10
 	},
 })
 
