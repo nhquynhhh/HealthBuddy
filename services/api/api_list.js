@@ -25,7 +25,6 @@ const otp_required = {
 const check_acount = {
 	url: `${BASE_URL}/api/check-account`,
 	method: 'GET'
-
 }
 
 const refresh_token = {

@@ -7,10 +7,9 @@ const handleLogin = async (email, password) => {
 	console.log(email);
 	console.log(password);
 
-	
-
 	try {
 		const response = await callLoginAPI({ email: email, password: password });
+		console.log(response);
 		const data = await response.json();
 		const { token, message, code } = data;
 		if (response.ok && code === '200') {
@@ -19,7 +18,7 @@ const handleLogin = async (email, password) => {
 			console.log(message);
 			console.log(code);
 			console.log(access_token);
-			console.log(refresh_token);	
+			console.log(refresh_token);
 			await setAccessToken(access_token);
 			await setRefreshToken(refresh_token);
 			return true;
