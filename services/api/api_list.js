@@ -1,5 +1,5 @@
-const BASE_URL = 'https://premium-singularly-meerkat.ngrok-free.app';
-// const BASE_URL = 'https://implicitly-charming-eft.ngrok-free.app';
+//const BASE_URL = 'https://premium-singularly-meerkat.ngrok-free.app';
+const BASE_URL = 'https://implicitly-charming-eft.ngrok-free.app';
 // const BASE_URL = 'https://widely-discrete-glowworm.ngrok-free.app/';
 
 const login_api = {
@@ -25,7 +25,6 @@ const otp_required = {
 const check_acount = {
 	url: `${BASE_URL}/api/check-account`,
 	method: 'GET'
-
 }
 
 const refresh_token = {
@@ -139,6 +138,28 @@ const get_water = {
 	method: 'GET'
 }
 
+const get_statistic = {	
+	url: `${BASE_URL}/api/statistic/get-sevendays-statistic`,
+	method: 'GET'
+}
+
+const get_statistic_water = {	
+	url: `${BASE_URL}/api/statistic/get-sevendays-water`,
+	method: 'GET'
+}
+
+const new_genetic_algorithm = {	
+	url: `${BASE_URL}/api/new_genetic_algorithm `,
+	method: 'GET'
+}
+
+const get_suggest_menu = {	
+	url: `${BASE_URL}/api/get-suggest-menu `,
+	method: 'GET'
+}
+
+
+
 export {
 	login_api,
 	signup_api,
@@ -159,5 +180,5 @@ export {
 	get_favorite_dishes,
 	get_home_favorite_dishes,
 	get_fav_list,
-	get_calories, add_morning, add_noon, add_dinner, add_snack, add_exercise, save_water, get_water
+	get_calories, add_morning, add_noon, add_dinner, add_snack, add_exercise, save_water, get_water,get_statistic,get_statistic_water,new_genetic_algorithm,get_suggest_menu
 };
