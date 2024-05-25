@@ -1,249 +1,124 @@
-import React, { useState } from "react";
+import React, { Component, useState, useEffect, useRef } from 'react'
 import { ScrollView, StyleSheet, TextInput, View, Text, SafeAreaView, TouchableOpacity, Keyboard} from "react-native";
 import FoodList from "../food_list/food_list";
 import NoResults from "../no_results/no_results";
 import { Button, Icon } from "react-native-elements";
 import { colors } from "../../utils/colors";
 import { LinearGradient } from "expo-linear-gradient";
+import { useNavigation } from "@react-navigation/native";
+import { handleGetSuggestMenu, handleNewGeneticAlgorithm } from '../../services/menu/menu';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Tab, TabView } from '@rneui/themed';
+import { CardDishComponent } from '../../screens/CardDishComponent/index'
+
 function MenuSuggestion() {
-    const ListItems = [
-        { 
-            dish: {
-                id: 1, 
-                img: "https://www.thatlangon.com/wp-content/uploads/2020/04/spaghetti-bolognese-106560-1-scaled.jpeg",
-                name: "Dish 1", 
-                calo: 100, 
-                protein: 10, 
-                carb: 20, 
-                fat: 5,
-                nameingredient: "Trứng"
-            } 
-        },
-        { 
-            dish: {
-                id: 2,
-                img: "https://www.thatlangon.com/wp-content/uploads/2020/04/spaghetti-bolognese-106560-1-scaled.jpeg",
-                name: "Dish 2", 
-                calo: 120, 
-                protein: 12, 
-                carb: 22, 
-                fat: 6,
-                nameingredient: "Cá"
-            } 
-        },
-        { 
-            dish: {
-                id: 3, 
-                img: "https://www.thatlangon.com/wp-content/uploads/2020/04/spaghetti-bolognese-106560-1-scaled.jpeg",
-                name: "Dish 3", 
-                calo: 130, 
-                protein: 15, 
-                carb: 25, 
-                fat: 7,
-                nameingredient: "Rau"
-            } 
-        },
-        { 
-            dish: {
-                id: 4, 
-                img: "https://www.thatlangon.com/wp-content/uploads/2020/04/spaghetti-bolognese-106560-1-scaled.jpeg",
-                name: "Dish 4", 
-                calo: 140, 
-                protein: 18, 
-                carb: 28, 
-                fat: 8,
-                nameingredient: "Thịt"
-            } 
-        },
-        { 
-            dish: {
-                id: 5, 
-                img: "https://www.thatlangon.com/wp-content/uploads/2020/04/spaghetti-bolognese-106560-1-scaled.jpeg",
-                name: "Dish 5", 
-                calo: 140, 
-                protein: 18, 
-                carb: 28, 
-                fat: 8,
-                nameingredient: "Gạo"
-            } 
-        },
-        { 
-            dish: {
-                id: 6, 
-                img: "https://www.thatlangon.com/wp-content/uploads/2020/04/spaghetti-bolognese-106560-1-scaled.jpeg",
-                name: "Dish 6", 
-                calo: 140, 
-                protein: 18, 
-                carb: 28, 
-                fat: 8,
-                nameingredient: "Miến"
-
-            } 
-        },
-    ];
-    const [isSearchQuery, setSearchQuery] = useState("");
-    const [CheckList, setCheckList] = useState(false);
-    const [filteredListItems, setFilteredListItems] = useState([]);
-    const [ListSearch, setListSearch] = useState([]);
-    const handleSearch = (text) => {
-        setSearchQuery(text);
-    };
-
-    const handleSuggestion = () => {
-      if (isSearchQuery.trim() !== "") {
-          const filteredItems = ListItems.filter(item =>
-              item.dish.nameingredient.toLowerCase().includes(isSearchQuery.toLowerCase())
-          );
-          setFilteredListItems(filteredItems);
-          setCheckList(true);
-          setListSearch(prevListSearch => [...prevListSearch, isSearchQuery]);
-      } else {
-        setCheckList(false);
-      }
-      Keyboard.dismiss();
-    };
     
+    const [visible2, setVisible2] = useState(false)
+    const [fitnessScore, setFitnessScore] = useState(0)
+    const [totalcalo, setTotalcalo] = useState(0)
+    const [indexMeal, setIndexMeal] = useState(0)
+    const [morningToday, setMorningToday] = useState([])
+    const [lunchToday, setLunchToday] = useState([])
+    const [dinnerToday, setDinnerToday] = useState([])
+    const [snackToday, setSnackToday] = useState([])
+    const END_LINEAR_COLOR = '#FF7E06';
 
-    return ( 
-        <SafeAreaView  style={{height: "100%", backgroundColor: colors.white, paddingBottom: 100}}>
-            <View style={styles.searchContainer}>
-                <View style={styles.inputContainer}>
-                    <Icon 
-                        name="search" 
-                        size={24} 
-                        color="black" 
-                    />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Nhập tên nguyên liệu..."
-                        onChangeText={handleSearch}
-                        value={isSearchQuery}
-                    />
+    const fetchMenuData = async () => {
+        const res = await handleGetSuggestMenu()
+        // console.log(res)
+        if (res && res.fitness_score) {
+            setMorningToday(res.morning_dishs)
+            setLunchToday(res.noon_dishs)
+            setDinnerToday(res.dinner_dishs)
+            setSnackToday(res.snacks)            
+            setFitnessScore(res.fitness_score)
+            setTotalcalo(res.calo)
+        }
+        else if (res) {
+            newMenu()
+        }
+        else {
+            console.log('Token expired');
+            setVisible2(true);
+        }
+    }
+    useEffect(() => {
+        fetchMenuData()
+    }, [])
+    
+    const newMenu = async () => {
+        const new_menu = await handleNewGeneticAlgorithm()
+        const new_res = await handleGetSuggestMenu()
+        setMorningToday(new_res.morning_dishs)
+        setLunchToday(new_res.noon_dishs)
+        setDinnerToday(new_res.dinner_dishs)
+        setSnackToday(new_res.snacks)
+        setFitnessScore(new_res.fitness_score)
+        setTotalcalo(new_res.calo)
+    }
+
+
+
+    return (
+        <View>
+            <View style={{marginBottom: 10, display: "flex", flexDirection: "row", 
+            justifyContent: "space-between", alignItems: "center"}}>
+                <View>
+                    <Text>Điểm thực đơn: {fitnessScore}</Text>
+                    <Text>calo: {totalcalo}</Text>
+                </View>
+                
+                <TouchableOpacity style={{ backgroundColor: END_LINEAR_COLOR, 
+                    padding: 10, borderRadius: 50, display: "flex", flexDirection: "row", 
+                    alignItems: "center", gap: 5 }} onPress={newMenu}>
+                    <MaterialCommunityIcons name="reload" size={24} color="white" />
+                    <Text style={{color: "white", fontWeight: "bold"}}>Thực đơn khác</Text>
+                </TouchableOpacity>
+            </View>
+            <Tab value={indexMeal} onChange={(e) => setIndexMeal(e)}
+                indicatorStyle={{ backgroundColor: 'white', height: 3,}}
+                style={{backgroundColor: END_LINEAR_COLOR, marginVertical: 20}}
+                variant="primary">
+                <Tab.Item title="Sáng" titleStyle={{ fontSize: 12 }}
+                    icon={{ name: 'sunny', type: 'ionicon', color: 'white' }} />
+                <Tab.Item title="Trưa" titleStyle={{ fontSize: 12 }}
+                    icon={{ name: 'partly-sunny', type: 'ionicon', color: 'white' }} />
+                <Tab.Item title="Tối" titleStyle={{ fontSize: 12 }}
+                    icon={{ name: 'moon', type: 'ionicon', color: 'white' }} />
+                <Tab.Item title="Phụ" titleStyle={{ fontSize: 12 }}
+                    icon={{ name: 'cafe', type: 'ionicon', color: 'white' }} />
+            </Tab>
+            <View style={{marginBottom: 10}}>
+                <View style={styles.list_item}>
+                    {morningToday && indexMeal === 0 && morningToday.map((dish, index) => { return (
+                        <CardDishComponent key={index} dish = {dish}/> )})}
+                </View>
+                <View style={styles.list_item}>
+                    {lunchToday && indexMeal === 1 && lunchToday.map((dish, index) => { return (
+                        <CardDishComponent key={index} dish = {dish}/> )})}
+                </View>
+                <View style={styles.list_item}>
+                    {dinnerToday && indexMeal === 2 && dinnerToday.map((dish, index) => { return (
+                        <CardDishComponent key={index} dish = {dish}/> )})}
+                </View>
+                <View style={styles.list_item}>
+                    {snackToday && indexMeal === 3 && snackToday.map((dish, index) => { return (
+                        <CardDishComponent key={index} dish = {dish}/>)})}
                 </View>
             </View>
-            <View style={styles.SuggestContainer}>
-              {ListSearch?.map((item, index) => (
-                <View key={index} style={styles.IngredientSuggest}>
-                  <TouchableOpacity style={{marginRight: 15}}
-                    onPress={() =>{
-                      setSearchQuery(item);
-                    }}
-                  >
-                    <Text>{item}</Text> 
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => {
-                      setListSearch(prevListSearch => prevListSearch.filter((_, idx) => idx !== index));
-                    }}
-                  >
-                    <Icon
-                        name="closecircleo"
-                        type="ant-design"
-                        size={15}
-                        color={colors.gray}
-                    />
-                  </TouchableOpacity>
-              </View>
-              ))} 
-            </View>
-            <View>
-                <Button 
-                    title="GỢI Ý" 
-                    titleStyle={{fontWeight:'700', fontSize: 20, color:colors.white}}
-                    buttonStyle={{ 
-                        width: "100%", 
-                        height: 45, 
-                        borderRadius: 20,
-                    }}
-                    containerStyle={{margin: 20}}
-                    ViewComponent={LinearGradient}
-                    linearGradientProps={{ 
-                        colors: [colors.blue, colors.lightBlue],
-                        start: { x: 0, y: 0.5 }, 
-                        end: { x: 1, y: 0.5 } 
-                    }} 
-                    onPress={handleSuggestion}
-                />
-            </View>
-            <View style={{alignItems: "center"}}>
-              <View style={styles.horizontalLine}></View>
-            </View>
-            <ScrollView style={styles.scrollView}>
-                <View style={styles.ListContainer}>
-                    {filteredListItems .length > 0 ? filteredListItems.map((item) => (
-                        <FoodList key={item.dish.id} FoodList={item.dish} />
-                    )) : CheckList ? <NoResults height={290}/> :
-                    ListItems.map((item) => (
-                        <FoodList key={item.dish.id} FoodList={item.dish} />
-                    ))
-                    }
-                </View>
-            </ScrollView>
-        </SafeAreaView>
-     );
+
+            
+        </View>
+    )
 }
 const styles = StyleSheet.create({
     
-    SuggestContainer: {
-        display: "flex",
-        flexWrap: "wrap",
-        flexDirection: "row",
-        marginTop: 20,
-        marginLeft: 30,
-        marginRight: 30,
-        borderRadius: 10,
-        borderWidth: 1,
-        borderColor: "#D8D8D8",
-        paddingBottom: 50,
+    container: {
+        paddingHorizontal: 5, paddingTop: 10,
     },
-    IngredientSuggest: {
-        borderRadius: 10,
-        flexDirection: "row",
-        alignItems: "center",
-        borderWidth: 1,
-        borderColor: "#D8D8D8",
-        margin: 10,
-        padding: 5,
+    list_item: {
+        display: "flex", flexDirection: "row", gap: 15, marginHorizontal: 5, flexWrap: "wrap"
     },
-    searchContainer:{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    inputContainer: {
-        flexDirection: "row",
-        alignItems: "center",
-        borderRadius: 20,
-        width: "90%",
-        height: 50,
-        marginTop: 10,
-        paddingLeft: 10,
-        backgroundColor: colors.gray,
-    },
-    input: {
-        height: "100%",
-        width: "80%",
-        marginLeft: 10,
-    },
-    scrollView: {
-        height: "70%",
-        marginTop: 10,
-    },
-    ListContainer: {
-        display: "flex",
-        flexWrap: "wrap",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        paddingHorizontal: 30,
-        paddingTop: 10,
-    },
-    horizontalLine: {
-      borderBottomWidth: 1,
-      borderBottomColor: colors.black,
-      width: "60%",
-      marginTop: 10,
-
-  }
 })
 
 export default MenuSuggestion;

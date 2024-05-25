@@ -149,6 +149,17 @@ const get_statistic_water = {
 	method: 'GET'
 }
 
+const new_genetic_algorithm = {	
+	url: `${BASE_URL}/api/new_genetic_algorithm `,
+	method: 'GET'
+}
+
+const get_suggest_menu = {	
+	url: `${BASE_URL}/api/get-suggest-menu `,
+	method: 'GET'
+}
+
+
 
 export {
 	login_api,
@@ -170,5 +181,5 @@ export {
 	get_favorite_dishes,
 	get_home_favorite_dishes,
 	get_fav_list,
-	get_calories, add_morning, add_noon, add_dinner, add_snack, add_exercise, save_water, get_water,get_statistic,get_statistic_water
+	get_calories, add_morning, add_noon, add_dinner, add_snack, add_exercise, save_water, get_water,get_statistic,get_statistic_water,new_genetic_algorithm,get_suggest_menu
 };

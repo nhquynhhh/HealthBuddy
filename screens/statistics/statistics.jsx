@@ -10,6 +10,7 @@ import { handleGetStatic } from '../../services/statistic/get_statistic';
 import { handleGetStaticWater } from '../../services/water/get_statistic_water';
 import { LineChart } from 'react-native-chart-kit';
 
+
 export default function Statistics() {
   const windowHeight = useWindowDimensions().height;
   const windowWidth = useWindowDimensions().width;
