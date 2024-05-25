@@ -159,6 +159,11 @@ const get_suggest_menu = {
 	method: 'GET'
 }
 
+const recommend_dish = {	
+	url: `${BASE_URL}/api/recommend_dish`,
+	method: 'GET'
+}
+
 
 
 export {
@@ -181,5 +186,5 @@ export {
 	get_favorite_dishes,
 	get_home_favorite_dishes,
 	get_fav_list,
-	get_calories, add_morning, add_noon, add_dinner, add_snack, add_exercise, save_water, get_water,get_statistic,get_statistic_water,new_genetic_algorithm,get_suggest_menu
+	get_calories, add_morning, add_noon, add_dinner, add_snack, add_exercise, save_water, get_water,get_statistic,get_statistic_water,new_genetic_algorithm,get_suggest_menu,recommend_dish
 };

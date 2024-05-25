@@ -11,6 +11,7 @@ import { handleGetHomeFavoriteDishes } from '../../services/favorite/get_home_fa
 import { set } from 'date-fns';
 import { handleGetCalories } from '../../services/calories/get_calories'
 import { call_get_water } from '../../services/api/api_water';
+import { SuggestDishComponent } from '../SuggestDishComponent/index';
 
 export default function Home() {
 	const windowHeight = useWindowDimensions().height;
@@ -212,6 +213,7 @@ export default function Home() {
 					<Text style={{ textAlign: 'right', fontStyle: 'italic', color: colors.darkGray }}>Chi tiết {'\u25BA'}</Text>
 				</TouchableOpacity>
 			</View>
+			<SuggestDishComponent/>
 		</ScrollView>
 
 	)
