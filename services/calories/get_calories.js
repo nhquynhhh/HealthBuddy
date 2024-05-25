@@ -13,3 +13,4 @@ export const handleGetCalories = async () => {
 		return 0;
 	}
 }
+
