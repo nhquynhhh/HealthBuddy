@@ -74,13 +74,14 @@ export default function Premium() {
 					end: { x: 1, y: 0.5 },
 				}}>
 			</Button>
+			<View style={{paddingBottom: 150}}></View>
 		</View>
 	)
 }
 
 const styles = StyleSheet.create({
 	container: {
-		backgroundColor: '#fff',
+		backgroundColor: colors.white,
 		paddingTop: 20
 	},
 	btnClick: {
