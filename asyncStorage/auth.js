@@ -112,7 +112,34 @@ const removeReminderTime = async () => {
 	} catch (e) {
 		console.log(e);
 	}
+}
 
+const setPaymentURL = async (paymentURL) => {
+	try {
+		await AsyncStorage.setItem("paymentURL", paymentURL);
+	} catch (e) {
+		console.log(e);
+	}
+}
+
+const getPaymentURL = async () => {
+	try {
+		const value = await AsyncStorage.getItem("paymentURL");
+		if (value !== null) {
+			return value;
+		}
+		return null;
+	} catch (e) {
+		console.log(e);
+	}
+}
+
+const removePaymentURL = async () => {
+	try {
+		await AsyncStorage.removeItem("paymentURL");
+	} catch (e) {
+		console.log(e);
+	}
 }
 
 export {
@@ -127,6 +154,9 @@ export {
 	removeEncrypted,
 	setReminderNoti,
 	getReminderTime,
-	removeReminderTime
+	removeReminderTime,
+	setPaymentURL,
+	getPaymentURL,
+	removePaymentURL
 };
 

@@ -14,6 +14,10 @@ export default function OTPForgotPassword() {
 	const [otp, setOtp] = React.useState('');
 	const [timeLeft, setTimeLeft] = useState(300);
 
+	const handleOtpChange = (value) => {
+		setOtp(value);
+	}
+
     useEffect(() => {
         if (timeLeft === 0) return;
     
@@ -54,8 +58,8 @@ export default function OTPForgotPassword() {
 			<View style={{ width: '90%', paddingTop: 20, alignSelf: 'center' }}>
 				<OtpInput
 					focusColor={colors.blue}
-					otp={otp}
-					setOtp={setOtp}
+					value={otp}
+					onTextChange={handleOtpChange}
 					digits={6}
 					style={{ backgroundColor: colors.white, borderTopWidth: 0, borderRightWidth: 0, borderLeftWidth: 0, borderBottomWidth: 2 }}
 					fontStyle={{ fontWeight: 'bold', color: colors.blue, fontSize: 20 }}>

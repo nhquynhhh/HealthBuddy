@@ -7,15 +7,20 @@ import { colors } from '../../utils/colors';
 import { handleAuthenticatedAccount } from '../../services/authenticate/authenticated_account';
 import { AuthContext } from '../../context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
+import {callOTPPassAPI} from '../../services/authenticate/required_otp';
 
 export default function Activation() {
 	const windowHeight = useWindowDimensions().height;
 	const windowWidth = useWindowDimensions().width;
 	const { isLogged, setLoginStatus } = useContext(AuthContext);
-	const [otp, setOtp] = React.useState('');
+	const [otp, setOtp] = useState("");
 	const navigation = useNavigation();
 	const [timeLeft, setTimeLeft] = useState(300);
 
+	const handleOtpChange = (value) => {
+		setOtp(value);
+	  };
+	
     useEffect(() => {
         if (timeLeft === 0) return;
     
@@ -33,11 +38,11 @@ export default function Activation() {
     };
 
 	const handleActivation = async () => {
+		console.log(otp);
 		if (otp === "") {
 			Alert.alert('Thông báo', 'Vui lòng nhập mã OTP');
 			return;
 		}
-		console.log(otp);
 		const result = await handleAuthenticatedAccount(otp);
 		if (result === true) {
 			navigation.navigate('GetData');
@@ -57,8 +62,8 @@ export default function Activation() {
             <View style={{width: '90%', paddingTop: 20, alignSelf: 'center'}}>
 				<OtpInput
                     focusColor={colors.blue}
-                    otp={otp}
-                    setOtp={setOtp}
+                    value={otp}
+                    onTextChange={handleOtpChange}
                     digits={6}
                     style={{backgroundColor: colors.white, borderTopWidth: 0, borderRightWidth: 0, borderLeftWidth: 0, borderBottomWidth: 2}}
                     fontStyle={{fontWeight: 'bold', color: colors.blue, fontSize: 20}}>
