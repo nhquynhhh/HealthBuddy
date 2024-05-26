@@ -9,7 +9,6 @@ import { AuthContext } from "../../context/AuthContext";
 export const CardDishComponent = ({id, dish}) => {
 	const { userInfo } = useContext(AuthContext);
     const navigation = useNavigation();
-    const { userInfo } = useContext(AuthContext);
     const data = { dish };
 
 	const onPressHandler = async () => {

@@ -42,18 +42,26 @@ export default function Calories() {
 		setWaterValue(newConsumedWater);
 	}
 	const [newWaterValue, setNewWaterValue] = useState('');
+
 	const handleNewWaterValue = (newWaterValue) => {
-		setNewWaterValue(newWaterValue);
+		setNewWaterValue(newWaterValue)
+		
 	};
 	const updateConsumedWater = (newWaterValue) => {
 		const newConsumedWater = waterValue + newWaterValue;
 		setWaterValue(newConsumedWater);
 	};
+
 	const handleNewWaterValueSubmit = async () => {
-		await call_save_water(newWaterValue);
 		const newWater = parseInt(newWaterValue);
-		updateConsumedWater(newWater);
-		setNewWaterValue('');
+		if (!isNaN(newWater) && newWater >= 1 && newWater <= 2000) {
+			console.log('newWater', newWater);
+			await call_save_water(newWaterValue);
+			updateConsumedWater(newWater);
+			setNewWaterValue('');
+		} else {
+		  Toast.error('Vui lòng nhập số từ 1 đến 2000');
+		}
 	};
 	const showToastsMore = () => {
 		Toast.success('Bạn đã uống nhiều hơn lượng nước mục tiêu!\nLàm tốt lắm bạn ơi 🥰')
