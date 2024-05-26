@@ -13,6 +13,7 @@ export default function Payment({ route }) {
 	const { userInfo, setAccount, setUserInfo } = useContext(AuthContext);
 
 	const [modalVisible, setModalVisible] = useState(false);
+	const [failureModalVisible, setFailureModalVisible] = useState(false);
 
 
 	const navigation = useNavigation();
@@ -23,12 +24,11 @@ export default function Payment({ route }) {
 
 		// Kiểm tra nếu URL là URL thành công bạn mong muốn
 		if (currentUrl.includes(URL)) {
+			navigation.navigate("PersonalTab", "Personal");
 			// lấy các params trong url
-			const url = new URL(currentUrl);
-			const params = new URLSearchParams(url.search);
-
-			if (params.get('resultCode') === '0') {
-				navigation.navigate("HomeTab", "Home");
+			const resultCodeMatch = currentUrl.match(/resultCode=([^&]+)/);
+			const resultCode = resultCodeMatch ? resultCodeMatch[1] : null;
+			if (resultCode === '0') {
 				const accountInfo = await handleGetAccountInfo();
 				if (accountInfo) {
 					setAccount(accountInfo);
@@ -36,7 +36,7 @@ export default function Payment({ route }) {
 				const userInfo = await handleGetUserInfo();
 				if (userInfo) {
 					setUserInfo(userInfo);
-				}	
+				}
 			}
 		}
 	};
@@ -46,24 +46,6 @@ export default function Payment({ route }) {
 				source={{ uri: url }}
 				onNavigationStateChange={handleNavigationStateChange}
 			/>
-			<Modal
-				animationType="slide"
-				transparent={true}
-				visible={modalVisible}
-				onRequestClose={() => {
-					setModalVisible(!modalVisible);
-				}}
-			>
-				<View style={styles.centeredView}>
-					<View style={styles.modalView}>
-						<Text style={styles.modalText}>Nâng cấp tài khoản thành công!</Text>
-						<Button
-							onPress={() => setModalVisible(false)}
-							title="Đóng"
-						/>
-					</View>
-				</View>
-			</Modal>
 		</View>
 	);
 }

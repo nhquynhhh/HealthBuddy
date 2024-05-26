@@ -22,7 +22,7 @@ export default function Home() {
 	const isFocused = useIsFocused();
 	const [idFavDishes, setIdFavDishes] = useState([]);
 	const favDishList = [];
-	const [favDish, setFavDish] = React.useState([]);
+	const [favDish, setFavDish] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [updatedFavDish, setUpdatedFavDish] = useState([]);
 	const [isPremium, setIsPremium] = useState(false);
@@ -224,6 +224,28 @@ export default function Home() {
         <Text style={{ fontStyle: 'italic', textAlign: 'center', color: colors.darkGray,marginTop: 10 }}>Đăng ký để mở khóa tính năng Gợi ý món ăn</Text>
             </TouchableOpacity>
         )}
+			{/* Favourite dish */}
+			{/* <View style={{ padding: 20, borderWidth: 1, width: windowWidth * 0.9, alignSelf: 'center', borderRadius: 10, borderColor: colors.gray, marginVertical: 20 }}>
+				<Text style={[styles.headerBox, { marginBottom: 20 }]}>Món ăn yêu thích</Text>
+				<FlatGrid
+					scrollEnabled={false}
+					contentContainerStyle={{ justifyContent: 'space-around' }}
+					itemDimension={100}
+					data={favDish}
+					style={styles.gridView}
+					spacing={5}
+					maxItemsPerRow={2}
+					renderItem={({ item }) => (
+						<TouchableOpacity style={[styles.dishContainer, { alignItems: 'center' }]}>
+							<Image source={item.image} style={styles.dishImage} />
+							<Text style={styles.dishName}>{item.name}</Text>
+						</TouchableOpacity>
+					)}
+				/>
+				<TouchableOpacity onPress={() => { navigation.navigate('FavouriteFood') }}>
+					<Text style={{ textAlign: 'right', fontStyle: 'italic', color: colors.darkGray }}>Chi tiết {'\u25BA'}</Text>
+				</TouchableOpacity>
+			</View> */}
 		</ScrollView>
 
 	)

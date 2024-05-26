@@ -162,7 +162,6 @@ export default function Personal() {
 						</TouchableOpacity>
 					</View>
 					<Text style={{ marginVertical: 10, fontSize: RFValue(14, 720) }}>{targetSelected}</Text>
-					<Text style={{ fontSize: RFValue(14, 720) }}>Cân nặng mong muốn: <Text style={{ fontWeight: 'bold' }}>55kg</Text></Text>
 				</View>
 				<View style={{ padding: 15, borderWidth: 1.5, width: windowWidth * 0.9, alignSelf: 'center', borderRadius: 10, borderColor: colors.blue, marginVertical: 5 }}>
 					<View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>

@@ -139,7 +139,7 @@ const MainNavigator = () => {
 							)
 						}
 					}} />
-				{/* <Tab.Screen name="ScanTab"
+				<Tab.Screen name="ScanTab"
 					component={Scan}
 					options={{
 						tabBarIcon: ({ focused }) => {
@@ -160,15 +160,15 @@ const MainNavigator = () => {
 								</LinearGradient>
 							)
 						}
-					}} /> */}
+					}} />
 				<Tab.Screen name="NotiTab"
-					component={NotiStackScreens}
+					component={WorkoutStackScreens}
 					options={{
 						tabBarIcon: ({ focused }) => {
 							return (
 								<View style={{ alignItems: "center", justifyContent: "center" }}>
-									<Icon name={focused ? "notifications" : "notifications-outline"} type="ionicon" size={23} color={focused ? colors.blue : colors.black} />
-									<Text style={{ fontSize: 12, color: focused ? colors.blue : colors.black, marginTop: 4, fontWeight: focused ? 'bold' : 'normal' }}>Thông báo</Text>
+									<Icon name={focused ? "accessibility" : "accessibility-outline"} type="ionicon" size={23} color={focused ? colors.blue : colors.black} />
+									<Text style={{ fontSize: 12, color: focused ? colors.blue : colors.black, marginTop: 4, fontWeight: focused ? 'bold' : 'normal' }}>Tập luyện</Text>
 								</View>
 							)
 						}

@@ -28,7 +28,7 @@ async function call_save_water(water) {
 	}
 }
 
-async function call_get_water() {
+const call_get_water = async() => {
 	const authToken = await getAccessToken();
 	const url = get_water.url;
 	const headers = {

@@ -21,7 +21,7 @@ export default function Premium() {
 		{ label: '50.000đ / tháng', value: "monthly" }
 	]
 
-	const [upgradePackSelected, setUpgradePackSelected] = useState('monthly');
+	const [upgradePackSelected, setUpgradePackSelected] = useState('yearly');
 	const [webViewUrl, setWebViewUrl] = useState(null);
 
 	const handleRadioPress = (value) => {
