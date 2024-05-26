@@ -1,36 +1,38 @@
 {
-  "expo": {
-    "name": "HealthBuddy",
-    "slug": "HealthBuddy",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/img_bare_logo.png",
-    "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/img_full_logo.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/img_bare_logo.png",
-        "backgroundColor": "#ffffff"
-      },
-      "package": "com.anonymous.HealthBuddy"
-    },
-    "web": {
-      "favicon": "./assets/img_bare_logo.png"
-    },
-    "expo-notifications":
-    {
-      "icon": "./assets/img_bare_logo.png",
-      "color": "#000000"
-    }  
-  }
+	"expo": {
+		"name": "HealthBuddy",
+		"slug": "HealthBuddy",
+		"version": "1.0.0",
+		"orientation": "portrait",
+		"icon": "./assets/img_bare_logo.png",
+		"userInterfaceStyle": "light",
+		"splash": {
+			"image": "./assets/img_full_logo.png",
+			"resizeMode": "contain",
+			"backgroundColor": "#ffffff"
+		},
+		"assetBundlePatterns": [
+			"**/*"
+		],
+		"ios": {
+			"supportsTablet": true
+		},
+		"android": {
+			"adaptiveIcon": {
+				"foregroundImage": "./assets/img_bare_logo.png",
+				"backgroundColor": "#ffffff"
+			},
+			"package": "com.anonymous.HealthBuddy"
+		},
+		"web": {
+			"favicon": "./assets/img_bare_logo.png"
+		},
+		"expo-notifications": {
+			"icon": "./assets/img_bare_logo.png",
+			"color": "#000000",
+			"iosDisplayInForeground": true,
+			"androidMode": "default",
+			"androidCollapsedTitle": "New notification"
+		}
+	}
 }

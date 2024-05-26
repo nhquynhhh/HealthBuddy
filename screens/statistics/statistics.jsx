@@ -192,7 +192,7 @@ export default function Statistics() {
               justifyContent: 'space-evenly',
               marginTop: 24,
             }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            {/* <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <View
                 style={{
                   height: 12,
@@ -211,8 +211,8 @@ export default function Statistics() {
                 }}>
                 Calories hấp thu
               </Text>
-            </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            </View> */}
+            {/* <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <View
                 style={{
                   height: 12,
@@ -231,7 +231,7 @@ export default function Statistics() {
                 }}>
                 Calories tiêu hao
               </Text>
-            </View>
+            </View> */}
           </View>
         </View>
       )

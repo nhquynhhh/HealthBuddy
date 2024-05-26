@@ -1,5 +1,5 @@
-//const BASE_URL = 'https://premium-singularly-meerkat.ngrok-free.app';
-const BASE_URL = 'https://implicitly-charming-eft.ngrok-free.app';
+export const BASE_URL = 'https://premium-singularly-meerkat.ngrok-free.app';
+// const BASE_URL = 'https://implicitly-charming-eft.ngrok-free.app';
 // const BASE_URL = 'https://widely-discrete-glowworm.ngrok-free.app/';
 
 const login_api = {
@@ -25,7 +25,6 @@ const otp_required = {
 const check_acount = {
 	url: `${BASE_URL}/api/check-account`,
 	method: 'GET'
-
 }
 
 const refresh_token = {
@@ -163,8 +162,10 @@ const recommend_dish = {
 	url: `${BASE_URL}/api/recommend_dish`,
 	method: 'GET'
 }
-
-
+const create_payment_url = {
+	url: `${BASE_URL}/api/create_payment_url`,
+	method: 'POST'
+}
 
 export {
 	login_api,
@@ -186,5 +187,6 @@ export {
 	get_favorite_dishes,
 	get_home_favorite_dishes,
 	get_fav_list,
-	get_calories, add_morning, add_noon, add_dinner, add_snack, add_exercise, save_water, get_water,get_statistic,get_statistic_water,new_genetic_algorithm,get_suggest_menu,recommend_dish
+	get_calories, add_morning, add_noon, add_dinner, add_snack, add_exercise, save_water, get_water,get_statistic,get_statistic_water,new_genetic_algorithm,get_suggest_menu,
+	create_payment_url, recommend_dish
 };

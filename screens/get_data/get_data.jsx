@@ -6,6 +6,7 @@ import RadioForm from 'react-native-simple-radio-button';
 import { colors } from '../../utils/colors';
 import { handleUpdateUserInfo } from '../../services/info/update_info';
 import { AuthContext } from '../../context/AuthContext';
+import {FoodList} from '../food_list/food_list';
 
 export default function GetData() {
 	const windowHeight = useWindowDimensions().height;

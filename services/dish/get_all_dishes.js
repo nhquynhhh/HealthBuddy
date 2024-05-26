@@ -1,14 +1,14 @@
 import { callGetDishList,callRecommendDish } from "../api/api_dish";	
 import { getAccessToken } from '../../asyncStorage/auth';
 
-const handleGetDishList = async () => {
+const handleGetDishList = async (page, page_size) => {
 	const accessToken = await getAccessToken();
 	try {
-		const response = await callGetDishList(accessToken);
+		const response = await callGetDishList(accessToken, page, page_size);
 		const data = await response.json();
-		const {dishes, message} = data;
+		const {dishes, message, pagination} = data;
 		if (response.ok && message === "success") {
-			return dishes;
+			return data;
 		} else {
 			console.log(message);
 			return null;

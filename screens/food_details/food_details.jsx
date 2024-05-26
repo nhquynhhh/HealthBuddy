@@ -42,6 +42,7 @@ function FoodDetails({ route }) {
 		if (isFavoriteFound) {
 			setIsFavorite(true);
 		}
+		console.log(FoodList.img)
 	}, []);
 
 	const FoodList = data;
@@ -50,7 +51,7 @@ function FoodDetails({ route }) {
 			<ScrollView>
 				<View style={styles.DetailsContainer}>
 					<View style={styles.ContainerImage}>
-						<Image source={{ uri: FoodList?.img }} style={styles.image} />
+						<Image source={{ uri: "https://www.thatlangon.com/wp-content/uploads/2020/04/spaghetti-bolognese-106560-1-scaled.jpeg" }} style={styles.image} />
 						<TouchableOpacity onPress={toggleFavorite} style={{ position: "absolute", right: 0, top: 0, padding: 10 }}>
 							<Image source={isFavorite ? require('../../assets/img_favourite_check.png') : require('../../assets/heart.png')} style={{ width: 30, height: 30 }} />
 						</TouchableOpacity>
@@ -95,7 +96,7 @@ function FoodDetails({ route }) {
 							}
 						</View>
 					</View>
-					<View style={styles.ContainerIngredient}>
+					{/* <View style={styles.ContainerIngredient}>
 						<View style={styles.ContainerItem}>
 							<Text style={styles.text2}>Cách chế biến</Text>
 							<Text>ab</Text>
@@ -104,7 +105,7 @@ function FoodDetails({ route }) {
 							<Text>gh</Text>
 							<Text>tk</Text>
 						</View>
-					</View>
+					</View> */}
 				</View>
 			</ScrollView>
 		</SafeAreaView>

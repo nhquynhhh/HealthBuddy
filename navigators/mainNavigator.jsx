@@ -29,10 +29,10 @@ import FoodDetails from '../screens/food_details/food_details';
 import Energy from '../screens/energy/energy';
 import Reminders from '../screens/reminders/reminders';
 import React, { useState } from 'react';
+import Payment from '../screens/webview/payment';
 
 const MainNavigator = () => {
 	const HomeStack = createNativeStackNavigator();
-	const [ShowBottomNavigator, setShowBottomNavigator] = useState(false);
 	function HomeStackScreens() {
 		return (
 			<HomeStack.Navigator screenOptions={{ headerTitleAlign: 'center', headerTitleStyle: { fontWeight: 'bold' } }}>
@@ -55,7 +55,6 @@ const MainNavigator = () => {
 			</HomeStack.Navigator>
 		)
 	}
-
 	const NotiStack = createNativeStackNavigator();
 	function NotiStackScreens() {
 		return (
@@ -140,7 +139,7 @@ const MainNavigator = () => {
 							)
 						}
 					}} />
-				<Tab.Screen name="ScanTab"
+				{/* <Tab.Screen name="ScanTab"
 					component={Scan}
 					options={{
 						tabBarIcon: ({ focused }) => {
@@ -161,7 +160,7 @@ const MainNavigator = () => {
 								</LinearGradient>
 							)
 						}
-					}} />
+					}} /> */}
 				<Tab.Screen name="NotiTab"
 					component={NotiStackScreens}
 					options={{
@@ -192,9 +191,14 @@ const MainNavigator = () => {
 
 		)
 	}
+	const RootStack = createNativeStackNavigator();
+
 	return (
-		<BottomNavigation />
-	)
-}
+		  <RootStack.Navigator screenOptions={{ headerShown: false }}>
+			<RootStack.Screen name="Main" component={BottomNavigation} />
+			<RootStack.Screen name="Payment" component={Payment} options={{ headerTitle: "MOMO PAYMENt" }} />
+		  </RootStack.Navigator>
+	  )
+	}
 
 export default MainNavigator;
