@@ -8,19 +8,19 @@ import { format } from 'date-fns';
 import { LiquidGauge } from 'react-native-liquid-gauge';
 import ToastManager, { Toast } from 'toastify-react-native'
 import { call_save_water, call_get_water } from '../../services/api/api_water';
+import { handleGetWater} from '../../services/water/get_water'
 
 export default function Calories() {
 	const today = new Date();
-	const defaultDate = format(today.setDate(today.getDate()), 'yyyy/MM/dd');
 	const [openCalendar, setOpenCalendar] = useState(false);
-	const [selectDate, setSelectDate] = useState(defaultDate);
+	const [selectDate, setSelectDate] = useState(format(today.setDate(today.getDate()), 'dd/MM/yyyy'));
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const response = await call_get_water(selectDate);
+			const response = await handleGetWater();
 			if (response) {
-				console.log('response', response);
-				setWaterValue(response.total_water);
+				
+				setWaterValue(response);
 			}
 		}
 		fetchData();
@@ -32,10 +32,9 @@ export default function Calories() {
 	function handleSelectDate(selectDate) {
 		setSelectDate(selectDate);
 	}
-	const defaultWater = 0;
 	const targetWater = 2000;
 
-	const [waterValue, setWaterValue] = useState(defaultWater);
+	const [waterValue, setWaterValue] = useState(0);
 	const handleWaterValue = async (valueClicked) => {
 		await call_save_water(valueClicked);
 		const newConsumedWater = waterValue + valueClicked;
@@ -82,12 +81,12 @@ export default function Calories() {
 				textStyle={{ fontSize: 15, lineHeight: 25, paddingRight: 5 }}
 				style={{ paddingRight: 5 }} />
 			<View>
-				<TouchableOpacity style={{ flexDirection: 'row', paddingTop: 20, alignSelf: 'center' }} onPress={handleCalendar}>
+				{/* <TouchableOpacity style={{ flexDirection: 'row', paddingTop: 20, alignSelf: 'center' }} onPress={handleCalendar}>
 					<Icon name='calendar-outline' type='ionicon' color={colors.blue} />
 					<Text style={{ color: colors.blue, textAlignVertical: 'center', paddingHorizontal: 10, fontSize: RFValue(15, 720), fontWeight: 'bold' }}>Chọn ngày</Text>
-				</TouchableOpacity>
-				<Text style={{ alignSelf: 'center', paddingTop: 10, fontSize: RFValue(15, 720), fontWeight: 'bold' }}>{selectDate}</Text>
-				<Modal
+				</TouchableOpacity> */}
+				<Text style={{ alignSelf: 'center', paddingTop: 10, fontSize: RFValue(15, 720), fontWeight: 'bold' }}>Ngày {selectDate}</Text>
+				{/* <Modal
 					animationType='slide'
 					transparent={true}
 					visible={openCalendar}
@@ -104,7 +103,7 @@ export default function Calories() {
 							</TouchableOpacity>
 						</View>
 					</View>
-				</Modal>
+				</Modal> */}
 			</View>
 			<Divider style={{ marginVertical: 20, width: '50%', alignSelf: 'center' }}></Divider>
 			<Text style={{ fontSize: RFValue(16, 720), marginBottom: 20, textAlign: 'center' }}>Mục tiêu của bạn là: <Text style={{ fontWeight: 'bold', color: colors.blue }}>{targetWater} ml</Text></Text>
