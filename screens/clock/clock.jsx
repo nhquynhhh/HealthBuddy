@@ -1,13 +1,15 @@
 import React, { Component } from "react";
 import { Button, Text, View } from "react-native";
 import DateTimePicker from "react-native-modal-datetime-picker";
-import { setReminderNoti } from "../../asyncStorage/auth";
+import { setReminderNoti, removeReminderTime } from "../../asyncStorage/auth";
 import { getTime } from "date-fns";
 import { select } from "d3";
+import {scheduleAlarm} from '../../services/notification/NotificationHandler';
 
 export default class Clock extends Component {
 	constructor(props) {
 		super(props);
+		const { reminderTime } = this.props;
 		this.state = {
 			isDateTimePickerVisible: false,
 			selectedDate: '',
@@ -47,15 +49,23 @@ export default class Clock extends Component {
 	};
 
 	handleDatePicked = async (date) => {
-
+		await removeReminderTime();
 		// get time from date
-		const time = date.toLocaleTimeString();
+		const timeS = date.toLocaleTimeString();
 
-		console.log("A date has been picked: ", time);
-		await setReminderNoti(time);
+		const [time, period] = timeS.split(' ');
+		const [hour, minute] = time.split(':').map(Number);
+		
+		// Nếu là buổi chiều (PM) thì cộng thêm 12 giờ
+		const adjustedHour = period === 'PM' ? hour + 12 : hour;
+
+		console.log(adjustedHour, minute);
+		console.log("A date has been picked: ", timeS);
+		await setReminderNoti(timeS);
+		await scheduleAlarm(adjustedHour, minute);
 		// this.setState({ selectedDate: date });
 		this.hideDateTimePicker();
-		this.props.onClose(time);
+		this.props.onClose(timeS);
 	};
 
 	render() {
