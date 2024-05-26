@@ -9,6 +9,7 @@ import { handleGetSuggestMenu, handleNewGeneticAlgorithm } from '../../services/
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Tab, TabView } from '@rneui/themed';
 import { CardDishComponent } from '../../screens/CardDishComponent/index'
+import { ActivityIndicator } from 'react-native-paper';
 
 function MenuSuggestion() {
 
@@ -22,7 +23,19 @@ function MenuSuggestion() {
 	const [snackToday, setSnackToday] = useState([])
 	const END_LINEAR_COLOR = '#FF7E06';
 
+	const [isLoading, setIsLoading] = useState(false);
+
+	const clearData = () => {
+		setMorningToday([])
+		setLunchToday([])
+		setDinnerToday([])
+		setSnackToday([])
+		setFitnessScore(0)
+		setTotalcalo(0)
+	}
+
 	const fetchMenuData = async () => {
+		setIsLoading(true)
 		const res = await handleGetSuggestMenu()
 		// console.log(res)
 		if (res && res.fitness_score) {
@@ -37,12 +50,15 @@ function MenuSuggestion() {
 		else if (res) {
 			newMenu()
 		}
+		setIsLoading(false)
 	}
 	useEffect(() => {
 		fetchMenuData()
 	}, [])
 
 	const newMenu = async () => {
+		clearData();
+		setIsLoading(true)
 		const new_menu = await handleNewGeneticAlgorithm()
 		const new_res = await handleGetSuggestMenu()
 		setMorningToday(new_res.morning_dishs)
@@ -51,6 +67,7 @@ function MenuSuggestion() {
 		setSnackToday(new_res.snacks)
 		setFitnessScore(new_res.fitness_score)
 		setTotalcalo(new_res.calo)
+		setIsLoading(false);
 	}
 
 	return (
@@ -86,6 +103,7 @@ function MenuSuggestion() {
 				<Tab.Item title="Phụ" titleStyle={{ fontSize: 12 }}
 					icon={{ name: 'cafe', type: 'ionicon', color: 'white' }} />
 			</Tab>
+			{isLoading && <ActivityIndicator size="large" color={colors.primary} />}
 			<View style={{ marginBottom: 10 }}>
 				<View style={styles.list_item}>
 					{morningToday && indexMeal === 0 && morningToday.map((dish, index) => {

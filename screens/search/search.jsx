@@ -17,7 +17,7 @@ function Search() {
 	const [ListItems, setListItems] = useState([]);
 	const [listDishes, setListDishes] = useState([]);
 	const [listIngredients, setListIngredients] = useState([]);
-	const [isLoading, setIsLoading] = useState(true);
+	const [isLoading, setIsLoading] = useState(false);
 	const [isDish, setIsDish] = useState(true);
 	const [isIngredient, setIsIngredient] = useState(false);
 	const [isSearchQuery, setSearchQuery] = useState("");
@@ -30,10 +30,15 @@ function Search() {
 	});
 
 	useEffect(() => {
+		getDishList();
+	}, []);
+
+	useEffect(() => {
 		setIsLoading(true);
 		getDishList();
 		setIsLoading(false);
 	}, [pagination.current_page]);
+
 
 	// useEffect(() => {
 	// 	setIsLoading(true);
@@ -43,40 +48,14 @@ function Search() {
 
 
 	const getDishList = async () => {
+		setIsLoading(true);
 		const { current_page, page_size } = pagination;
 		if (isDish) {
 			const response = await handleGetDishList(current_page, page_size);
 			setListItems(response.dishes);
 			setPagination(response.pagination);
 		}
-		// let dataToLoad = [];
-		// if (isDish) {
-		// 	dataToLoad = listDishes.map(item => ({
-		// 		dish: {
-		// 			id: item.id,
-		// 			img: "https://www.thatlangon.com/wp-content/uploads/2020/04/spaghetti-bolognese-106560-1-scaled.jpeg",
-		// 			name: item.name,
-		// 			calo: item.calo,
-		// 			protein: item.protein,
-		// 			carb: item.carb,
-		// 			fat: item.fat
-		// 		}
-		// 	}));
-		// } else if (isIngredient) {
-		// 	dataToLoad = listIngredients.map(item => ({
-		// 		dish: {
-		// 			id: item.id,
-		// 			img: "https://www.thatlangon.com/wp-content/uploads/2020/04/spaghetti-bolognese-106560-1-scaled.jpeg",
-		// 			name: item.name,
-		// 			calo: item.calo,
-		// 			protein: item.protein,
-		// 			carb: item.carb,
-		// 			fat: item.fat
-		// 		}
-		// 	}));
-		// }
-		// setListItems(dataToLoad);
-		// console.log("listItems", dataToLoad);
+		setIsLoading(false);
 	}
 
 	const handleSearch = (text) => {

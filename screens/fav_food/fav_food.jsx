@@ -50,15 +50,15 @@ function FavouriteFood() {
 	}, []);
 	return (
 		<SafeAreaView style={{ height: "100%", backgroundColor: colors.white }}>
-			{existFav ?
-				<ScrollView >
+			<ScrollView >
+				{existFav ?
 					<View style={styles.wishListContainer}>
 						{wishList.map((item) => (
 							<Foodlist key={item.dish.id} FoodList={item.dish} Dish={true} />
 						))}
-					</View>
-				</ScrollView> :
-				<NoResults height="100%" />}
+					</View> : <NoResults height="100%" />}
+
+			</ScrollView>
 		</SafeAreaView>
 	);
 }

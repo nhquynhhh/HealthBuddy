@@ -1,4 +1,4 @@
-import { ScrollView, Text, View, Image, useWindowDimensions, StyleSheet, TouchableOpacity, FlatList, Alert } from 'react-native'
+import { ScrollView, Text, View, Image, useWindowDimensions, StyleSheet, TouchableOpacity, FlatList, Alert, RefreshControl  } from 'react-native'
 import React, { Component, useContext, useEffect, useState, useCallback } from 'react'
 import { SearchBar, Icon, Divider } from 'react-native-elements';
 import { useNavigation, useFocusEffect, useIsFocused } from '@react-navigation/native';
@@ -25,6 +25,7 @@ export default function Home() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [updatedFavDish, setUpdatedFavDish] = useState([]);
 	const [isPremium, setIsPremium] = useState(false);
+	const [refreshing, setRefreshing] = useState(false);
 
 	const getFavoriteDishes = async () => {
 		setFavDish([]);
@@ -62,16 +63,28 @@ export default function Home() {
 
 	useEffect(() => {
 		// getFavoriteDishes();
+		setRefreshing(true);
+		getFavoriteDishes();
 		getCalories();
 		getUserInfo();
+		setRefreshing(false);
+
 	}, []);
 
-	useEffect(() => {
-		if (isFocused) {
-			getCalories();
-			getUserInfo();
-		}
-	}, [isFocused]);
+	const onRefresh = () => {
+		setRefreshing(true);
+		getCalories();
+		getUserInfo();
+		getFavoriteDishes();
+		setRefreshing(false);
+	}
+
+	// useEffect(() => {
+	// 	if (isFocused) {
+	// 		getCalories();
+	// 		getUserInfo();
+	// 	}
+	// }, [isFocused]);
 
 	user = {
 		age: userInfo.age,
@@ -99,8 +112,13 @@ export default function Home() {
 	];
 
 	return (
-		<ScrollView style={{ backgroundColor: colors.white, marginBottom: 60 }} showsVerticalScrollIndicator={false}>
+		<ScrollView style={{ backgroundColor: colors.white, marginBottom: 60 }} showsVerticalScrollIndicator={false}
+			refreshControl={
+				<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+			}
+		>
 			{/* Header */}
+
 			<View style={{ flexDirection: 'row', marginTop: 20, paddingLeft: 20, paddingTop: 20, paddingBottom: 10 }}>
 				<Image source={require('../../assets/img_bare_logo.png')} style={{ width: 50, height: 50 }}></Image>
 				<Text style={{ textAlignVertical: 'center', fontSize: RFValue(16, 720), marginLeft: 15 }}>Xin chào, {"\n"}
@@ -207,6 +225,7 @@ export default function Home() {
 					<Text style={{ textAlign: 'right', fontStyle: 'italic', color: colors.darkGray }}>Chi tiết {'\u25BA'}</Text>
 				</TouchableOpacity>
 			</View>
+			
 		</ScrollView>
 
 	)

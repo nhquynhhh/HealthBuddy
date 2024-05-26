@@ -1,4 +1,4 @@
-import { ScrollView, Text, View, Image, useWindowDimensions, StyleSheet, TouchableOpacity, TextInput } from 'react-native'
+import { ScrollView, Text, View, Image, useWindowDimensions, StyleSheet, TouchableOpacity, TextInput, RefreshControl } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { SearchBar, Icon, Divider, Input, Button } from 'react-native-elements';
 import { useNavigation, useFocusEffect, useIsFocused } from '@react-navigation/native';
@@ -19,6 +19,8 @@ export default function Personal() {
 	const isFocused = useIsFocused();
 	const [expiredDate, setExpiredDate] = useState('');
 	const { removeAccessToken, removeRefreshToken, isLogged, setIsLogged, userInfo, account, setUserInfo, setAccount } = useContext(AuthContext);
+
+	const [refresh, setRefresh] = useState(false);
 
 	const logout = () => {
 		setIsLogged(false);
@@ -102,13 +104,19 @@ export default function Personal() {
 		console.log(userInfo);
 	}, [])
 
-	useEffect(() => {
-		if (isFocused) {
-			loadData();
-			console.log(account.has_subscription ? "PREMIUM" : "STANDARD");
-			console.log(userInfo);
-		}
-	}, [isFocused]);
+	// useEffect(() => {
+	// 	if (isFocused) {
+	// 		console.log(account.has_subscription ? "PREMIUM" : "STANDARD");
+	// 		console.log(userInfo);
+	// 	}
+	// }, [isFocused]);
+
+	const onRefresh = () => {
+		setRefresh(true);
+		loadData();
+		setRefresh(false);
+
+	}
 
 	useEffect(() => {
 		setTargetSelected(targetLabel);
@@ -116,7 +124,9 @@ export default function Personal() {
 
 	return (
 		<SafeAreaView style={{ backgroundColor: colors.white, marginBottom: 60 }}>
-			<ScrollView >
+			<ScrollView refreshControl={
+				<RefreshControl refreshing={refresh} onRefresh={onRefresh}/>
+			} >
 				<View style={{ flexDirection: 'row', alignItems: 'center', padding: 16 }}>
 					<View style={{ padding: 10 }}>
 						<Image source={require('../../assets/img_avatar.png')} style={{ width: 60, height: 60, alignSelf: 'center' }}></Image>
