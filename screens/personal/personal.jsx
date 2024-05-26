@@ -1,4 +1,4 @@
-import { ScrollView, Text, View, Image, useWindowDimensions, StyleSheet, TouchableOpacity, TextInput, RefreshControl } from 'react-native'
+import { ScrollView, Text, View, Image, useWindowDimensions, StyleSheet, TouchableOpacity, TextInput, RefreshControl, Alert } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { SearchBar, Icon, Divider, Input, Button } from 'react-native-elements';
 import { useNavigation, useFocusEffect, useIsFocused } from '@react-navigation/native';
@@ -21,6 +21,22 @@ export default function Personal() {
 	const { removeAccessToken, removeRefreshToken, isLogged, setIsLogged, userInfo, account, setUserInfo, setAccount } = useContext(AuthContext);
 
 	const [refresh, setRefresh] = useState(false);
+
+	const handleLogout = () => {
+		// are you sure to logout
+		Alert.alert(
+			"Đăng xuất",
+			"Bạn có chắc chắn muốn đăng xuất?",
+			[
+				{
+					text: "Hủy",
+					onPress: () => console.log("Đã hủy"),
+					style: "cancel"
+				},
+				{ text: "Đồng ý", onPress: () => logout(), style: "default" }
+			]
+		);
+	}
 
 	const logout = () => {
 		setIsLogged(false);
@@ -125,7 +141,7 @@ export default function Personal() {
 	return (
 		<SafeAreaView style={{ backgroundColor: colors.white, marginBottom: 60 }}>
 			<ScrollView refreshControl={
-				<RefreshControl refreshing={refresh} onRefresh={onRefresh}/>
+				<RefreshControl refreshing={refresh} onRefresh={onRefresh} />
 			} >
 				<View style={{ flexDirection: 'row', alignItems: 'center', padding: 16 }}>
 					<View style={{ padding: 10 }}>
@@ -211,7 +227,7 @@ export default function Personal() {
 							<Text style={{ color: colors.white, textAlign: 'left', lineHeight: 25 }}>
 								<Text style={{ fontWeight: 'bold', fontSize: RFValue(14, 720) }}>Thành viên PREMIUM{"\n"}</Text>
 								<Text style={{ fontStyle: 'italic' }}>
-									Tài khoản hết hạn vào ngày 
+									Tài khoản hết hạn vào ngày
 									<Text style={{ fontWeight: 'bold' }}> {expiredDate} {"\n"}</Text>
 								</Text>
 							</Text>
@@ -231,7 +247,7 @@ export default function Personal() {
 						start: { x: 0, y: 0.5 },
 						end: { x: 1, y: 0.5 },
 					}}
-					onPress={() => logout()}>
+					onPress={() => handleLogout()}>
 				</Button>
 				<View style={{ paddingBottom: 70 }}>
 

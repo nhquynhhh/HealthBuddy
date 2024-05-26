@@ -63,11 +63,10 @@ export default function Home() {
 	}
 
 	useEffect(() => {
-		// getFavoriteDishes();
+		getUserInfo();
 		setRefreshing(true);
 		getFavoriteDishes();
 		getCalories();
-		getUserInfo();
 		setRefreshing(false);
 
 	}, []);
@@ -88,10 +87,10 @@ export default function Home() {
 	// }, [isFocused]);
 
 	user = {
-		age: userInfo.age,
-		weight: userInfo.weight,
-		height: userInfo.height,
-		gender: userInfo.gender == 'male' ? 'nam' : 'nữ',
+		age: userInfo?.age,
+		weight: userInfo?.weight,
+		height: userInfo?.height,
+		gender: userInfo?.gender == 'male' ? 'nam' : 'nữ',
 	}
 	const BMI = (user?.weight / ((user?.height * user?.height) / 10000)).toFixed(1);
 	let energy;
