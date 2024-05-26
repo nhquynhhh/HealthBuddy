@@ -54,7 +54,6 @@ function callAuthenOTPPass(props) {
 		headers: headers,
 		body: JSON.stringify(data)
 	});
-
 }
 
 export { CallOTPAPI, callAuthenAccAPI, callAuthenOTPPass };

@@ -1,20 +1,41 @@
 import { View, Text, Image, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, useWindowDimensions } from 'react-native'
-import React, { Component, useState } from 'react'
+import React, { Component, useState, useContext } from 'react'
 import { Icon, Button, Divider, ListItem } from "react-native-elements";
 import { LinearGradient } from 'expo-linear-gradient';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button'
 import { colors } from '../../utils/colors'
-
+import {handlePayMentURL} from '../../services/payment/call_payment'
+import { useNavigation,useFocusEffect, useIsFocused } from '@react-navigation/native';
+import Payment from '../webview/payment';
+import { setPaymentURL } from '../../asyncStorage/auth';
+import { AuthContext } from '../../context/AuthContext';
 export default function Premium() {
 	const windowHeight = useWindowDimensions().height;
 	const windowWidth = useWindowDimensions().width;
+	const navigation = useNavigation();
+	const [url, setUrl] = useState('');
+	const { paymentURL, setPaymentURL } = useContext(AuthContext);
 
 	const upgradePack = [
-		{ label: '550.000đ / năm', value: 0 },
-		{ label: '50.000đ / tháng', value: 1 }
+		{ label: '550.000đ / năm', value: "yearly" },
+		{ label: '50.000đ / tháng', value: "monthly" }
 	]
 
-	const [upgradePackSelected, setUpgradePackSelected] = useState('0');
+	const [upgradePackSelected, setUpgradePackSelected] = useState('monthly');
+	const [webViewUrl, setWebViewUrl] = useState(null);
+
+	const handleRadioPress = (value) => {
+		setUpgradePackSelected(value); // Cập nhật giá trị được chọn vào state
+		console.log('Giá trị được chọn:', value); // In ra giá trị được chọn
+	  };
+	
+	const handlePayment = async () => {
+		const response = await handlePayMentURL(upgradePackSelected);
+		console.log(response);
+		if (response !== null) {
+			navigation.navigate('Payment', { url: response });
+		}
+	}
 
 	return (
 		<View style={styles.container}>
@@ -54,7 +75,7 @@ export default function Premium() {
 				<Text style={{ fontWeight: 700, fontSize: 16, marginBottom: 10 }}>Chọn gói nâng cấp</Text>
 				<RadioForm
 					radio_props={upgradePack}
-					onPress={upgradePackSelected => setUpgradePackSelected(upgradePackSelected)}
+					onPress={handleRadioPress}
 					selectedLabelColor={colors.blue}
 					buttonSize={8}
 					buttonOuterSize={20}
@@ -72,15 +93,18 @@ export default function Premium() {
 					colors: [colors.blue, colors.lightBlue],
 					start: { x: 0, y: 0.5 },
 					end: { x: 1, y: 0.5 },
-				}}>
+				}}
+				onPress={handlePayment}
+			>
 			</Button>
+			<View style={{paddingBottom: 150}}></View>
 		</View>
 	)
 }
 
 const styles = StyleSheet.create({
 	container: {
-		backgroundColor: '#fff',
+		backgroundColor: colors.white,
 		paddingTop: 20
 	},
 	btnClick: {

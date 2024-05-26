@@ -86,6 +86,62 @@ const removeEncrypted = async () => {
 	}
 }
 
+const setReminderNoti = async (reminderTime) => {
+	try {
+		await AsyncStorage.setItem("reminderTime", reminderTime);
+	} catch (e) {
+		console.log(e);
+	}
+}
+
+const getReminderTime = async () => {
+	try {
+		const value = await AsyncStorage.getItem("reminderTime");
+		if (value !== null) {
+			return value;
+		}
+		return null;
+	} catch (e) {
+		console.log(e);
+	}
+}
+
+const removeReminderTime = async () => {
+	try {
+		await AsyncStorage.removeItem("reminderTime");
+	} catch (e) {
+		console.log(e);
+	}
+}
+
+const setPaymentURL = async (paymentURL) => {
+	try {
+		await AsyncStorage.setItem("paymentURL", paymentURL);
+	} catch (e) {
+		console.log(e);
+	}
+}
+
+const getPaymentURL = async () => {
+	try {
+		const value = await AsyncStorage.getItem("paymentURL");
+		if (value !== null) {
+			return value;
+		}
+		return null;
+	} catch (e) {
+		console.log(e);
+	}
+}
+
+const removePaymentURL = async () => {
+	try {
+		await AsyncStorage.removeItem("paymentURL");
+	} catch (e) {
+		console.log(e);
+	}
+}
+
 export {
 	setAccessToken,
 	setRefreshToken,
@@ -95,6 +151,12 @@ export {
 	getEncrypted,
 	removeAccessTokenAsync,
 	removeRefreshTokenAsync,
-	removeEncrypted
+	removeEncrypted,
+	setReminderNoti,
+	getReminderTime,
+	removeReminderTime,
+	setPaymentURL,
+	getPaymentURL,
+	removePaymentURL
 };
 

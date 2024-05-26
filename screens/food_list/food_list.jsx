@@ -12,15 +12,24 @@ const FoodList = ({ FoodList, Dish }) => {
 
 	const onPressHandler = async () => {
 		if (!Dish) return;
-		const recipe = await handleGetRecipeByDishID(FoodList.id);
-		const response = await handleGetFavoriteDishes(userInfo.id);
+		const recipe = await handleGetRecipeByDishID(FoodList?.id);
+		const response = await handleGetFavoriteDishes(userInfo?.id);
 		navigation.navigate("FoodDetails", { data: FoodList, recipe: recipe, favoriteDishes: response });
 	}
+
+	// useEffect(() => {
+	// 	if (isFocused) {
+	// 		handleGetFavoriteDishes(userInfo.id);
+	// 	}
+
+	// }, [isFocused]);
 
 	return (
 		<TouchableOpacity onPress={onPressHandler} key={FoodList.id} style={styles.ContainerItem}>
 			<View style={styles.ContainerImage}>
-				<Image source={{ uri: FoodList?.img }} style={styles.image} />
+				<Image source={require('../../assets/restaurant.png')} style={styles.image} />
+				{FoodList?.is_premium && 
+				<Text style={{marginBottom: 5}}>Premium</Text> }
 			</View>
 			<View>
 				<Text style={{ fontWeight: "bold", padding: 8 }}>{FoodList?.name}</Text>
@@ -59,16 +68,17 @@ const styles = StyleSheet.create({
 		borderWidth: 1,
 		borderColor: "#D8D8D8",
 
-
 	},
 	ContainerImage: {
 		height: "60%",
+		marginBottom: 10,
 	},
 	image: {
 		width: "100%",
 		height: "100%",
 		borderTopLeftRadius: 10,
 		borderTopRightRadius: 10,
+		objectFit: "contain"
 	},
 	ContainerNutrients: {
 		display: "flex",
