@@ -71,28 +71,28 @@ function MenuSuggestion() {
 	}
 
 	return (
-		<View>
+		<View style={{backgroundColor: colors.white}}>
 			<View style={{
 				marginBottom: 10, display: "flex", flexDirection: "row",
-				justifyContent: "space-between", alignItems: "center"
+				justifyContent: "space-between", alignItems: "center",
+				marginTop: 30
 			}}>
-				<View>
-					<Text>Điểm thực đơn: {fitnessScore}</Text>
-					<Text>calo: {totalcalo}</Text>
+				<View style={{paddingLeft: 20}}>
+					<Text style={{fontSize: 16}}><Text style={{fontWeight: 'bold'}}>Điểm thực đơn:</Text> {fitnessScore}</Text>
+					<Text style={{fontSize: 16}}><Text style={{fontWeight: 'bold'}}>Calories:</Text> {totalcalo}</Text>
 				</View>
-
 				<TouchableOpacity style={{
-					backgroundColor: END_LINEAR_COLOR,
+					backgroundColor: colors.blue,
 					padding: 10, borderRadius: 50, display: "flex", flexDirection: "row",
-					alignItems: "center", gap: 5
+					alignItems: "center", gap: 5, marginRight: 20
 				}} onPress={newMenu}>
 					<MaterialCommunityIcons name="reload" size={24} color="white" />
 					<Text style={{ color: "white", fontWeight: "bold" }}>Thực đơn khác</Text>
 				</TouchableOpacity>
 			</View>
 			<Tab value={indexMeal} onChange={(e) => setIndexMeal(e)}
-				indicatorStyle={{ backgroundColor: 'white', height: 3, }}
-				style={{ backgroundColor: END_LINEAR_COLOR, marginVertical: 20 }}
+				indicatorStyle={{ backgroundColor: colors.lightOrange, height: 3, }}
+				style={{ backgroundColor: colors.superLightBlue, marginVertical: 20 }}
 				variant="primary">
 				<Tab.Item title="Sáng" titleStyle={{ fontSize: 12 }}
 					icon={{ name: 'sunny', type: 'ionicon', color: 'white' }} />
@@ -103,8 +103,12 @@ function MenuSuggestion() {
 				<Tab.Item title="Phụ" titleStyle={{ fontSize: 12 }}
 					icon={{ name: 'cafe', type: 'ionicon', color: 'white' }} />
 			</Tab>
-			{isLoading && <ActivityIndicator size="large" color={colors.primary} />}
+			{isLoading && <ActivityIndicator size="large" color={colors.blue} />}
 			<View style={{ marginBottom: 10 }}>
+				<View style={{flexDirection: 'row', alignSelf: 'center'}}>
+					<Icon name='magic-wand' type='simple-line-icon' color={colors.lightOrange} size={20}/>
+					<Text style={{fontSize: 16, marginBottom: 20, marginLeft: 5}}> Thực đơn cho bữa ăn của bạn là: </Text>
+				</View>
 				<View style={styles.list_item}>
 					{morningToday && indexMeal === 0 && morningToday.map((dish, index) => {
 						return (
@@ -130,7 +134,7 @@ function MenuSuggestion() {
 					})}
 				</View>
 			</View>
-
+			<View style={{height: 1000}}></View>
 		</View>
 	)
 }
@@ -140,7 +144,7 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 5, paddingTop: 10,
 	},
 	list_item: {
-		display: "flex", flexDirection: "row", gap: 15, marginHorizontal: 5, flexWrap: "wrap"
+		display: "flex", flexDirection: "row", gap: 15, marginHorizontal: 5, flexWrap: "wrap", marginLeft: 15
 	},
 })
 

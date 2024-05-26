@@ -60,15 +60,14 @@ export default function GetData() {
 	}
 
 	return (
-		<View style={{ alignItems: 'center', paddingTop: 60 }}>
-			<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+		<View style={{ alignItems: 'center', paddingTop: 60, backgroundColor: colors.white }}>
+			<View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: colors.white }}>
 				<View style={[styles.activePage, { width: windowWidth / 4, marginHorizontal: 10 }, currentPageNav === 'page1Nav' ? styles.activePage : styles.inactivePage]} name='page1Nav'></View>
 				<View style={[styles.inactivePage, { width: windowWidth / 4, marginHorizontal: 10 }, currentPageNav === 'page2Nav' ? styles.activePage : styles.inactivePage]} name='page2Nav'></View>
 				<View style={[styles.inactivePage, { width: windowWidth / 4, marginHorizontal: 10 }, currentPageNav === 'page3Nav' ? styles.activePage : styles.inactivePage]} name='page3Nav'></View>
 			</View>
-			<View style={[{ alignItems: 'center' }, currentPage === 'page1' ? styles.displayPage : styles.hidePage]}>
+			<View style={[{ alignItems: 'center', backgroundColor: colors.white }, currentPage === 'page1' ? styles.displayPage : styles.hidePage]}>
 				<Text style={styles.describeText}>Trước khi bắt đầu, hãy cung cấp cho chúng tôi một vài thông tin về bạn.</Text>
-				{/* Different from AOD */}
 				<Text style={[styles.titleText, { width: '90%', textAlign: 'left', paddingLeft: 30 }]}>1. Giới tính của bạn</Text>
 				<View style={{ flexDirection: 'row', alignItems: 'center', width: '90%', marginHorizontal: 40 }}>
 					<TouchableOpacity
@@ -100,7 +99,7 @@ export default function GetData() {
 					}}>
 				</Button>
 			</View>
-			<View style={[{ alignItems: 'center' }, currentPage === 'page2' ? styles.displayPage : styles.hidePage]}>
+			<View style={[{ alignItems: 'center', backgroundColor: colors.white }, currentPage === 'page2' ? styles.displayPage : styles.hidePage]}>
 				<Text style={[styles.titleText, { marginTop: 20 }]}>2. Tuổi và số đo cơ thể của bạn</Text>
 				<View>
 					<Text style={styles.headerText}>Tuổi</Text>
@@ -148,7 +147,7 @@ export default function GetData() {
 					}}>
 				</Button>
 			</View>
-			<View style={[{}, currentPage === 'page3' ? styles.displayPage : styles.hidePage]}>
+			<View style={[{backgroundColor: colors.white}, currentPage === 'page3' ? styles.displayPage : styles.hidePage]}>
 				<Text style={[styles.titleText, { marginTop: 20 }]}>3. Mục tiêu của bạn</Text>
 				<View style={{ marginLeft: 27 }}>
 					<RadioForm
@@ -178,7 +177,7 @@ export default function GetData() {
 					}}
 					onPress={() => {
 						handleUpdateUser();
-						Alert.alert('Thông báo', 'Xong');
+						Alert.alert('Thông báo', 'Hoàn tất! Chào mừng bạn đến với HealthBuddy!');
 					}}>
 				</Button>
 			</View>

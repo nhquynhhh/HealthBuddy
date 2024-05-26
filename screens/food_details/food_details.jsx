@@ -47,7 +47,7 @@ function FoodDetails({ route }) {
 
 	const FoodList = data;
 	return (
-		<SafeAreaView style={{ height: "100%", }}>
+		<SafeAreaView style={{ height: "100%", backgroundColor: colors.white}}>
 			<ScrollView>
 				<View style={styles.DetailsContainer}>
 					<View style={styles.ContainerImage}>

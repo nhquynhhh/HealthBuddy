@@ -1,5 +1,5 @@
 export const BASE_URL = 'https://premium-singularly-meerkat.ngrok-free.app';
-// const BASE_URL = 'https://implicitly-charming-eft.ngrok-free.app';
+// export const BASE_URL = 'https://implicitly-charming-eft.ngrok-free.app';
 // const BASE_URL = 'https://widely-discrete-glowworm.ngrok-free.app/';
 
 const login_api = {

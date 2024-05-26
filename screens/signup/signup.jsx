@@ -172,6 +172,8 @@ export default function Signup() {
 						<Text style={{ color: colors.blue, fontWeight: '600' }}>Đăng nhập</Text>
 					</TouchableOpacity>
 				</View>
+
+				<View style={{height: 50}}></View>
 			</View>
 		</ScrollView>
 	)
