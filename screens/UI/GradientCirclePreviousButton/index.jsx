@@ -1,28 +1,24 @@
 import React from 'react';
 import { TouchableHighlight, Text, View, StyleSheet } from 'react-native';
+import { Icon, Button } from "react-native-elements";
 import { LinearGradient } from 'expo-linear-gradient';
 import { AntDesign } from '@expo/vector-icons';
+import { colors } from '../../../utils/colors';
 
-const GradientCirclePreviousButton = ({ onPress, colors }) => {
+const GradientCirclePreviousButton = ({ onPress }) => {
     return (
-        <TouchableHighlight
-          underlayColor="transparent"
-          onPress={onPress}
-          style={styles.buttonContainer}
-        >
-            <LinearGradient 
-              colors={colors}
-              start={[0, 0]}
-              end={[1, 0]}
-              style={styles.gradient}>
-                <AntDesign style={{position: 'absolute', borderRadius: 50,
-                    shadowOffset: { width: 1, height: 2 },
-                    shadowOpacity: 0.8, padding: 8,
-                    shadowRadius: 4,
-                    elevation: 5,}} 
-                    name="caretleft" size={32} color="white" />
-            </LinearGradient>
-        </TouchableHighlight>
+      <Button title={" Quay lại"}
+        icon={{ name: 'leftcircleo', type: 'antdesign', color: colors.white, size: 16 }}
+        titleStyle={{ fontWeight: 'bold', fontSize: 14, color: colors.white }}
+        buttonStyle={{ width: 100, height: 40, borderRadius: 50,}}
+        ViewComponent={LinearGradient}
+        linearGradientProps={{
+          colors: [colors.blue, colors.lightBlue],
+          start: { x: 0, y: 0.5 },
+          end: { x: 1, y: 0.5 },
+        }}
+        onPress={onPress}>
+      </Button>
     )
 };
 

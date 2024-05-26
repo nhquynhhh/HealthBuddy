@@ -1,5 +1,3 @@
-
-
 import { View, Text, Image, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, useWindowDimensions, ScrollView, Platform, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Alert, ActivityIndicator, Modal } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import React, { Component, useContext, useState } from 'react'

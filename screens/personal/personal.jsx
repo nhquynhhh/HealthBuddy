@@ -192,7 +192,7 @@ export default function Personal() {
 							<Text style={{ fontWeight: 'bold', fontSize: RFValue(14, 720), color: colors.blue }}>Thay đổi</Text>
 						</TouchableOpacity>
 					</View>
-					<Text style={{ marginVertical: 10, fontSize: RFValue(14, 720) }}>{targetSelected}</Text>
+					<Text style={{ marginTop: 10, fontSize: RFValue(14, 720) }}>{targetSelected}</Text>
 				</View>
 				<View style={{ padding: 15, borderWidth: 1.5, width: windowWidth * 0.9, alignSelf: 'center', borderRadius: 10, borderColor: colors.blue, marginVertical: 5 }}>
 					<View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -257,8 +257,8 @@ export default function Personal() {
 							<Text style={{ color: colors.white, textAlign: 'left', lineHeight: 25 }}>
 								<Text style={{ fontWeight: 'bold', fontSize: RFValue(14, 720) }}>Thành viên PREMIUM{"\n"}</Text>
 								<Text style={{ fontStyle: 'italic' }}>
-									Tài khoản hết hạn vào ngày
-									<Text style={{ fontWeight: 'bold' }}> {expiredDate} {"\n"}</Text>
+									Tài khoản hết hạn vào ngày {"\n"}
+									<Text style={{ fontWeight: 'bold' }}> {expiredDate} </Text>
 								</Text>
 							</Text>
 						</LinearGradient>
@@ -318,17 +318,6 @@ export default function Personal() {
 							style={{ paddingLeft: 30 }}
 							status={targetLabel}
 						/>
-						{/* <Text style={{ fontWeight: 'bold', fontSize: RFValue(20, 720), padding: 20 }}>Cân nặng mong muốn</Text>
-						<View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20, paddingBottom: 20 }}>
-							<TextInput
-								style={[styles.inputField, { paddingLeft: 20, paddingRight: 20, borderColor: colors.blue, borderWidth: 1, borderRadius: 10 }]}
-								placeholder='Cân nặng'
-								keyboardType='numeric'
-							/>
-							<View style={{ marginLeft: 10 }}>
-								<Text style={{ fontSize: RFValue(20, 720) }}>kg</Text>
-							</View>
-						</View> */}
 						<Button title={"XÁC NHẬN"}
 							style={styles.btnClick}
 							titleStyle={{ fontWeight: '700', fontSize: 20 }}

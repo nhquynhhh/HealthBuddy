@@ -5,7 +5,6 @@ import { handleGetFavoriteDishes } from '../../services/favorite/get_favorite_di
 import { handleGetRecipeByDishID } from "../../services/recipe/get_recipe_by_dish_id";
 import { AuthContext } from "../../context/AuthContext";
 
-
 export const CardDishComponent = ({id, dish}) => {
 	const { userInfo } = useContext(AuthContext);
     const navigation = useNavigation();
@@ -37,21 +36,21 @@ export const CardDishComponent = ({id, dish}) => {
 const styles = StyleSheet.create({
     dish: {
         alignItems: "center", paddingVertical: 15,
-        width: "47%", borderRadius: 12, backgroundColor: 'white', shadowColor: '#000',
+        width: "46%", borderRadius: 12, backgroundColor: 'white', shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.8, shadowRadius: 4, elevation: 5, position: "relative",
     },
     dish_img: {
         width: "100%", height: 90, objectFit: "contain"
     },
     dish_name: {
-        height: 40, paddingHorizontal: 11, marginTop: 8, fontWeight: "bold", 
-        fontSize: 16,
+        height: 50, paddingHorizontal: 11, marginTop: 8, fontWeight: "bold", 
+        fontSize: 15, textAlign: 'center'
     },
     txt: {
-        color: "gray", fontSize: 12
+        color: "gray", fontSize: 12, textAlignVertical: 'center'
     },
     value: {
-        fontWeight: 'bold', fontSize: 16, color: '#1A8C03'
+        fontWeight: 'bold', fontSize: 16, color: '#008dda'
     },
     add:{
         position:'absolute', right: 10, bottom: 10,
