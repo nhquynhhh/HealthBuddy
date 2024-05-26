@@ -38,7 +38,7 @@ const MainNavigator = () => {
 			<HomeStack.Navigator screenOptions={{ headerTitleAlign: 'center', headerTitleStyle: { fontWeight: 'bold' } }}>
 				<HomeStack.Screen name="Home" component={Home} options={{ headerShown: false }} />
 				<HomeStack.Screen name="Calories" component={Calories} options={{ headerTitle: "Kiểm soát Calories" }} />
-				<HomeStack.Screen name="Water" component={Water} options={{ headerTitle: "Theo dõi uống nước" }} />
+				<HomeStack.Screen name="Water" component={Reminders} options={{ headerTitle: "Theo dõi uống nước" }} />
 				<WorkoutStack.Screen name="Workout" component={WorkoutStackScreens} options={{ headerShown: false }} />
 				<HomeStack.Screen name="BodyIndex" component={BodyIndex} options={{ headerTitle: "Chỉ số cơ thể" }} />
 				<HomeStack.Screen name="Statistics" component={StatisticsStackScreens} options={{ headerShown: false }} />

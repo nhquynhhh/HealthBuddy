@@ -76,7 +76,7 @@ export const SuggestDishComponent = () => {
                             dish = {dish}/>
                     )})
                 : 
-                <Text>Thêm danh sách yêu thích để MenuMate có thể gợi ý món ăn cho bạn</Text>}
+                <Text>Thêm danh sách yêu thích để HealthyBuddy có thể gợi ý món ăn cho bạn</Text>}
             </View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 50, alignItems: "center" }}>
                 {pagination.current_page > 1 && (

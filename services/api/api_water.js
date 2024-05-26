@@ -35,7 +35,6 @@ async function call_get_water() {
 		'Content-Type': 'application/json',
 		'Authorization': `Bearer ${authToken}`
 	};
-	console.log('get_water', url);
 	return fetch(url, {
 		method: 'GET',
 		headers: headers

@@ -22,7 +22,6 @@ export default function Calories() {
 	useEffect(() => {
 		const getCalories = async () => {
 			const response = await handleGetCalories();
-			console.log("response", response);
 			if (response !== 0) {
 				setConsumedCalories(response.total_morning_calo + response.total_noon_calo + response.total_dinner_calo + response.total_snack_calo - response.total_exercise_calo)
 				// setCaloValueBreakfast(response.total_morning_calo.toString());
@@ -68,6 +67,18 @@ export default function Calories() {
 		setSelectDate(selectDate);
 	}
 	// Chưa tối ưu, chỉnh sau nha
+
+	const validateCalories = (calories) => {
+		const caloNumber = parseInt(calories);
+		if (isNaN(caloNumber) || caloNumber < 1 || caloNumber > 2000) {
+			setErrorMessage('Vui lòng nhập số calo hợp lệ từ 1 đến 2000');
+			Toast.error('Vui lòng nhập số calo hợp lệ từ 1 đến 2000');
+			return false;
+		}
+		setErrorMessage('');
+		return true;
+	}
+
 	const defaultCalories = 0;
 	const targetCalories = energy;
 	const [caloValueBreakfast, setCaloValueBreakfast] = useState('');
@@ -75,6 +86,7 @@ export default function Calories() {
 	const [caloValueDinner, setCaloValueDinner] = useState('');
 	const [caloValueSnacks, setCaloValueSnacks] = useState('');
 	const [caloValueWorkout, setCaloValueWorkout] = useState('');
+	const [errorMessage, setErrorMessage] = useState('');
 	const handleCaloBreakfastChange = async () => {
 		setCaloValueBreakfast(caloValueBreakfast);
 		const result = await save_calories_morning(caloValueBreakfast);
@@ -95,34 +107,44 @@ export default function Calories() {
 		setCaloValueWorkout(caloValueWorkout);
 	};
 	const handleCaloBreakfastSubmit = async () => {
-		const result = await save_calories_morning(caloValueBreakfast);
-		const calories = parseInt(caloValueBreakfast);
-		updateConsumedCalories(calories);
-		setCaloValueBreakfast('');
+		if (validateCalories(caloValueBreakfast)) {
+			const result = await save_calories_morning(caloValueBreakfast);
+			const calories = parseInt(caloValueBreakfast);
+			updateConsumedCalories(calories);
+			setCaloValueBreakfast('');
+		}
 	};
-	const handleCaloLunchSubmit = () => {
-		const result = save_calories_lunch(caloValueLunch);
-		const calories = parseInt(caloValueLunch);
-		updateConsumedCalories(calories);
-		setCaloValueLunch('');
+	const handleCaloLunchSubmit = async () => {
+		if (validateCalories(caloValueLunch)) {
+			const result = await save_calories_lunch(caloValueLunch);
+			const calories = parseInt(caloValueLunch);
+			updateConsumedCalories(calories);
+			setCaloValueLunch('');
+		}
 	};
-	const handleCaloDinnerSubmit = () => {
-		const result = save_calories_dinner(caloValueDinner);
-		const calories = parseInt(caloValueDinner);
-		updateConsumedCalories(calories);
-		setCaloValueDinner('');
+	const handleCaloDinnerSubmit = async () => {
+		if (validateCalories(caloValueDinner)) {
+			const result = await save_calories_dinner(caloValueDinner);
+			const calories = parseInt(caloValueDinner);
+			updateConsumedCalories(calories);
+			setCaloValueDinner('');
+		}
 	};
-	const handleCaloSnacksSubmit = () => {
-		const result = save_calories_snack(caloValueSnacks);
-		const calories = parseInt(caloValueSnacks);
-		updateConsumedCalories(calories);
-		setCaloValueSnacks('');
+	const handleCaloSnacksSubmit = async () => {
+		if (validateCalories(caloValueSnacks)) {
+			const result = await save_calories_snack(caloValueSnacks);
+			const calories = parseInt(caloValueSnacks);
+			updateConsumedCalories(calories);
+			setCaloValueSnacks('');
+		}
 	};
-	const handleCaloWorkoutSubmit = () => {
-		const result = save_calories_exercise(caloValueWorkout);
-		const calories = parseInt(caloValueWorkout);
-		updateWorkoutCalories(calories);
-		setCaloValueWorkout('');
+	const handleCaloWorkoutSubmit = async () => {
+		if (validateCalories(caloValueWorkout)) {
+			const result = await save_calories_exercise(caloValueWorkout);
+			const calories = parseInt(caloValueWorkout);
+			updateWorkoutCalories(calories);
+			setCaloValueWorkout('');
+		}
 	};
 	const updateConsumedCalories = (calories) => {
 		const newConsumedCalories = consumedCalories + calories;

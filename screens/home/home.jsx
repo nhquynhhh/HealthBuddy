@@ -203,29 +203,27 @@ export default function Home() {
 					<Text style={{ textAlign: 'right', marginTop: 15, fontStyle: 'italic', color: colors.darkGray }}>Chi tiết {'\u25BA'}</Text>
 				</TouchableOpacity>
 			</View>
-			{/* Favourite dish */}
-			<View style={{ padding: 20, borderWidth: 1, width: windowWidth * 0.9, alignSelf: 'center', borderRadius: 10, borderColor: colors.gray, marginVertical: 20 }}>
-				<Text style={[styles.headerBox, { marginBottom: 20 }]}>Món ăn yêu thích</Text>
-				<FlatGrid
-					scrollEnabled={false}
-					contentContainerStyle={{ justifyContent: 'space-around' }}
-					itemDimension={100}
-					data={favDish}
-					style={styles.gridView}
-					spacing={5}
-					maxItemsPerRow={2}
-					renderItem={({ item }) => (
-						<TouchableOpacity style={[styles.dishContainer, { alignItems: 'center' }]}>
-							<Image source={item.image} style={styles.dishImage} />
-							<Text style={styles.dishName}>{item.name}</Text>
-						</TouchableOpacity>
-					)}
-				/>
-				<TouchableOpacity onPress={() => { navigation.navigate('FavouriteFood') }}>
-					<Text style={{ textAlign: 'right', fontStyle: 'italic', color: colors.darkGray }}>Chi tiết {'\u25BA'}</Text>
-				</TouchableOpacity>
-			</View>
-			<SuggestDishComponent/>
+			 {/* SuggestDishComponent */}
+			 {isPremium ? (
+            <SuggestDishComponent />
+        ) : (
+            <TouchableOpacity
+                onPress={() => Alert.alert('Thông báo', 'Đăng ký để mở khóa tính năng Gợi ý món ăn', [{ text: 'OK' }])}
+                style={{
+                    padding: 20,
+                    borderWidth: 1,
+                    width: windowWidth * 0.9,
+                    alignSelf: 'center',
+                    borderRadius: 10,
+                    borderColor: colors.gray,
+                    marginVertical: 20
+                }}
+            >
+                <Text style={[styles.headerBox, { marginBottom: 20 }]}>Gợi ý món ăn</Text>
+		<Text style={{ textAlign: 'center', color: 'red', fontWeight: 'bold', marginTop: 0.5 }}>CHỈ ÁP DỤNG CHO THÀNH VIÊN PREMIUM </Text>
+        <Text style={{ fontStyle: 'italic', textAlign: 'center', color: colors.darkGray,marginTop: 10 }}>Đăng ký để mở khóa tính năng Gợi ý món ăn</Text>
+            </TouchableOpacity>
+        )}
 		</ScrollView>
 
 	)

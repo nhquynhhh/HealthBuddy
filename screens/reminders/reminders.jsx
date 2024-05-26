@@ -1,92 +1,58 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Text, View, Button, TextInput, Platform, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, View, Button, TextInput, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
-    shouldShowAlert: true,
+    shouldShowAlert: false,
     shouldPlaySound: false,
     shouldSetBadge: false,
   }),
 });
 
 export default function App() {
-  const [notification, setNotification] = useState(null);
-  const [alarmHour, setAlarmHour] = useState('');
-  const [alarmMinute, setAlarmMinute] = useState('');
-  const notificationListener = useRef();
+  const [hour, setHour] = useState('');
+  const [minute, setMinute] = useState('');
+  const [alarms, setAlarms] = useState([]);
 
   useEffect(() => {
-    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-      setNotification(notification);
-    });
-
-    // Lắng nghe sự kiện thông báo được bấm để xóa thông báo đó
-    Notifications.addNotificationResponseReceivedListener(response => {
-      console.log(response.notification.request.content.title);
-    });
-
-    loadAlarmFromStorage();
-
-    return () => {
-      Notifications.removeNotificationSubscription(notificationListener.current);
-    };
+    loadAlarmsFromStorage();
   }, []);
 
-  useEffect(() => {
-    // Đảm bảo rằng nếu có thông báo chưa được xem khi khởi động, nó vẫn được hiển thị
-    const backgroundSubscription = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log(response.notification.request.content.title);
-    });
-
-    return () => backgroundSubscription.remove();
-  }, []);
-
-  const loadAlarmFromStorage = async () => {
+  const loadAlarmsFromStorage = async () => {
     try {
-      const storedAlarmHour = await AsyncStorage.getItem('alarmHour');
-      const storedAlarmMinute = await AsyncStorage.getItem('alarmMinute');
-      if (storedAlarmHour && storedAlarmMinute) {
-        setAlarmHour(storedAlarmHour);
-        setAlarmMinute(storedAlarmMinute);
+      const storedAlarms = await AsyncStorage.getItem('alarms');
+      if (storedAlarms) {
+        setAlarms(JSON.parse(storedAlarms));
       }
     } catch (error) {
-      console.error("Failed to load alarm from AsyncStorage:", error);
+      console.error("Failed to load alarms from AsyncStorage:", error);
     }
   };
 
-  const saveAlarmToStorage = async () => {
+  const saveAlarmsToStorage = async () => {
     try {
-      await AsyncStorage.setItem('alarmHour', alarmHour);
-      await AsyncStorage.setItem('alarmMinute', alarmMinute);
+      await AsyncStorage.setItem('alarms', JSON.stringify(alarms));
+      console.log("Alarms saved to AsyncStorage:", alarms);
     } catch (error) {
-      console.error("Failed to save alarm to AsyncStorage:", error);
+      console.error("Failed to save alarms to AsyncStorage:", error);
     }
   };
 
-  const clearAlarmFromStorage = async () => {
+  const clearAlarmsFromStorage = async () => {
     try {
-      await AsyncStorage.removeItem('alarmHour');
-      await AsyncStorage.removeItem('alarmMinute');
-      setAlarmHour('');
-      setAlarmMinute('');
-      Alert.alert('Alarm Cleared', 'Alarm has been cleared.');
+      await AsyncStorage.removeItem('alarms');
+      setAlarms([]);
+      Alert.alert('Alarms Cleared', 'All alarms have been cleared.');
     } catch (error) {
-      console.error("Failed to clear alarm from AsyncStorage:", error);
+      console.error("Failed to clear alarms from AsyncStorage:", error);
     }
   };
 
-  const scheduleAlarm = async () => {
-    if (!alarmHour || !alarmMinute) {
-      Alert.alert('Missing Information', 'Please enter both hour and minute.');
-      return;
-    }
-
-    saveAlarmToStorage();
-
+  const scheduleAlarm = async (hour, minute) => {
     const now = new Date();
-    const alarmTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(alarmHour), parseInt(alarmMinute), 0, 0);
+    const alarmTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(hour), parseInt(minute), 0, 0);
 
     if (alarmTime < now) {
       alarmTime.setDate(alarmTime.getDate() + 1);
@@ -96,15 +62,37 @@ export default function App() {
       await Notifications.scheduleNotificationAsync({
         content: {
           title: "Alarm",
-          body: "Tới giờ! Ghi chú calories thoi!",
+          body: "It's time to do something!",
         },
         trigger: { date: alarmTime },
       });
-      Alert.alert('Alarm Set', `Alarm set for ${alarmHour}:${alarmMinute}.`);
+      Alert.alert('Alarm Set', `Alarm set for ${hour}:${minute}.`);
     } catch (error) {
       console.error("Failed to schedule alarm:", error);
       Alert.alert('Error', 'Failed to schedule alarm.');
     }
+  };
+
+  const addAlarm = () => {
+    if (!hour || !minute) {
+      Alert.alert('Missing Information', 'Please enter both hour and minute.');
+      return;
+    }
+  
+    const newAlarm = { hour, minute };
+    const newAlarms = [...alarms, newAlarm];
+    setAlarms(newAlarms);
+    saveAlarmsToStorage().then(() => {
+      scheduleAlarm(newAlarm.hour, newAlarm.minute);
+      setHour('');
+      setMinute('');
+    });
+  };
+  
+  const removeAlarm = async (index) => {
+    const newAlarms = alarms.filter((alarm, i) => i !== index);
+    setAlarms(newAlarms);
+    saveAlarmsToStorage();
   };
 
   return (
@@ -114,70 +102,40 @@ export default function App() {
         alignItems: 'center',
         justifyContent: 'space-around',
       }}>
-      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Title: {notification && notification.request.content.title} </Text>
-        <Text>Body: {notification && notification.request.content.body}</Text>
-      </View>
       <View>
-        <Text>{alarmHour && alarmMinute ? `Alarm set for ${alarmHour}:${alarmMinute}` : "No alarm set"}</Text>
+        <Text>{alarms.length > 0 ? "Alarms:" : "No alarms set"}</Text>
+        {alarms.map((alarm, index) => (
+          <View key={index} style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <Text>{`${alarm.hour}:${alarm.minute}`}</Text>
+            <Button
+              title="Remove"
+              onPress={() => removeAlarm(index)}
+            />
+          </View>
+        ))}
         <TextInput
           placeholder="Hour"
           keyboardType="numeric"
           style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 10, textAlign: 'center' }}
-          value={alarmHour}
-          onChangeText={text => setAlarmHour(text)}
+          value={hour}
+          onChangeText={text => setHour(text)}
         />
         <TextInput
           placeholder="Minute"
           keyboardType="numeric"
           style={{ height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 10, textAlign: 'center' }}
-          value={alarmMinute}
-          onChangeText={text => setAlarmMinute(text)}
+          value={minute}
+          onChangeText={text => setMinute(text)}
         />
         <Button
-          title="Set Alarm"
-          onPress={scheduleAlarm}
+          title="Add Alarm"
+          onPress={addAlarm}
         />
         <Button
-          title="Clear Alarm"
-          onPress={clearAlarmFromStorage}
+          title="Clear Alarms"
+          onPress={clearAlarmsFromStorage}
         />
       </View>
     </View>
   );
 }
-
-// Đăng ký headless task
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
-  }),
-});
-
-// Xử lý headless task
-Notifications.registerTaskAsync('showAlarmNotification', async ({ notificationId, payload }) => {
-  const now = new Date();
-  const { hour, minute } = payload;
-
-  const alarmTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseInt(hour), parseInt(minute), 0, 0);
-
-  if (alarmTime < now) {
-    alarmTime.setDate(alarmTime.getDate() + 1);
-  }
-
-  try {
-    await Notifications.scheduleNotificationAsync({
-      content: {
-        title: "Alarm",
-        body: "Wake up! It's time!",
-      },
-      trigger: { date: alarmTime },
-    });
-  } catch (error) {
-    console.error("Failed to schedule alarm:", error);
-  }
-
-  return Promise.resolve();
-});
