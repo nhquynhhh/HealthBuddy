@@ -1,4 +1,4 @@
-import { otp_required, authenticated_account, otp_reset_password } from "./api_list";
+import { otp_required, authenticated_account, otp_reset_password, required_otp_again } from "./api_list";
 
 function CallOTPAPI(props) {
 	const { email, reset } = props;
@@ -56,4 +56,16 @@ function callAuthenOTPPass(props) {
 	});
 }
 
-export { CallOTPAPI, callAuthenAccAPI, callAuthenOTPPass };
+function callOTPAgain(token) {
+	const url = required_otp_again.url;
+	const headers = {
+		'Content-Type': 'application/json',
+		'Authorization': `Bearer ${token}`
+	};
+	const method = required_otp_again.method;
+	return fetch(url, {
+		method: method,
+		headers: headers,
+	});
+}
+export { CallOTPAPI, callAuthenAccAPI, callAuthenOTPPass, callOTPAgain };
