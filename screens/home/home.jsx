@@ -22,7 +22,7 @@ export default function Home() {
 	const isFocused = useIsFocused();
 	const [idFavDishes, setIdFavDishes] = useState([]);
 	const favDishList = [];
-	const [favDish, setFavDish] = React.useState([]);
+	const [favDish, setFavDish] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [updatedFavDish, setUpdatedFavDish] = useState([]);
 	const [isPremium, setIsPremium] = useState(false);
@@ -204,7 +204,7 @@ export default function Home() {
 				</TouchableOpacity>
 			</View>
 			{/* Favourite dish */}
-			<View style={{ padding: 20, borderWidth: 1, width: windowWidth * 0.9, alignSelf: 'center', borderRadius: 10, borderColor: colors.gray, marginVertical: 20 }}>
+			{/* <View style={{ padding: 20, borderWidth: 1, width: windowWidth * 0.9, alignSelf: 'center', borderRadius: 10, borderColor: colors.gray, marginVertical: 20 }}>
 				<Text style={[styles.headerBox, { marginBottom: 20 }]}>Món ăn yêu thích</Text>
 				<FlatGrid
 					scrollEnabled={false}
@@ -224,7 +224,7 @@ export default function Home() {
 				<TouchableOpacity onPress={() => { navigation.navigate('FavouriteFood') }}>
 					<Text style={{ textAlign: 'right', fontStyle: 'italic', color: colors.darkGray }}>Chi tiết {'\u25BA'}</Text>
 				</TouchableOpacity>
-			</View>
+			</View> */}
 			<SuggestDishComponent/>
 		</ScrollView>
 
