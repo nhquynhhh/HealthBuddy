@@ -8,7 +8,7 @@ import { Modal } from "react-native-paper";
 import Clock from "../clock/clock";
 import { getReminderTime, removeReminderTime } from "../../asyncStorage/auth";
 import { set } from "date-fns";
-
+// import { Clock } from "../clock/ClockComponent";
 function BodyIndex({ user }) {
 	const { userInfo, account } = useContext(AuthContext);
 	user = {
@@ -49,6 +49,7 @@ function BodyIndex({ user }) {
 			Evaluate = 'Thông số chưa chính xác';
 	}
 	const navigation = useNavigation();
+
 	const onPressHandler = (title) => {
 		navigation.navigate(title);
 	}
