@@ -8,7 +8,6 @@ import { handleGetFavoriteDishes } from '../../services/favorite/get_favorite_di
 const FoodList = ({ FoodList, Dish }) => {
 	const navigation = useNavigation();
 	const { userInfo } = useContext(AuthContext);
-	// const isFocused = useIsFocused();
 
 
 	const onPressHandler = async () => {
@@ -17,14 +16,6 @@ const FoodList = ({ FoodList, Dish }) => {
 		const response = await handleGetFavoriteDishes(userInfo.id);
 		navigation.navigate("FoodDetails", { data: FoodList, recipe: recipe, favoriteDishes: response });
 	}
-
-
-	// useEffect(() => {
-	// 	if (isFocused) {
-	// 		handleGetFavoriteDishes(userInfo.id);
-	// 	}
-
-	// }, [isFocused]);
 
 	return (
 		<TouchableOpacity onPress={onPressHandler} key={FoodList.id} style={styles.ContainerItem}>
@@ -56,8 +47,6 @@ const FoodList = ({ FoodList, Dish }) => {
 	);
 }
 
-
-// CSS
 
 const styles = StyleSheet.create({
 	ContainerItem: {

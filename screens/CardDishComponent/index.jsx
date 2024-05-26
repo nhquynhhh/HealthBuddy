@@ -1,13 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext } from "react";
 import { View, Text, Image, StyleSheet, Button, TouchableOpacity} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { handleGetRecipeByDishID } from "../../services/recipe/get_recipe_by_dish_id";
+import { AuthContext } from "../../context/AuthContext";
+import { handleGetFavoriteDishes } from '../../services/favorite/get_favorite_dishes';
+
 
 export const CardDishComponent = ({id, dish}) => {
 
     const navigation = useNavigation();
+    const { userInfo } = useContext(AuthContext);
     const data = { dish };
+    const onPressHandler = async () => {
+		if (!dish) return;
+		const recipe = await handleGetRecipeByDishID(dish.id);
+		const response = await handleGetFavoriteDishes(userInfo.id);
+		navigation.navigate("FoodDetails", { data: dish, recipe: recipe, favoriteDishes: response });
+	}
+
     return (
-        <TouchableOpacity style={styles.dish} onPress={() => navigation.push('DetailDish', {data})}>
+        <TouchableOpacity style={styles.dish} onPress={onPressHandler}>
             <Image style={styles.dish_img} source={require('../../assets/restaurant.png')}/>
             <View>
                 <Text style={styles.dish_name}>{dish.name}</Text>
