@@ -5,7 +5,6 @@ import { colors } from '../utils/colors'
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
-
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from '../screens/home/home';
 import Statistics from '../screens/statistics/statistics';
@@ -14,8 +13,12 @@ import Notifications from '../screens/notifications/notifications';
 import Personal from '../screens/personal/personal';
 import Calories from '../screens/calories/calories';
 import Water from '../screens/water/water';
+import WorkoutDetail1 from '../screens/workout/workout_detail1';
+import WorkoutDetail2 from '../screens/workout/workout_detail2';
+import WorkoutDetail3 from '../screens/workout/workout_detail3';
+import WorkoutDetail4 from '../screens/workout/workout_detail4';
+import WorkoutDetail5 from '../screens/workout/workout_detail5';
 import Workout from '../screens/workout/workout';
-import WorkoutDetail from '../screens/workout/workout_detail';
 import BodyIndex from '../screens/body_index/body_index';
 import FavouriteFood from '../screens/fav_food/fav_food';
 import MenuSuggestion from '../screens/menu_suggest/menu_suggest';
@@ -26,10 +29,10 @@ import FoodDetails from '../screens/food_details/food_details';
 import Energy from '../screens/energy/energy';
 import Reminders from '../screens/reminders/reminders';
 import React, { useState } from 'react';
+import Payment from '../screens/webview/payment';
 
 const MainNavigator = () => {
 	const HomeStack = createNativeStackNavigator();
-	const [ShowBottomNavigator, setShowBottomNavigator] = useState(false);
 	function HomeStackScreens() {
 		return (
 			<HomeStack.Navigator screenOptions={{ headerTitleAlign: 'center', headerTitleStyle: { fontWeight: 'bold' } }}>
@@ -52,7 +55,6 @@ const MainNavigator = () => {
 			</HomeStack.Navigator>
 		)
 	}
-
 	const NotiStack = createNativeStackNavigator();
 	function NotiStackScreens() {
 		return (
@@ -77,7 +79,11 @@ const MainNavigator = () => {
 		return (
 			<WorkoutStack.Navigator screenOptions={{ headerTitleAlign: 'center', headerTitleStyle: { fontWeight: 'bold' } }}>
 				<WorkoutStack.Screen name="WorkoutStack" component={Workout} options={{ headerTitle: "Vận động cơ thể" }} />
-				<WorkoutStack.Screen name="WorkoutDetail" component={WorkoutDetail} options={{ headerTitle: "Chi tiết bài tập" }} />
+				<WorkoutStack.Screen name="WorkoutDetail1" component={WorkoutDetail1} options={{ headerTitle: "Chi tiết bài tập" }} />
+				<WorkoutStack.Screen name="WorkoutDetail2" component={WorkoutDetail2} options={{ headerTitle: "Chi tiết bài tập" }} />
+				<WorkoutStack.Screen name="WorkoutDetail3" component={WorkoutDetail3} options={{ headerTitle: "Chi tiết bài tập" }} />
+				<WorkoutStack.Screen name="WorkoutDetail4" component={WorkoutDetail4} options={{ headerTitle: "Chi tiết bài tập" }} />
+				<WorkoutStack.Screen name="WorkoutDetail5" component={WorkoutDetail5} options={{ headerTitle: "Chi tiết bài tập" }} />
 			</WorkoutStack.Navigator>
 		)
 	}
@@ -133,7 +139,7 @@ const MainNavigator = () => {
 							)
 						}
 					}} />
-				<Tab.Screen name="ScanTab"
+				{/* <Tab.Screen name="ScanTab"
 					component={Scan}
 					options={{
 						tabBarIcon: ({ focused }) => {
@@ -154,7 +160,7 @@ const MainNavigator = () => {
 								</LinearGradient>
 							)
 						}
-					}} />
+					}} /> */}
 				<Tab.Screen name="NotiTab"
 					component={NotiStackScreens}
 					options={{
@@ -185,9 +191,14 @@ const MainNavigator = () => {
 
 		)
 	}
+	const RootStack = createNativeStackNavigator();
+
 	return (
-		<BottomNavigation />
-	)
-}
+		  <RootStack.Navigator screenOptions={{ headerShown: false }}>
+			<RootStack.Screen name="Main" component={BottomNavigation} />
+			<RootStack.Screen name="Payment" component={Payment} options={{ headerTitle: "MOMO PAYMENt" }} />
+		  </RootStack.Navigator>
+	  )
+	}
 
 export default MainNavigator;

@@ -28,12 +28,14 @@ export const AuthProvider = ({ children }) => {
 	const [favoriteDishes, setFavoriteDishes] = useState([]);
 	const [calories, setCalories] = useState(null);
 	const [water, setWater] = useState(0);
+	const [paymentURL, setPaymentURL] = useState(null);
 
 	useEffect(() => {
 		const checkLogin = async () => {
 			const refresh_token = await getRefreshToken();
-			if (refresh_token) {
-				const isValidToken = await handleLoginWithToken(refresh_token);
+			if (refresh_token !== null) {
+				console.log('refresh_token', refresh_token);
+				const isValidToken = await handleLoginWithToken();
 				if (isValidToken) {
 					const userInfo = await handleGetUserInfo();
 					if (userInfo) {
@@ -43,14 +45,14 @@ export const AuthProvider = ({ children }) => {
 					if (accountInfo) {
 						setAccount(accountInfo);
 					}
-					const dishList = await handleGetDishList();
-					if (dishList) {
-						setDishes(dishList);
-					}
-					const ingredientsList = await handleGetAllIngredients();
-					if (ingredientsList) {
-						setIngredients(ingredientsList);
-					}
+					// const dishList = await handleGetDishList();
+					// if (dishList) {
+					// 	setDishes(dishList);
+					// }
+					// const ingredientsList = await handleGetAllIngredients();
+					// if (ingredientsList) {
+					// 	setIngredients(ingredientsList);
+					// }
 					const favoriteDishes = await handleGetFavoriteDishes(userInfo.id);
 					if (favoriteDishes) {
 						setFavoriteDishes(favoriteDishes);
@@ -102,7 +104,7 @@ export const AuthProvider = ({ children }) => {
 	}
 
 	return (
-		<AuthContext.Provider value={{ accessTokenContext, account, storeAccessToken, removeAccessToken, storeRefreshToken, removeRefreshToken, setAccountContext, refreshTokenContext, isLogged, setIsLogged, userInfo, setUserInfo, setAccount, dishes, setDishes, ingredients, setIngredients, favoriteDishes, setFavoriteDishes, setFavoriteDishesContext, addFavoriteDish, setLoginStatus }}>
+		<AuthContext.Provider value={{ accessTokenContext, account, storeAccessToken, removeAccessToken, storeRefreshToken, removeRefreshToken, setAccountContext, refreshTokenContext, isLogged, setIsLogged, userInfo, setUserInfo, setAccount, dishes, setDishes, ingredients, setIngredients, favoriteDishes, setFavoriteDishes, setFavoriteDishesContext, addFavoriteDish, setLoginStatus, paymentURL }}>
 			{children}
 		</AuthContext.Provider>
 	);

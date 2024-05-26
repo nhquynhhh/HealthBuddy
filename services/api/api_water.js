@@ -1,4 +1,4 @@
-import { save_water, get_water } from "./api_list";
+import { save_water, get_water, get_statistic_water } from "./api_list";
 import { getAccessToken } from "../../asyncStorage/auth";
 
 async function call_save_water(water) {
@@ -36,20 +36,26 @@ async function call_get_water() {
 		'Authorization': `Bearer ${authToken}`
 	};
 	console.log('get_water', url);
-	try {
-		const response = await fetch(url, {
-			method: 'GET',
-			headers: headers
-		});
-		if (!response.ok) {
-			throw new Error('Failed to get water');
-		}
-		return response.json();
-	} catch (error) {
-		throw error;
-	}
+	return fetch(url, {
+		method: 'GET',
+		headers: headers
+	});
+}
+async function getUserStatisticWater(accessToken, days) {
+	const urlWithDays = `${get_statistic_water.url}?days=${days}`;
+	const url = urlWithDays;
+	const headers = {
+		'Content-Type': 'application/json',
+		'Authorization': `Bearer ${accessToken}`
+	};
+	const method = get_statistic_water.method;
+	return fetch(url, {
+		method,
+		headers
+	});
 }
 
 export {
-	call_save_water, call_get_water
+	call_save_water, call_get_water, getUserStatisticWater
 }
+

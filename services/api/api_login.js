@@ -11,6 +11,7 @@ function callLoginAPI(props) {
 	const headers = {
 		'Content-Type': 'application/json'
 	};
+	console.log(url);
 	const method = login_api.method;
 	return fetch(url, {
 		method: method,

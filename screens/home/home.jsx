@@ -1,4 +1,4 @@
-import { ScrollView, Text, View, Image, useWindowDimensions, StyleSheet, TouchableOpacity, FlatList } from 'react-native'
+import { ScrollView, Text, View, Image, useWindowDimensions, StyleSheet, TouchableOpacity, FlatList, Alert, RefreshControl  } from 'react-native'
 import React, { Component, useContext, useEffect, useState, useCallback } from 'react'
 import { SearchBar, Icon, Divider } from 'react-native-elements';
 import { useNavigation, useFocusEffect, useIsFocused } from '@react-navigation/native';
@@ -11,6 +11,8 @@ import { handleGetHomeFavoriteDishes } from '../../services/favorite/get_home_fa
 import { set } from 'date-fns';
 import { handleGetCalories } from '../../services/calories/get_calories'
 import { call_get_water } from '../../services/api/api_water';
+import { SuggestDishComponent } from '../SuggestDishComponent/index';
+import { handleGetUserInfo } from '../../services/info/get_info';
 
 export default function Home() {
 	const windowHeight = useWindowDimensions().height;
@@ -20,12 +22,14 @@ export default function Home() {
 	const isFocused = useIsFocused();
 	const [idFavDishes, setIdFavDishes] = useState([]);
 	const favDishList = [];
-	const [favDish, setFavDish] = React.useState([
-	]);
+	const [favDish, setFavDish] = React.useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [updatedFavDish, setUpdatedFavDish] = useState([]);
+	const [isPremium, setIsPremium] = useState(false);
+	const [refreshing, setRefreshing] = useState(false);
 
 	const getFavoriteDishes = async () => {
+		setFavDish([]);
 		const response = await handleGetHomeFavoriteDishes(userInfo.id);
 		console.log("response", response);
 		if (response.length > 0) {
@@ -51,42 +55,42 @@ export default function Home() {
 		}
 	}
 
+	const getUserInfo = async () => {
+		const response = await handleGetUserInfo();
+		if (response) {
+			setIsPremium(response.has_subscription);
+		}
+	}
 
 	useEffect(() => {
-		console.log(userInfo);
+		getUserInfo();
+		setRefreshing(true);
 		getFavoriteDishes();
 		getCalories();
+		setRefreshing(false);
+
 	}, []);
 
-	useEffect(() => {
-		if (isFocused) {
-			getFavoriteDishes();
-			getCalories();
-		}
-	}, [isFocused]);
-
-	// useFocusEffect(
-	// 	React.useCallback(() => {
-	// 		setIsLoading(true);
-	// 		console.log('Home screen is focused');
-	// 		getFavoriteDishes();
-	// 	}, [])
-	// );
+	const onRefresh = () => {
+		setRefreshing(true);
+		getCalories();
+		getUserInfo();
+		getFavoriteDishes();
+		setRefreshing(false);
+	}
 
 	// useEffect(() => {
-
-	// }, [isLoading]);
-
-	// useEffect(() => {
-	// 	setUpdatedFavDish(favDish); // Cập nhật state mới khi favDish thay đổi
-	// }, [favDish]);
-
+	// 	if (isFocused) {
+	// 		getCalories();
+	// 		getUserInfo();
+	// 	}
+	// }, [isFocused]);
 
 	user = {
-		age: userInfo.age,
-		weight: userInfo.weight,
-		height: userInfo.height,
-		gender: userInfo.gender == 'male' ? 'nam' : 'nữ',
+		age: userInfo?.age,
+		weight: userInfo?.weight,
+		height: userInfo?.height,
+		gender: userInfo?.gender == 'male' ? 'nam' : 'nữ',
 	}
 	const BMI = (user?.weight / ((user?.height * user?.height) / 10000)).toFixed(1);
 	let energy;
@@ -108,8 +112,13 @@ export default function Home() {
 	];
 
 	return (
-		<ScrollView style={{ backgroundColor: colors.white, marginBottom: 60 }} showsVerticalScrollIndicator={false}>
+		<ScrollView style={{ backgroundColor: colors.white, marginBottom: 60 }} showsVerticalScrollIndicator={false}
+			refreshControl={
+				<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+			}
+		>
 			{/* Header */}
+
 			<View style={{ flexDirection: 'row', marginTop: 20, paddingLeft: 20, paddingTop: 20, paddingBottom: 10 }}>
 				<Image source={require('../../assets/img_bare_logo.png')} style={{ width: 50, height: 50 }}></Image>
 				<Text style={{ textAlignVertical: 'center', fontSize: RFValue(16, 720), marginLeft: 15 }}>Xin chào, {"\n"}
@@ -128,9 +137,7 @@ export default function Home() {
 								<TouchableOpacity
 									style={[styles.iconContainer, { width: windowWidth * 0.96 / 4 }]}
 									onPress={() => {
-
 										navigation.navigate(item.tab, item.screen)
-
 									}}
 								>
 									<View style={styles.roundContainer}>
@@ -143,7 +150,13 @@ export default function Home() {
 							return (
 								<TouchableOpacity
 									style={[styles.iconContainer, { width: windowWidth * 0.96 / 4 }]}
-									onPress={() => navigation.navigate(item.screen)}
+									onPress={() => {
+										if (item.screen == 'MenuSuggestion' && !isPremium) {
+											Alert.alert('Thông báo', 'Chức năng này chỉ dành cho tài khoản Premium', [{ text: 'OK' }])
+											return;
+										}
+										navigation.navigate(item.screen)
+									}}
 								>
 									<View style={styles.roundContainer}>
 										<Image source={item.image} style={styles.image} />
@@ -212,6 +225,7 @@ export default function Home() {
 					<Text style={{ textAlign: 'right', fontStyle: 'italic', color: colors.darkGray }}>Chi tiết {'\u25BA'}</Text>
 				</TouchableOpacity>
 			</View>
+			<SuggestDishComponent/>
 		</ScrollView>
 
 	)
