@@ -122,7 +122,7 @@ export default function Home() {
 			<View style={{ flexDirection: 'row', marginTop: 20, paddingLeft: 20, paddingTop: 20, paddingBottom: 10 }}>
 				<Image source={require('../../assets/img_bare_logo.png')} style={{ width: 50, height: 50 }}></Image>
 				<Text style={{ textAlignVertical: 'center', fontSize: RFValue(16, 720), marginLeft: 15 }}>Xin chào, {"\n"}
-					<Text style={{ fontWeight: '800', fontSize: RFValue(18, 720) }}>{userInfo.username}</Text></Text>
+					<Text style={{ fontWeight: '800', fontSize: RFValue(18, 720) }}>{userInfo?.username}</Text></Text>
 			</View>
 			{/* Divider */}
 			<Divider style={{ backgroundColor: colors.gray, height: 0.5 }}></Divider>

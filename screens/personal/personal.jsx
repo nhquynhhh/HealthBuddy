@@ -1,4 +1,4 @@
-import { ScrollView, Text, View, Image, useWindowDimensions, StyleSheet, TouchableOpacity, TextInput, RefreshControl, Alert } from 'react-native'
+import { ScrollView, Text, View, Image, useWindowDimensions, StyleSheet, TouchableOpacity, TextInput, RefreshControl, Alert, ActivityIndicator } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { SearchBar, Icon, Divider, Input, Button } from 'react-native-elements';
 import { useNavigation, useFocusEffect, useIsFocused } from '@react-navigation/native';
@@ -21,7 +21,7 @@ export default function Personal() {
 	const isFocused = useIsFocused();
 	const [expiredDate, setExpiredDate] = useState('');
 	const { removeAccessToken, removeRefreshToken, isLogged, setIsLogged, userInfo, account, setUserInfo, setAccount } = useContext(AuthContext);
-
+	const [isLoading, setIsLoading] = useState(false);
 	const [refresh, setRefresh] = useState(false);
 	const [selectedValue, setSelectedValue] = useState(0);
 
@@ -88,6 +88,7 @@ export default function Personal() {
 	const [targetSelected, setTargetSelected] = useState();
 
 	const loadData = async () => {
+		setIsLoading(true);
 		const response = await handleGetUserInfo();
 		if (response) {
 			setAccountType(response.has_subscription ? "PREMIUM" : "STANDARD");
@@ -112,6 +113,7 @@ export default function Personal() {
 			setTempTarget(targetSelected ? targetSelected.value : 0);
 
 			// setSelectedValue((target.find(item => item.value === response.aim)).value);
+			setIsLoading(false);
 		}
 	}
 

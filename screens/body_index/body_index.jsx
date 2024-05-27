@@ -7,26 +7,36 @@ import { AuthContext } from '../../context/AuthContext';
 import { Modal } from "react-native-paper";
 import Clock from "../clock/clock";
 import { getReminderTime, removeReminderTime } from "../../asyncStorage/auth";
+import { handleGetUserInfo } from '../../services/info/get_info';
 import { set } from "date-fns";
+import { ca } from "date-fns/locale";
 // import { Clock } from "../clock/ClockComponent";
-function BodyIndex({ user }) {
-	const { userInfo, account } = useContext(AuthContext);
-	user = {
-		age: userInfo?.age,
-		weight: userInfo?.weight,
-		height: userInfo?.height,
-		gender: userInfo?.gender == 'male' ? 'nam' : 'nữ',
+
+const calculateEnergy = (height, weight, age, gender) => {
+	weight = Math.round(parseInt(weight));
+	height = parseInt(height);
+	age = parseInt(age);
+	console.log(height, weight, gender);
+	if (gender == "male") {
+		energy = (6.25 * height) + (10 * weight) - (5 * age) + 5;
+	} else {
+		energy = (6.25 * height) + (10 * weight) - (5 * age) - 161;
 	}
+	return energy;
+}
+
+function BodyIndex() {
+
+	const [user, setUser] = useState(null);
+	
 	const [isModalVisible, setIsModalVisible] = useState(false);
 	const [reminderTime, setReminderTime] = useState(null);
 	const [isReminder, setIsReminder] = useState(false);
+	const [energy, setEnergy] = useState(0);
+
 	const BMI = (user?.weight / ((user?.height * user?.height) / 10000)).toFixed(1);
-	let energy;
-	if (user?.gender == "nam") {
-		energy = (6.25 * user?.height) + (10 * user?.weight) - (5 * user?.age) + 5;
-	} else {
-		energy = (6.25 * user?.height) + (10 + user?.weight) - (5 * user?.age) - 161;
-	}
+
+
 	let Evaluate;
 
 	switch (true) {
@@ -59,12 +69,16 @@ function BodyIndex({ user }) {
 			setReminderTime(newReminderTime);
 			setIsReminder(true);
 		}
-
 	};
 
 	useEffect(() => {
 		const fetchData = async () => {
 			const reminderTime = await getReminderTime();
+			const userInfo = await handleGetUserInfo();
+			if (userInfo) {
+				setUser(userInfo);
+				setEnergy(calculateEnergy(userInfo.height, userInfo.weight, userInfo.age, userInfo.gender));
+			}
 			if (reminderTime != null) {
 				setReminderTime(reminderTime);
 				setIsReminder(true);
@@ -74,6 +88,7 @@ function BodyIndex({ user }) {
 			}
 		}
 		fetchData();
+		calculateEnergy();
 	}, [])
 
 	const deleteReminder = async () => {

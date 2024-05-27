@@ -32,7 +32,10 @@ export default function GetData() {
 		if (age === '' || height === '' || weight === '') {
 			Alert.alert('Thông báo', 'Vui lòng nhập đầy đủ thông tin.');
 			return;
-		} else if (age < 0 || height < 0 || weight < 0) {
+		}  else if (isNaN(age) || isNaN(height) || isNaN(weight)) {
+			Alert.alert('Thông báo', 'Tuổi, chiều cao và cân nặng phải là số');
+			return;
+		} else if (age <= 0 || height <= 0 || weight <= 0){
 			Alert.alert('Thông báo', 'Thông tin đã nhập không hợp lệ. Tuổi, chiều cao và cân nặng phải lớn hơn 0');
 			return;
 		} else {
