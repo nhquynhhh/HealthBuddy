@@ -135,14 +135,20 @@ export default function Personal() {
 	}
 
 	const updateData1 = async () => {
+
 		const response = await handleUpdateUserInfo({ age: age, height: height, weight: weight, aim: tempTargetLabel, gender: checked });
 		if (response) {
 			loadData();
 		}
 	}
 
-
 	const updateData2 = async () => {
+		if (age < 18 || height < 100 || weight < 30 || weight > 200 || height < 250) {
+			Alert.alert('Thông báo', 'Thông tin đã nhập không hợp lệ. Tuổi phải lớn hơn 18 , chiều cao phải từ 1m đến 2.5m, cân nặng từ 30kg đến 200kg');
+			loadData();
+			return;
+		}
+
 		const response = await handleUpdateUserInfo({ age: tempAge, height: tempHeight, weight: tempWeight, aim: targetSelected, gender: checked });
 		if (response) {
 			loadData();
