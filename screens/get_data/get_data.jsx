@@ -38,6 +38,9 @@ export default function GetData() {
 		} else if (age <= 0 || height <= 0 || weight <= 0){
 			Alert.alert('Thông báo', 'Thông tin đã nhập không hợp lệ. Tuổi, chiều cao và cân nặng phải lớn hơn 0');
 			return;
+		} else if (age < 18 || height < 100 || weight < 30 || height > 250 || weight > 200) {
+			Alert.alert('Thông báo', 'Thông tin đã nhập không hợp lệ. Tuổi phải lớn hơn 18, chiều cao phải lớn hơn 100 và cân nặng phải từ 30 đến 200 kg');
+			return; 
 		} else {
 			setCurrentPage('page3');
 			setCurrentPageNav('page3Nav');
