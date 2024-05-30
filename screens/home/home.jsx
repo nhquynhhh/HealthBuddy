@@ -14,11 +14,27 @@ import { call_get_water } from '../../services/api/api_water';
 import { SuggestDishComponent } from '../SuggestDishComponent/index';
 import { handleGetUserInfo } from '../../services/info/get_info';
 
+const calculateEnergy = (height, weight, age, gender) => {
+	weight = Math.round(parseInt(weight));
+	height = parseInt(height);
+	age = parseInt(age);
+	console.log(height, weight, gender);
+	if (gender == "male") {
+		energy = (6.25 * height) + (10 * weight) - (5 * age) + 5;
+	} else {
+		energy = (6.25 * height) + (10 * weight) - (5 * age) - 161;
+	}
+	const a = 0;
+	return energy;
+	////// //tesst
+}
+
+
 export default function Home() {
 	const windowHeight = useWindowDimensions().height;
 	const windowWidth = useWindowDimensions().width;
 	const navigation = useNavigation();
-	const { userInfo } = useContext(AuthContext);
+	const { userInfo, setUserInfo } = useContext(AuthContext);
 	const isFocused = useIsFocused();
 	const [idFavDishes, setIdFavDishes] = useState([]);
 	const favDishList = [];
@@ -27,10 +43,16 @@ export default function Home() {
 	const [updatedFavDish, setUpdatedFavDish] = useState([]);
 	const [isPremium, setIsPremium] = useState(false);
 	const [refreshing, setRefreshing] = useState(false);
+	// const [user, setUser] = useState(null);
+	// const [gender, setGender] = useState(null);
+	// const [caloriesNeeded, setCaloriesNeeded] = useState(0);
+	// const [energy, setEnergy] = useState(0);
+	// const [caloriesNeeded, setCaloriesNeeded] = useState(0);
+	// const [user, setUser] = useState(null);
 
 	const getFavoriteDishes = async () => {
 		setFavDish([]);
-		const response = await handleGetHomeFavoriteDishes(userInfo.id);
+		const response = await handleGetHomeFavoriteDishes(user.id);
 		console.log("response", response);
 		if (response.length > 0) {
 			response.map((item) => {
@@ -59,6 +81,13 @@ export default function Home() {
 		const response = await handleGetUserInfo();
 		if (response) {
 			setIsPremium(response.has_subscription);
+			// setEnergy(calculateEnergy(response.height, response.weight, response.age, response.gender));
+			// setCaloriesNeeded((energy - 0).toFixed(0));
+			// setUserInfo(response);
+			// setUser(response);
+			// setGender(response.gender == 'male' ? 'nam' : 'nữ')
+			// setCaloriesNeeded(calculateEnergy(response.height, response.weight, response.age, response.gender) - 0);
+			// setEnergy((calculateEnergy(response.height, response.weight, response.age, response.gender)));
 		}
 	}
 
@@ -119,6 +148,8 @@ export default function Home() {
 		>
 			{/* Header */}
 
+			
+
 			<View style={{ flexDirection: 'row', marginTop: 20, paddingLeft: 20, paddingTop: 20, paddingBottom: 10 }}>
 				<Image source={require('../../assets/img_bare_logo.png')} style={{ width: 50, height: 50 }}></Image>
 				<Text style={{ textAlignVertical: 'center', fontSize: RFValue(16, 720), marginLeft: 15 }}>Xin chào, {"\n"}
@@ -137,6 +168,7 @@ export default function Home() {
 								<TouchableOpacity
 									style={[styles.iconContainer, { width: windowWidth * 0.96 / 4 }]}
 									onPress={() => {
+										
 										navigation.navigate(item.tab, item.screen)
 									}}
 								>
@@ -182,10 +214,10 @@ export default function Home() {
 					borderWidth={0}
 					color={((calories - caloWorkOut) / caloriesNeeded) > 1 ? colors.red : colors.green}
 					style={{ alignSelf: 'center' }} />
-				<View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15 }}>
+				{/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15 }}>
 					<Text style={{ fontSize: RFValue(13, 720) }}>Mục tiêu:</Text>
 					<Text style={{ fontWeight: 'bold' }}>{energy.toFixed(0)} calories</Text>
-				</View>
+				</View> */}
 				<View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15 }}>
 					<Text style={{ fontSize: RFValue(13, 720) }}>Calories đã hấp thụ:</Text>
 					<Text style={{ fontWeight: 'bold' }}>{calories} calories</Text>
@@ -247,7 +279,6 @@ export default function Home() {
 				</TouchableOpacity>
 			</View> */}
 		</ScrollView>
-
 	)
 }
 

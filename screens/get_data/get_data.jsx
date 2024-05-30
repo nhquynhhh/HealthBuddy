@@ -26,7 +26,7 @@ export default function GetData() {
 	const [age, setAge] = useState('');
 	const [height, setHeight] = useState('');
 	const [weight, setWeight] = useState('');
-	const [targetSelected, setTargetSelected] = useState('');
+	const [targetSelected, setTargetSelected] = useState('Giảm cân');
 
 	const handleContinuePage2 = () => {
 		if (age === '' || height === '' || weight === '') {
