@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, useWindowDimensions } from 'react-native'
+import { View, Text, Image, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, useWindowDimensions, ActivityIndicator } from 'react-native'
 import React, { Component, useState, useContext } from 'react'
 import { Icon, Button, Divider, ListItem } from "react-native-elements";
 import { LinearGradient } from 'expo-linear-gradient';
@@ -15,6 +15,7 @@ export default function Premium() {
 	const navigation = useNavigation();
 	const [url, setUrl] = useState('');
 	const { paymentURL, setPaymentURL } = useContext(AuthContext);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const upgradePack = [
 		{ label: '550.000đ / năm', value: "yearly" },
@@ -30,15 +31,18 @@ export default function Premium() {
 	  };
 	
 	const handlePayment = async () => {
+		setIsLoading(true);
 		const response = await handlePayMentURL(upgradePackSelected);
 		console.log(response);
 		if (response !== null) {
 			navigation.navigate('Payment', { url: response });
+			setIsLoading(false);
 		}
 	}
 
 	return (
 		<View style={styles.container}>
+			{isLoading && <ActivityIndicator size="large" color={colors.blue} />}
 			<View style={{ marginLeft: 30 }}>
 				<View style={{ alignItems: 'center', position: 'relative' }}>
 					<LinearGradient

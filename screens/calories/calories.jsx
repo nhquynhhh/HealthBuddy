@@ -11,31 +11,26 @@ import { save_calories_morning, save_calories_lunch, save_calories_dinner, save_
 import { Button } from '@rneui/themed'
 import { AuthContext } from '../../context/AuthContext';
 import { handleGetCalories } from '../../services/calories/get_calories'
+import { handleGetUserInfo } from '../../services/info/get_info';
 
 
 export default function Calories() {
 	const windowHeight = useWindowDimensions().height;
 	const windowWidth = useWindowDimensions().width;
-	const { userInfo } = useContext(AuthContext);
+	// const { userInfo } = useContext(AuthContext);
 	const [consumedCalories, setConsumedCalories] = useState(defaultCalories);
+	const [userInfo, setUserInfo] = useState(null);
 
 	useEffect(() => {
 		const getCalories = async () => {
 			const response = await handleGetCalories();
-			if (response !== 0) {
+			const info = await handleGetUserInfo();
+
+			if (response !== 0 && info !== null) {
 				setConsumedCalories(response.total_morning_calo + response.total_noon_calo + response.total_dinner_calo + response.total_snack_calo - response.total_exercise_calo)
-				// setCaloValueBreakfast(response.total_morning_calo.toString());
-				// setCaloValueLunch(response.total_noon_calo.toString());
-				// setCaloValueDinner(response.total_dinner_calo.toString());
-				// setCaloValueSnacks(response.total_snack_calo.toString());
-				// setCaloValueWorkout(response.total_exercise_calo.toString());
+				setUserInfo(info);
 			} else {
 				setConsumedCalories(0);
-				// setCaloValueBreakfast('');
-				// setCaloValueLunch('');
-				// setCaloValueDinner('');
-				// setCaloValueSnacks('');
-				// setCaloValueWorkout('');
 			}
 		}
 		getCalories();
@@ -43,10 +38,10 @@ export default function Calories() {
 
 
 	user = {
-		age: userInfo.age,
-		weight: userInfo.weight,
-		height: userInfo.height,
-		gender: userInfo.gender == 'male' ? 'nam' : 'nữ',
+		age: userInfo?.age,
+		weight: userInfo?.weight,
+		height: userInfo?.height,
+		gender: userInfo?.gender == 'male' ? 'nam' : 'nữ',
 	}
 
 	let energy;
