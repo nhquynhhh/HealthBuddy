@@ -53,7 +53,6 @@ export default function Home() {
 	});
 
 	const calculateEnergy = (user) => {
-		console.log("user", user.gender);
 		if (user.gender == "male") {
 			energy = ((6.25 * user?.height) + (10 * user?.weight) - (5 * user?.age) + 5).toFixed(0);
 		} else {
@@ -65,7 +64,6 @@ export default function Home() {
 	const getFavoriteDishes = async () => {
 		setFavDish([]);
 		const response = await handleGetHomeFavoriteDishes(user.id);
-		console.log("response", response);
 		if (response.length > 0) {
 			response.map((item) => {
 				favDishList.push({ name: item, image: { uri: 'https://www.marionskitchen.com/wp-content/uploads/2022/12/Filipino-Spaghetti-04.jpg' }, isFavorite: true });
@@ -121,6 +119,8 @@ export default function Home() {
 		getUserInfo();
 		getFavoriteDishes();
 		setRefreshing(false);
+		console.log("refreshing", user);
+		setUserInfo(user);
 	}
 
 	const categories = [
@@ -140,10 +140,6 @@ export default function Home() {
 				<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 			}
 		>
-
-			{/* Header */}
-
-			
 
 			<View style={{ flexDirection: 'row', marginTop: 20, paddingLeft: 20, paddingTop: 20, paddingBottom: 10 }}>
 				<Image source={require('../../assets/img_bare_logo.png')} style={{ width: 50, height: 50 }}></Image>
@@ -209,6 +205,8 @@ export default function Home() {
 					borderWidth={0}
 					color={((calories - caloWorkOut) / targetCalories) > 1 ? colors.red : colors.green}
 					style={{ alignSelf: 'center' }} />
+				<View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15 }}>
+					<Text style={{ fontSize: RFValue(13, 720) }}>Mục tiêu:</Text>
 					<Text style={{ fontWeight: 'bold' }}>{targetCalories} calories</Text>
 				</View>
 				<View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15 }}>
@@ -228,7 +226,6 @@ export default function Home() {
 					<Text style={{ textAlign: 'right', marginTop: 15, fontStyle: 'italic', color: colors.darkGray }}>Chi tiết {'\u25BA'}</Text>
 				</TouchableOpacity>
 			</View>
-			 {/* SuggestDishComponent */}
 			 {isPremium ? (
             <SuggestDishComponent />
         ) : (

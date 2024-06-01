@@ -24,33 +24,9 @@ export const AppRouters = () => {
 	// 	return () => clearTimeout(timeout);
 	// }, []);
 
-	useEffect(() => {
-
-		if (isLogged) {
-			Toast.success('Đăng nhập thành công', {
-				position: 'top',
-				duration: 5000,
-				hideOnPress: true,
-				visibilityTime: 4000,
-				autoHide: true,
-				topOffset: 30,
-				bottomOffset: 40,
-				onShow: () => console.log('show'),
-				onHide: () => console.log('hide')
-			})	
-		}
-	}, [isLogged]);
 	return (
 		<>
 			<LoadingModal visible={isLoggedWithToken} />
-			<ToastManager
-				width={'100%'}
-				height={100}
-				position={'top'}
-				positionValue={0}
-				duration={7000}
-				textStyle={{ fontSize: 15, lineHeight: 25, paddingRight: 5 }}
-				style={{ paddingRight: 5 }} />
 			{
 				isLogged ? <MainNavigator /> : <AuthNavigator />
 			}

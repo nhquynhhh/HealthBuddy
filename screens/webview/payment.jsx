@@ -28,12 +28,14 @@ export default function Payment({ route }) {
 			// lấy các params trong url
 			const resultCodeMatch = currentUrl.match(/resultCode=([^&]+)/);
 			const responseCodeMatch = currentUrl.match(/vnp_ResponseCode=([^&]+)/);
+			console.log('Result code:', responseCodeMatch);
 			const resultCode = resultCodeMatch ? resultCodeMatch[1] : null;
 			const respnseCode = responseCodeMatch ? responseCodeMatch[1] : null;
 			if (respnseCode === '00') {
 				const accountInfo = await handleGetAccountInfo();
 				if (accountInfo) {
 					setAccount(accountInfo);
+					console.log(accountInfo)
 				}
 				const userInfo = await handleGetUserInfo();
 				if (userInfo) {

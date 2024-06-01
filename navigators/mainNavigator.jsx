@@ -3,7 +3,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Icon } from 'react-native-elements';
 import { colors } from '../utils/colors'
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, Alert, TouchableOpacity } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from '../screens/home/home';
@@ -28,10 +28,25 @@ import BMI from '../screens/bmi/bmi';
 import FoodDetails from '../screens/food_details/food_details';
 import Energy from '../screens/energy/energy';
 import Reminders from '../screens/reminders/reminders';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Payment from '../screens/webview/payment';
+import { handleGetUserInfo } from '../services/info/get_info';
 
 const MainNavigator = () => {
+
+    const navigation = useNavigation();
+
+	const onPressScanTab = async () => {
+
+		const info = await handleGetUserInfo();
+
+		if (info.has_subscription === true) {
+			navigation.navigate("ScanTab", "Scan");
+		} else {
+			Alert.alert('Thông báo', 'Chức năng này chỉ dành cho tài khoản Premium', [{ text: 'OK' }])
+		}
+	}
+
 	const HomeStack = createNativeStackNavigator();
 	function HomeStackScreens() {
 		return (
@@ -144,6 +159,7 @@ const MainNavigator = () => {
 					options={{
 						tabBarIcon: ({ focused }) => {
 							return (
+								<TouchableOpacity onPress={onPressScanTab}>
 								<LinearGradient
 									colors={[colors.blue, colors.lightBlue]}
 									start={{ x: 0, y: 0 }}
@@ -157,9 +173,14 @@ const MainNavigator = () => {
 										top: -30
 									}}>
 									<Icon name="scan-helper" type="material-community" size={35} color="white" />
+									
 								</LinearGradient>
+								</TouchableOpacity>
 							)
-						}
+						},
+						// tabBarButton: () => {
+							
+						// }
 					}} />
 				<Tab.Screen name="NotiTab"
 					component={WorkoutStackScreens}
