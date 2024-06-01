@@ -21,7 +21,7 @@ export default function Personal() {
 	const isFocused = useIsFocused();
 	const [expiredDate, setExpiredDate] = useState('');
 	const { removeAccessToken, removeRefreshToken, isLogged, setIsLogged, userInfo, account, setUserInfo, setAccount } = useContext(AuthContext);
-	const [isLoading, setIsLoading] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 	const [refresh, setRefresh] = useState(false);
 	const [selectedValue, setSelectedValue] = useState(0);
 
@@ -88,7 +88,6 @@ export default function Personal() {
 	const [targetSelected, setTargetSelected] = useState();
 
 	const loadData = async () => {
-		setIsLoading(true);
 		const response = await handleGetUserInfo();
 		if (response) {
 			setAccountType(response.has_subscription ? "PREMIUM" : "STANDARD");
@@ -113,7 +112,6 @@ export default function Personal() {
 			setTempTarget(targetSelected ? targetSelected.value : 0);
 
 			// setSelectedValue((target.find(item => item.value === response.aim)).value);
-			setIsLoading(false);
 		}
 	}
 
@@ -143,7 +141,7 @@ export default function Personal() {
 	}
 
 	const updateData2 = async () => {
-		if (age < 18 || height < 100 || weight < 30 || weight > 200 || height < 250) {
+		if (age < 18 || height < 100 || weight < 30 || weight > 200 || height > 250) {
 			Alert.alert('Thông báo', 'Thông tin đã nhập không hợp lệ. Tuổi phải lớn hơn 18 , chiều cao phải từ 1m đến 2.5m, cân nặng từ 30kg đến 200kg');
 			loadData();
 			return;
@@ -156,29 +154,20 @@ export default function Personal() {
 	}
 
 	useEffect(() => {
+		setIsLoading(true);
 		loadData();
+		setIsLoading(false);
 	}, [])
-
-	// useEffect(() => {
-	// 	if (isFocused) {
-	// 		console.log(account.has_subscription ? "PREMIUM" : "STANDARD");
-	// 		console.log(userInfo);
-	// 	}
-	// }, [isFocused]);
 
 	const onRefresh = () => {
 		setRefresh(true);
 		loadData();
 		setRefresh(false);
-
 	}
-
-	// useEffect(() => {
-	// 	setTargetSelected(targetLabel);
-	// }, [targetSelected])
 
 	return (
 		<SafeAreaView style={{ backgroundColor: colors.white, marginBottom: 60 }}>
+			{isLoading && <ActivityIndicator size="large" color={colors.blue} style={{ marginTop: 20 }}></ActivityIndicator>}
 			<ScrollView refreshControl={
 				<RefreshControl refreshing={refresh} onRefresh={onRefresh} />
 			} >

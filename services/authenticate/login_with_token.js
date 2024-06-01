@@ -2,10 +2,9 @@ import { callLoginWithTokenAPI } from "../api/api_login";
 import { useContext } from "react";
 import { getAccessToken, getRefreshToken, setAccessToken } from "../../asyncStorage/auth";
 
-const handleLoginWithToken = async () => {
-	const refreshToken = await getRefreshToken();
+const handleLoginWithToken = async (refresh_token) => {
 	try {
-		const response = await callLoginWithTokenAPI({ token: refreshToken });
+		const response = await callLoginWithTokenAPI({ token: refresh_token });
 		const data = await response.json();
 		const { access_token, messagse, code } = data;
 		console.log('data', data);

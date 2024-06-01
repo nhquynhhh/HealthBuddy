@@ -11,55 +11,64 @@ import { save_calories_morning, save_calories_lunch, save_calories_dinner, save_
 import { Button } from '@rneui/themed'
 import { AuthContext } from '../../context/AuthContext';
 import { handleGetCalories } from '../../services/calories/get_calories'
+import { handleGetUserInfo } from '../../services/info/get_info';
 
 
 export default function Calories() {
 	const windowHeight = useWindowDimensions().height;
 	const windowWidth = useWindowDimensions().width;
-	const { userInfo } = useContext(AuthContext);
-	const [consumedCalories, setConsumedCalories] = useState(defaultCalories);
+	// const { userInfo } = useContext(AuthContext);
+	const [consumedCalories, setConsumedCalories] = useState(0);
+	const [targetCalories, setTargetCalories] = useState(2000);
+	const [userInfo, setUserInfo] = useState({
+		age: 18,
+		weight: 65,
+		height: 165,
+		gender: 'male',
+	});
+
+
+	const calculateEnergy = (user) => {
+		if (user.gender == "male") {
+			energy = ((6.25 * user?.height) + (10 * user?.weight) - (5 * user?.age) + 5).toFixed(0);
+		} else {
+			energy = ((6.25 * user?.height) + (10 * user?.weight) - (5 * user?.age) - 161).toFixed(0);
+		}
+		return energy;
+	}
+
+	const getUserInfo = async () => {
+		const response = await handleGetUserInfo();
+		if (response) {
+			setUserInfo(response);		
+			setTargetCalories(calculateEnergy(response));
+		}
+	}
+	const getCalories = async () => {
+		const response = await handleGetCalories();
+		if (response !== 0) {
+			setConsumedCalories(response.total_morning_calo + response.total_noon_calo + response.total_dinner_calo + response.total_snack_calo - response.total_exercise_calo)
+		} else {
+			setConsumedCalories(0);
+		}
+	}
 
 	useEffect(() => {
-		const getCalories = async () => {
-			const response = await handleGetCalories();
-			if (response !== 0) {
-				setConsumedCalories(response.total_morning_calo + response.total_noon_calo + response.total_dinner_calo + response.total_snack_calo - response.total_exercise_calo)
-				// setCaloValueBreakfast(response.total_morning_calo.toString());
-				// setCaloValueLunch(response.total_noon_calo.toString());
-				// setCaloValueDinner(response.total_dinner_calo.toString());
-				// setCaloValueSnacks(response.total_snack_calo.toString());
-				// setCaloValueWorkout(response.total_exercise_calo.toString());
-			} else {
-				setConsumedCalories(0);
-				// setCaloValueBreakfast('');
-				// setCaloValueLunch('');
-				// setCaloValueDinner('');
-				// setCaloValueSnacks('');
-				// setCaloValueWorkout('');
-			}
-		}
 		getCalories();
+		getUserInfo();
 	}, []);
 
 
-	user = {
-		age: userInfo.age,
-		weight: userInfo.weight,
-		height: userInfo.height,
-		gender: userInfo.gender == 'male' ? 'nam' : 'nữ',
-	}
-
-	let energy;
-	if (user?.gender == "nam") {
-		energy = ((6.25 * user?.height) + (10 * user?.weight) - (5 * user?.age) + 5).toFixed(0);
-	} else {
-		energy = ((6.25 * user?.height) + (10 + user?.weight) - (5 * user?.age) - 161).toFixed(0);
-	}
+	// let energy;
+	// if (user?.gender == "nam") {
+	// 	energy = ((6.25 * user?.height) + (10 * user?.weight) - (5 * user?.age) + 5).toFixed(0);
+	// } else {
+	// 	energy = ((6.25 * user?.height) + (10 + user?.weight) - (5 * user?.age) - 161).toFixed(0);
+	// }
 
 	const today = new Date();
-	const defaultDate = format(today.setDate(today.getDate()), 'yyyy/MM/dd');
 	const [openCalendar, setOpenCalendar] = useState(false);
-	const [selectDate, setSelectDate] = useState(defaultDate);
+	const [selectDate, setSelectDate] = useState(format(today.setDate(today.getDate()), 'dd/MM/yyyy'));
 	function handleCalendar() {
 		setOpenCalendar(!openCalendar);
 	}
@@ -79,8 +88,6 @@ export default function Calories() {
 		return true;
 	}
 
-	const defaultCalories = 0;
-	const targetCalories = energy;
 	const [caloValueBreakfast, setCaloValueBreakfast] = useState('');
 	const [caloValueLunch, setCaloValueLunch] = useState('');
 	const [caloValueDinner, setCaloValueDinner] = useState('');
@@ -180,13 +187,13 @@ export default function Calories() {
 				textStyle={{ fontSize: 15, lineHeight: 25, paddingRight: 5 }}
 				style={{ paddingRight: 5 }} />
 			<View>
-				<TouchableOpacity style={{ flexDirection: 'row', paddingTop: 20, alignSelf: 'center' }} onPress={handleCalendar}>
+				{/* <TouchableOpacity style={{ flexDirection: 'row', paddingTop: 20, alignSelf: 'center' }} onPress={handleCalendar}>
 					<Icon name='calendar-outline' type='ionicon' color={colors.blue} />
 					<Text style={{ color: colors.blue, textAlignVertical: 'center', paddingHorizontal: 10, fontSize: RFValue(15, 720), fontWeight: 'bold' }}>Chọn ngày</Text>
-				</TouchableOpacity>
-				<Text style={{ alignSelf: 'center', paddingTop: 10, fontSize: RFValue(15, 720), fontWeight: 'bold' }}>{selectDate}</Text>
+				</TouchableOpacity> */}
+				<Text style={{ alignSelf: 'center', paddingTop: 10, fontSize: RFValue(15, 720), fontWeight: 'bold' }}>Ngày {selectDate}</Text>
 				{/* <Button title="Solid" onPress={handleCaloBreakfastChange}/> */}
-				<Modal
+				{/* <Modal
 					animationType='slide'
 					transparent={true}
 					visible={openCalendar}
@@ -203,7 +210,7 @@ export default function Calories() {
 							</TouchableOpacity>
 						</View>
 					</View>
-				</Modal>
+				</Modal> */}
 			</View>
 			<Divider style={{ marginVertical: 20, width: '50%', alignSelf: 'center' }}></Divider>
 			<Text style={{ fontSize: RFValue(16, 720), marginBottom: 20, textAlign: 'center' }}>Mục tiêu của bạn là: <Text style={{ fontWeight: 'bold', color: colors.red }}>{targetCalories} calo</Text></Text>
