@@ -229,8 +229,8 @@ export default function Home() {
                 }}
             >
                 <Text style={[styles.headerBox, { marginBottom: 20 }]}>Gợi ý món ăn</Text>
-		<Text style={{ textAlign: 'center', color: 'red', fontWeight: 'bold', marginTop: 0.5 }}>CHỈ ÁP DỤNG CHO THÀNH VIÊN PREMIUM </Text>
-        <Text style={{ fontStyle: 'italic', textAlign: 'center', color: colors.darkGray,marginTop: 10 }}>Đăng ký để mở khóa tính năng Gợi ý món ăn</Text>
+				<Text style={{ textAlign: 'center', color: colors.red, fontWeight: 'bold', marginTop: 0.5 }}>CHỈ ÁP DỤNG CHO THÀNH VIÊN PREMIUM </Text>
+        		<Text style={{ fontStyle: 'italic', textAlign: 'center', color: colors.darkGray,marginTop: 10 }}>Đăng ký để mở khóa tính năng Gợi ý món ăn</Text>
             </TouchableOpacity>
         )}
 			{/* Favourite dish */}
