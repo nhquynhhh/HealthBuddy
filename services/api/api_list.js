@@ -162,8 +162,13 @@ const recommend_dish = {
 	url: `${BASE_URL}/api/recommend_dish`,
 	method: 'GET'
 }
-const create_payment_url = {
-	url: `${BASE_URL}/api/create_payment_url`,
+const create_payment_url_momo = {
+	url: `${BASE_URL}/api/create_payment_url/momo`,
+	method: 'POST'
+}
+
+const create_payment_url_vnpay = {
+	url: `${BASE_URL}/api/create_payment_url/vnpay`,
 	method: 'POST'
 }
 
@@ -193,5 +198,5 @@ export {
 	get_home_favorite_dishes,
 	get_fav_list,
 	get_calories, add_morning, add_noon, add_dinner, add_snack, add_exercise, save_water, get_water,get_statistic,get_statistic_water,new_genetic_algorithm,get_suggest_menu,
-	create_payment_url, recommend_dish, required_otp_again
+	create_payment_url_momo, recommend_dish, required_otp_again, create_payment_url_vnpay
 };

@@ -43,12 +43,24 @@ export default function Home() {
 	const [updatedFavDish, setUpdatedFavDish] = useState([]);
 	const [isPremium, setIsPremium] = useState(false);
 	const [refreshing, setRefreshing] = useState(false);
-	// const [user, setUser] = useState(null);
-	// const [gender, setGender] = useState(null);
-	// const [caloriesNeeded, setCaloriesNeeded] = useState(0);
-	// const [energy, setEnergy] = useState(0);
-	// const [caloriesNeeded, setCaloriesNeeded] = useState(0);
-	// const [user, setUser] = useState(null);
+	const [targetCalories, setTargetCalories] = useState(1);
+	const [user, setUser] = useState({
+		age: 18,
+		weight: 60,
+		height: 165,
+		gender: 'male',
+		username: 'user',
+	});
+
+	const calculateEnergy = (user) => {
+		console.log("user", user.gender);
+		if (user.gender == "male") {
+			energy = ((6.25 * user?.height) + (10 * user?.weight) - (5 * user?.age) + 5).toFixed(0);
+		} else {
+			energy = ((6.25 * user?.height) + (10 * user?.weight) - (5 * user?.age) - 161).toFixed(0);
+		}
+		return energy;
+	}
 
 	const getFavoriteDishes = async () => {
 		setFavDish([]);
@@ -63,8 +75,8 @@ export default function Home() {
 		}
 	}
 
-	const [calories, setCalories] = useState(null);
-	const [caloWorkOut, setCaloWorkOut] = useState(null);
+	const [calories, setCalories] = useState(0);
+	const [caloWorkOut, setCaloWorkOut] = useState(0);
 
 	const getCalories = async () => {
 		const response = await handleGetCalories();
@@ -81,15 +93,18 @@ export default function Home() {
 		const response = await handleGetUserInfo();
 		if (response) {
 			setIsPremium(response.has_subscription);
-			// setEnergy(calculateEnergy(response.height, response.weight, response.age, response.gender));
-			// setCaloriesNeeded((energy - 0).toFixed(0));
-			// setUserInfo(response);
-			// setUser(response);
-			// setGender(response.gender == 'male' ? 'nam' : 'nữ')
-			// setCaloriesNeeded(calculateEnergy(response.height, response.weight, response.age, response.gender) - 0);
-			// setEnergy((calculateEnergy(response.height, response.weight, response.age, response.gender)));
+			setTargetCalories(calculateEnergy(response));
+			setUser(response);
 		}
 	}
+
+	useEffect(() => {
+		getUserInfo();
+		setRefreshing(true);
+		getFavoriteDishes();
+		getCalories();
+		setRefreshing(false);
+	}, [isFocused]);
 
 	useEffect(() => {
 		getUserInfo();
@@ -108,27 +123,6 @@ export default function Home() {
 		setRefreshing(false);
 	}
 
-	// useEffect(() => {
-	// 	if (isFocused) {
-	// 		getCalories();
-	// 		getUserInfo();
-	// 	}
-	// }, [isFocused]);
-
-	user = {
-		age: userInfo?.age,
-		weight: userInfo?.weight,
-		height: userInfo?.height,
-		gender: userInfo?.gender == 'male' ? 'nam' : 'nữ',
-	}
-	const BMI = (user?.weight / ((user?.height * user?.height) / 10000)).toFixed(1);
-	let energy;
-	if (user?.gender == "nam") {
-		energy = (6.25 * user?.height) + (10 * user?.weight) - (5 * user?.age) + 5;
-	} else {
-		energy = (6.25 * user?.height) + (10 + user?.weight) - (5 * user?.age) - 161;
-	}
-	const caloriesNeeded = (energy - 0).toFixed(0);
 	const categories = [
 		{ image: require('../../assets/img_kcal_icon.png'), label: 'Kiểm soát\ncalories', screen: 'Calories', tab: '' },
 		{ image: require('../../assets/img_water_icon.png'), label: 'Theo dõi\nuống nước', screen: 'Water', tab: '' },
@@ -146,6 +140,7 @@ export default function Home() {
 				<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 			}
 		>
+
 			{/* Header */}
 
 			
@@ -153,7 +148,7 @@ export default function Home() {
 			<View style={{ flexDirection: 'row', marginTop: 20, paddingLeft: 20, paddingTop: 20, paddingBottom: 10 }}>
 				<Image source={require('../../assets/img_bare_logo.png')} style={{ width: 50, height: 50 }}></Image>
 				<Text style={{ textAlignVertical: 'center', fontSize: RFValue(16, 720), marginLeft: 15 }}>Xin chào, {"\n"}
-					<Text style={{ fontWeight: '800', fontSize: RFValue(18, 720) }}>{userInfo?.username}</Text></Text>
+					<Text style={{ fontWeight: '800', fontSize: RFValue(18, 720) }}>{user?.username}</Text></Text>
 			</View>
 			{/* Divider */}
 			<Divider style={{ backgroundColor: colors.gray, height: 0.5 }}></Divider>
@@ -206,18 +201,16 @@ export default function Home() {
 			{/* Today's calories */}
 			<View style={{ padding: 20, borderWidth: 1, width: windowWidth * 0.9, alignSelf: 'center', borderRadius: 10, borderColor: colors.gray, marginVertical: 20 }}>
 				<Text style={styles.headerBox}>Lượng calories hôm nay</Text>
-				<Text style={{ textAlign: 'right', fontSize: RFValue(12, 720), marginBottom: 15 }}>Hoàn thành: <Text style={{ color: colors.blue, fontWeight: 'bold' }}>{(((calories - caloWorkOut) / caloriesNeeded) * 100).toFixed(2)} %</Text></Text>
-				<Progress.Bar progress={(calories - caloWorkOut) / caloriesNeeded}
+				<Text style={{ textAlign: 'right', fontSize: RFValue(12, 720), marginBottom: 15 }}>Hoàn thành: <Text style={{ color: colors.blue, fontWeight: 'bold' }}>{(((calories - caloWorkOut) / targetCalories) * 100).toFixed(2)} %</Text></Text>
+				<Progress.Bar progress={(calories - caloWorkOut) / targetCalories}
 					width={RFValue(280, 720)}
 					height={6}
 					unfilledColor={colors.gray}
 					borderWidth={0}
-					color={((calories - caloWorkOut) / caloriesNeeded) > 1 ? colors.red : colors.green}
+					color={((calories - caloWorkOut) / targetCalories) > 1 ? colors.red : colors.green}
 					style={{ alignSelf: 'center' }} />
-				{/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15 }}>
-					<Text style={{ fontSize: RFValue(13, 720) }}>Mục tiêu:</Text>
-					<Text style={{ fontWeight: 'bold' }}>{energy.toFixed(0)} calories</Text>
-				</View> */}
+					<Text style={{ fontWeight: 'bold' }}>{targetCalories} calories</Text>
+				</View>
 				<View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15 }}>
 					<Text style={{ fontSize: RFValue(13, 720) }}>Calories đã hấp thụ:</Text>
 					<Text style={{ fontWeight: 'bold' }}>{calories} calories</Text>
@@ -229,7 +222,7 @@ export default function Home() {
 				<Divider style={{ backgroundColor: colors.gray, height: 0.2, marginTop: 15 }}></Divider>
 				<View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15, fontSize: RFValue(13, 720) }}>
 					<Text style={{ fontWeight: 'bold' }}>Cần thêm:</Text>
-					<Text style={{ fontWeight: 'bold', color: colors.blue, fontSize: RFValue(14, 720) }}>{caloriesNeeded - (calories - caloWorkOut)} calories</Text>
+					<Text style={{ fontWeight: 'bold', color: colors.blue, fontSize: RFValue(14, 720) }}>{targetCalories - (calories - caloWorkOut)} calories</Text>
 				</View>
 				<TouchableOpacity onPress={() => { navigation.navigate('Calories') }}>
 					<Text style={{ textAlign: 'right', marginTop: 15, fontStyle: 'italic', color: colors.darkGray }}>Chi tiết {'\u25BA'}</Text>
