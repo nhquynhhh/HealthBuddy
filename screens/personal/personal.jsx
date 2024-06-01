@@ -24,6 +24,7 @@ export default function Personal() {
 	const [isLoading, setIsLoading] = useState(true);
 	const [refresh, setRefresh] = useState(false);
 	const [selectedValue, setSelectedValue] = useState(0);
+	const [user, setUser] = useState(null);
 
 	const handleLogout = () => {
 		// are you sure to logout
@@ -116,10 +117,18 @@ export default function Personal() {
 	}
 
 	const handleUpdateUserInfo2 = () => {
-		setAge(parseInt(tempAge));
-		setHeight(parseInt(tempHeight));
-		setWeight(parseInt(weight));
-		setGender(checked == 'male' ? 'Nam' : 'Nữ');
+		if (tempAge < 18 || tempHeight < 100 || tempWeight < 30 || tempWeight > 200 || tempHeight > 250) {
+			Alert.alert('Thông báo', 'Thông tin đã nhập không hợp lệ. Tuổi phải lớn hơn 18 , chiều cao phải từ 1m đến 2.5m, cân nặng từ 30kg đến 200kg');
+			loadData();
+			return;
+		} else {
+			setAge(parseInt(tempAge));
+			setHeight(parseInt(tempHeight));
+			setWeight(parseInt(weight));
+			setGender(checked == 'male' ? 'Nam' : 'Nữ');
+		}
+
+
 	}
 
 	const updateUserInfo = async () => {
@@ -146,7 +155,6 @@ export default function Personal() {
 			loadData();
 			return;
 		}
-
 		const response = await handleUpdateUserInfo({ age: tempAge, height: tempHeight, weight: tempWeight, aim: targetSelected, gender: checked });
 		if (response) {
 			loadData();

@@ -59,13 +59,6 @@ export default function Calories() {
 	}, []);
 
 
-	// let energy;
-	// if (user?.gender == "nam") {
-	// 	energy = ((6.25 * user?.height) + (10 * user?.weight) - (5 * user?.age) + 5).toFixed(0);
-	// } else {
-	// 	energy = ((6.25 * user?.height) + (10 + user?.weight) - (5 * user?.age) - 161).toFixed(0);
-	// }
-
 	const today = new Date();
 	const [openCalendar, setOpenCalendar] = useState(false);
 	const [selectDate, setSelectDate] = useState(format(today.setDate(today.getDate()), 'dd/MM/yyyy'));
