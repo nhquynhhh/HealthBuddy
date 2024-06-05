@@ -186,7 +186,7 @@ export default function Personal() {
 					<View style={[styles.verticalLine, { marginRight: 15, marginLeft: 5 }]}></View>
 					<View style={{ flex: 1 }}>
 						<Text style={{ fontWeight: 'bold', fontSize: RFValue(16, 720), marginVertical: 2 }}>{userInfo.username}</Text>
-						<Text style={{ marginVertical: 2, fontSize: RFValue(14, 720) }}>UserID: <Text style={{ fontWeight: 'bold', }}>{account.account_id}</Text></Text>
+						<Text style={{ marginVertical: 2, fontSize: RFValue(14, 720) }}>UserID: <Text style={{ fontWeight: 'bold', }}>{account?.account_id}</Text></Text>
 						<Text style={{ marginVertical: 2, fontSize: RFValue(14, 720) }}>Loại tài khoản: <Text style={{ fontWeight: 'bold' }}>{accountType}</Text></Text>
 					</View>
 				</View>
