@@ -16,6 +16,8 @@ import { handleGetAllIngredients } from '../services/ingredients/get_all_ingredi
 import { handleGetFavoriteDishes } from '../services/favorite/get_favorite_dishes';
 import { handleGetCalories } from "../services/calories/get_calories";
 import ToastManager, { Toast } from 'toastify-react-native'
+import { validateToken } from "../services/token/validate_token";
+
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -29,13 +31,13 @@ export const AuthProvider = ({ children }) => {
 	const [favoriteDishes, setFavoriteDishes] = useState([]);
 	const [paymentURL, setPaymentURL] = useState(null);
 	const [isLoggedWithToken, setIsLoggedWithToken] = useState(false);
+	const [isLoggedWithPassword, setIsLoggedWithPassword] = useState(false);
 
 	useEffect(() => {
 		const checkLogin = async () => {
 			const refresh_token = await getRefreshToken();
-			if (refresh_token !== null) {
+			if (refresh_token !== null && validateToken(refresh_token)) {
 				setIsLoggedWithToken(true);
-				console.log('refresh_token', refresh_token);
 				const isValidToken = await handleLoginWithToken(refresh_token);
 				if (isValidToken) {
 					const userInfo = await handleGetUserInfo();
@@ -66,7 +68,6 @@ export const AuthProvider = ({ children }) => {
 					setIsLoggedWithToken(false);
 				}
 			} else {
-				setIsLoggedWithToken(false);
 				return;
 			}
 		};
@@ -109,7 +110,7 @@ export const AuthProvider = ({ children }) => {
 	}
 
 	return (
-		<AuthContext.Provider value={{ accessTokenContext, account, storeAccessToken, removeAccessToken, storeRefreshToken, removeRefreshToken, setAccountContext, refreshTokenContext, isLogged, setIsLogged, userInfo, setUserInfo, setAccount, dishes, setDishes, ingredients, setIngredients, favoriteDishes, setFavoriteDishes, setFavoriteDishesContext, addFavoriteDish, setLoginStatus, paymentURL, isLoggedWithToken, setIsLoggedWithToken }}>
+		<AuthContext.Provider value={{ accessTokenContext, account, storeAccessToken, removeAccessToken, storeRefreshToken, removeRefreshToken, setAccountContext, refreshTokenContext, isLogged, setIsLogged, userInfo, setUserInfo, setAccount, dishes, setDishes, ingredients, setIngredients, favoriteDishes, setFavoriteDishes, setFavoriteDishesContext, addFavoriteDish, setLoginStatus, paymentURL, isLoggedWithToken, setIsLoggedWithToken, isLoggedWithPassword, setIsLoggedWithPassword }}>
 			{children}
 		</AuthContext.Provider>
 	);

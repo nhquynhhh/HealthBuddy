@@ -66,6 +66,13 @@ export default function WorkoutDetail1() {
         reset();
     };
 
+	const handlePractice = () => {
+		if (isRunning) {
+			stop();
+		} else {
+			start();
+		}
+	}
     return (
         <ScrollView style={{ backgroundColor: colors.white, marginBottom: 60 }}>
             <View style={{ marginTop: 20, marginBottom: 10 }}>
@@ -76,11 +83,12 @@ export default function WorkoutDetail1() {
             </View>
             <View style={{ flexDirection: 'row', alignSelf: 'center', borderWidth: 1, borderColor: colors.blue }}>
                 <View style={{ backgroundColor: colors.blue, flexDirection: 'row', padding: 15 }}>
-                    <TouchableOpacity style={{ paddingHorizontal: 2 }} onPress={start} delayPressIn={0}>
+                    {/* <TouchableOpacity style={{ paddingHorizontal: 2 }} onPress={start} delayPressIn={0}>
                         <Icon name='play' type='ionicon' color={colors.white} size={26} />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={{ paddingHorizontal: 2 }} onPress={stop} delayPressIn={0}>
-                        <Icon name='pause' type='ionicon' color={colors.white} size={26} />
+						<Icon name='pause' type='ionicon' color={colors.white} size={26} />
+                    </TouchableOpacity> */}
+                    <TouchableOpacity style={{ paddingHorizontal: 2 }} onPress={handlePractice} delayPressIn={0}>
+						{isRunning ? <Icon name='pause' type='ionicon' color={colors.white} size={26} /> : <Icon name='play' type='ionicon' color={colors.white} size={26} />}
                     </TouchableOpacity>
                     <TouchableOpacity style={{ paddingHorizontal: 2 }} onPress={reset} delayPressIn={0}>
                         <Icon name='reload-sharp' type='ionicon' color={colors.white} size={26} />

@@ -88,7 +88,7 @@ export default function Premium() {
 					radioStyle={{ paddingVertical: 5 }}
 				/>
 			</View>
-			<Button title={"TIẾP TỤC"}
+			<Button title={"THANH TOÁN"}
 				style={styles.btnClick}
 				titleStyle={{ fontWeight: '700', fontSize: 20 }}
 				buttonStyle={{ minWidth: windowWidth * 0.9, height: 45, borderRadius: 10 }}

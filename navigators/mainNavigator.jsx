@@ -47,6 +47,22 @@ const MainNavigator = () => {
 		}
 	}
 
+	const onPressHomeTab = async () => {
+		navigation.navigate("HomeTab", "Home");
+	}
+
+	const onPressStatisticsTab = async () => {
+		navigation.navigate("StatisticsTab", "StatisticsStackScreens");
+	}
+
+	const onPressPersonalTab = async () => {
+		navigation.navigate("PersonalTab", "PersonalStackScreens");
+	}
+
+	const onPressWorkoutTab = async () => {
+		navigation.navigate("NotiTab", "WorkoutStackScreens");
+	}
+
 	const HomeStack = createNativeStackNavigator();
 	function HomeStackScreens() {
 		return (
@@ -134,10 +150,12 @@ const MainNavigator = () => {
 					options={{
 						tabBarIcon: ({ focused }) => {
 							return (
+								<TouchableOpacity onPress={onPressHomeTab}>
 								<View style={{ alignItems: "center", justifyContent: "center" }}>
 									<Icon name={focused ? "home" : "home-outline"} type="ionicon" size={23} color={focused ? colors.blue : colors.black} />
 									<Text style={{ fontSize: 12, color: focused ? colors.blue : colors.black, marginTop: 4, fontWeight: focused ? 'bold' : 'normal' }}>Trang chủ</Text>
 								</View>
+								</TouchableOpacity>
 							)
 						}
 					}} />
@@ -147,10 +165,12 @@ const MainNavigator = () => {
 						headerTitle: "Thống kê",
 						tabBarIcon: ({ focused }) => {
 							return (
+								<TouchableOpacity onPress={onPressStatisticsTab}>
 								<View style={{ alignItems: "center", justifyContent: "center" }}>
 									<Icon name={focused ? "stats-chart-sharp" : "stats-chart-outline"} type="ionicon" size={23} color={focused ? colors.blue : colors.black} />
 									<Text style={{ fontSize: 12, color: focused ? colors.blue : colors.black, marginTop: 4, fontWeight: focused ? 'bold' : 'normal' }}>Thống kê</Text>
 								</View>
+								</TouchableOpacity>
 							)
 						}
 					}} />
@@ -187,10 +207,12 @@ const MainNavigator = () => {
 					options={{
 						tabBarIcon: ({ focused }) => {
 							return (
+								<TouchableOpacity onPress={onPressWorkoutTab}>
 								<View style={{ alignItems: "center", justifyContent: "center" }}>
 									<Icon name={focused ? "accessibility" : "accessibility-outline"} type="ionicon" size={23} color={focused ? colors.blue : colors.black} />
 									<Text style={{ fontSize: 12, color: focused ? colors.blue : colors.black, marginTop: 4, fontWeight: focused ? 'bold' : 'normal' }}>Tập luyện</Text>
 								</View>
+								</TouchableOpacity>
 							)
 						}
 					}} />
@@ -199,10 +221,12 @@ const MainNavigator = () => {
 					options={{
 						tabBarIcon: ({ focused }) => {
 							return (
+								<TouchableOpacity onPress={onPressPersonalTab}>
 								<View style={{ alignItems: "center", justifyContent: "center" }}>
 									<Icon name={focused ? "person" : "person-outline"} type="ionicon" size={23} color={focused ? colors.blue : colors.black} />
 									<Text style={{ fontSize: 12, color: focused ? colors.blue : colors.black, marginTop: 4, fontWeight: focused ? 'bold' : 'normal' }}>Cá nhân</Text>
 								</View>
+								</TouchableOpacity>
 							)
 						}
 					}} />

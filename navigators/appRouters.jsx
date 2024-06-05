@@ -14,7 +14,7 @@ export const AppRouters = () => {
 	const [refresh_token, setRefresh_token] = useState(null);
 	const [isLogin, setIsLogin] = useState(false);
 
-	const { isLogged, isLoggedWithToken, setIsLoggedWithToken } = useContext(AuthContext);
+	const { isLogged, isLoggedWithToken, setIsLoggedWithToken, isLoggedWithPassword, setIsLoggedWithPassword } = useContext(AuthContext);
 
 	// useEffect(() => {
 	// 	const timeout = setTimeout(async () => {
@@ -27,6 +27,7 @@ export const AppRouters = () => {
 	return (
 		<>
 			<LoadingModal visible={isLoggedWithToken} />
+			<LoadingModal visible={isLoggedWithPassword} />
 			{
 				isLogged ? <MainNavigator /> : <AuthNavigator />
 			}
