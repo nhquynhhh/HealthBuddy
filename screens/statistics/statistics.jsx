@@ -18,7 +18,7 @@ export default function Statistics() {
   const [currentPage, setCurrentPage] = useState('dailyStatistic');
   const [currentPageTab, setCurrentPageTab] = useState('dailyStatisticTab');
 
-  const END_LINEAR_COLOR = '#FF7E06';
+  const END_LINEAR_COLOR = colors.blue;
   const [numDate, setNumDate] = useState(7);
   const [dataLabel, setDataLabel] = useState([""])
   const [dataCalo, setDataCalo] = useState([0])
@@ -92,7 +92,7 @@ export default function Statistics() {
     labels: numDate > 7 ? [] : dataLabel.map(item => item.substring(0, 5)),
     datasets: [{
       data: dataCalo,
-      color: (opacity = 1) => `rgba(26, 140, 3, ${opacity})`,
+      color: (opacity = 1) => `rgba(221, 20, 20, ${opacity})`,
     }],
   }
 
@@ -100,79 +100,13 @@ export default function Statistics() {
     labels: numDate > 7 ? [] : dataLabel.map(item => item.substring(0, 5)),
     datasets: [{
       data: dataWater,
-      color: (opacity = 1) => `rgba(26, 140, 3, ${opacity})`,
+      color: (opacity = 1) => `rgba(0, 141, 218, ${opacity})`,
     }],
   }
 
 
 
   const Calories = () => {
-    const barData = [
-      {
-        value: 40,
-        label: 'Jan',
-        spacing: 2,
-        labelWidth: 30,
-        labelTextStyle: colors.darkGray,
-        frontColor: colors.red,
-      },
-      { value: 20, frontColor: colors.blue },
-      {
-        value: 50,
-        label: 'Feb',
-        spacing: 2,
-        labelWidth: 30,
-        labelTextStyle: colors.darkGray,
-        frontColor: colors.red,
-      },
-      { value: 40, frontColor: colors.blue },
-      {
-        value: 75,
-        label: 'Mar',
-        spacing: 2,
-        labelWidth: 30,
-        labelTextStyle: colors.darkGray,
-        frontColor: colors.red,
-      },
-      { value: 25, frontColor: colors.blue },
-      {
-        value: 30,
-        label: 'Apr',
-        spacing: 2,
-        labelWidth: 30,
-        labelTextStyle: colors.darkGray,
-        frontColor: colors.red,
-      },
-      { value: 20, frontColor: colors.blue },
-      {
-        value: 60,
-        label: 'May',
-        spacing: 2,
-        labelWidth: 30,
-        labelTextStyle: colors.darkGray,
-        frontColor: colors.red,
-      },
-      { value: 40, frontColor: colors.blue },
-      {
-        value: 65,
-        label: 'Jun',
-        spacing: 2,
-        labelWidth: 30,
-        labelTextStyle: colors.darkGray,
-        frontColor: colors.red,
-      },
-      { value: 30, frontColor: colors.blue },
-      {
-        value: 60,
-        label: 'May',
-        spacing: 2,
-        labelWidth: 30,
-        labelTextStyle: colors.darkGray,
-        frontColor: colors.red,
-      },
-      { value: 40, frontColor: colors.blue },
-    ];
-
     const renderTitle = () => {
       return (
         <View style={{ marginVertical: 20 }}>
@@ -192,46 +126,6 @@ export default function Statistics() {
               justifyContent: 'space-evenly',
               marginTop: 24,
             }}>
-            {/* <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <View
-                style={{
-                  height: 12,
-                  width: 12,
-                  borderRadius: 6,
-                  backgroundColor: colors.red,
-                  marginRight: 8,
-                }}
-              />
-              <Text
-                style={{
-                  width: 'auto',
-                  height: 20,
-                  color: colors.black,
-                  textAlignVertical: 'center'
-                }}>
-                Calories hấp thu
-              </Text>
-            </View> */}
-            {/* <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <View
-                style={{
-                  height: 12,
-                  width: 12,
-                  borderRadius: 6,
-                  backgroundColor: colors.blue,
-                  marginRight: 8,
-                }}
-              />
-              <Text
-                style={{
-                  width: 'auto',
-                  height: 20,
-                  color: colors.black,
-                  textAlignVertical: 'center'
-                }}>
-                Calories tiêu hao
-              </Text>
-            </View> */}
           </View>
         </View>
       )
@@ -245,32 +139,16 @@ export default function Statistics() {
           borderRadius: 10,
         }}>
         {renderTitle()}
-        {/* <BarChart
-          data={temp}
-          barWidth={8}
-          spacing={18}
-          roundedTop
-          roundedBottom
-          rulesType='dash'
-          rulesColor={colors.darkGray}
-          xAxisThickness={1}
-          xAxisColor={colors.darkGray}
-          yAxisThickness={1}
-          yAxisColor={colors.darkGray}
-          yAxisTextStyle={colors.darkGray}
-          noOfSections={4}
-          maxValue={75}
-        /> */}
         {
           <LineChart data={temp} width={390} height={220} yAxisLabel={''}
             chartConfig={{
               backgroundGradientFrom: '#fff',
               backgroundGradientTo: '#fff',
               decimalPlaces: 0,
-              color: (opacity = 1) => `rgba(26, 140, 3, ${opacity})`,
+              color: (opacity = 1) => `rgba(221, 20, 20, ${opacity})`,
               labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
               style: { borderRadius: 16, },
-              propsForDots: { r: '6', strokeWidth: '2', stroke: '#1A8C03', fill: '#fff' },
+              propsForDots: { r: '6', strokeWidth: '2', stroke: colors.red, fill: '#fff' },
             }}
             bezier
             style={{ marginVertical: 8, borderRadius: 16, }} />
@@ -280,18 +158,9 @@ export default function Statistics() {
   };
 
   const Water = () => {
-    const data1 = [
-      { value: 70 },
-      { value: 36 },
-      { value: 50 },
-      { value: 40 },
-      { value: 18 },
-      { value: 38 },
-      { value: 38 },
-    ];
     const renderTitle = () => {
       return (
-        <View style={{ marginVertical: 20 }}>
+        <View style={{ marginVertical: 10 }}>
           <Text
             style={{
               color: colors.blue,
@@ -311,63 +180,16 @@ export default function Statistics() {
           borderRadius: 10,
         }}>
         {renderTitle()}
-        {/* <LineChart
-          areaChart
-          curved
-          data={data1}
-          dataPointsColor1={colors.blue}
-          spacing={45}
-          color1={colors.blue}
-          startFillColor1={colors.blue}
-          endFillColor1={colors.blue}
-          startOpacity={0.9}
-          endOpacity={0.2}
-          initialSpacing={0}
-          noOfSections={4}
-          yAxisColor="white"
-          yAxisThickness={0}
-          rulesType='dash'
-          rulesColor={colors.darkGray}
-          yAxisTextStyle={{ color: 'gray' }}
-          yAxisLabelSuffix="%"
-          xAxisColor="lightgray"
-          pointerConfig={{
-            pointerStripUptoDataPoint: true,
-            pointerStripColor: 'lightgray',
-            pointerStripWidth: 2,
-            strokeDashArray: [2, 5],
-            pointerColor: 'lightgray',
-            radius: 4,
-            pointerLabelWidth: 100,
-            pointerLabelHeight: 120,
-            pointerLabelComponent: items => {
-              return (
-                <View
-                  style={{
-                    height: 120,
-                    width: 100,
-                    backgroundColor: '#282C3E',
-                    borderRadius: 4,
-                    justifyContent: 'center',
-                    paddingLeft: 16,
-                  }}>
-                  <Text style={{ color: 'lightgray', fontSize: 12 }}>{2018}</Text>
-                  <Text style={{ color: 'white', fontWeight: 'bold' }}>{items[0].value}</Text>
-                </View>
-              );
-            },
-          }}
-        /> */}
         {
           <LineChart data={temp_water} width={390} height={220} yAxisLabel={''}
             chartConfig={{
               backgroundGradientFrom: '#fff',
               backgroundGradientTo: '#fff',
               decimalPlaces: 0,
-              color: (opacity = 1) => `rgba(26, 140, 3, ${opacity})`,
+              color: (opacity = 1) => `rgba(0, 141, 218, ${opacity})`,
               labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
               style: { borderRadius: 16, },
-              propsForDots: { r: '6', strokeWidth: '2', stroke: '#1A8C03', fill: '#fff' },
+              propsForDots: { r: '6', strokeWidth: '2', stroke: colors.blue, fill: '#fff' },
             }}
             bezier
             style={{ marginVertical: 8, borderRadius: 16, }} />
@@ -379,83 +201,34 @@ export default function Statistics() {
 
   return (
     <ScrollView style={{ backgroundColor: colors.white, marginBottom: 60 }}>
-      <View style={{ display: "flex", flexDirection: "row", gap: 5 }}>
+      <View style={{ display: "flex", flexDirection: "row", gap: 5, justifyContent: 'space-between', marginTop: 20, paddingHorizontal: 15 }}>
         <TouchableOpacity style={{
-          backgroundColor: numDate === 7 ? END_LINEAR_COLOR : '#D9D9D9',
-          padding: 10, borderRadius: 50
+          backgroundColor: numDate === 7 ? END_LINEAR_COLOR : colors.gray,
+          padding: 10, borderRadius: 50, width: '30%'
         }} onPress={() => setNumDate(7)}>
-          <Text style={{ color: "white", fontWeight: "bold" }}>07</Text>
+          <Text style={{ color: "white", fontWeight: "bold", alignSelf: 'center' }}>7 ngày</Text>
         </TouchableOpacity>
         <TouchableOpacity style={{
-          backgroundColor: numDate === 14 ? END_LINEAR_COLOR : '#D9D9D9',
-          padding: 10, borderRadius: 50
+          backgroundColor: numDate === 14 ? END_LINEAR_COLOR : colors.gray,
+          padding: 10, borderRadius: 50, width: '30%'
         }} onPress={() => setNumDate(14)}>
-          <Text style={{ color: "white", fontWeight: "bold" }}>14</Text>
+          <Text style={{ color: "white", fontWeight: "bold", alignSelf: 'center' }}>14 ngày</Text>
         </TouchableOpacity>
         <TouchableOpacity style={{
-          backgroundColor: numDate === 30 ? END_LINEAR_COLOR : '#D9D9D9',
-          padding: 10, borderRadius: 50
+          backgroundColor: numDate === 30 ? END_LINEAR_COLOR : colors.gray,
+          padding: 10, borderRadius: 50, width: '30%'
         }} onPress={() => setNumDate(30)}>
-          <Text style={{ color: "white", fontWeight: "bold" }}>30</Text>
+          <Text style={{ color: "white", fontWeight: "bold", alignSelf: 'center' }}>30 ngày</Text>
         </TouchableOpacity>
 
       </View>
       <View style={[currentPage === 'dailyStatistic' ? styles.displayPage : styles.hidePage]}>
-        {/* <TouchableOpacity style={{flexDirection: 'row', paddingTop: 20, alignSelf: 'center'}} onPress={handleCalendar}>
-          <Icon name='calendar-outline' type='ionicon' color={colors.blue}/>
-          <Text style={{color: colors.blue, textAlignVertical: 'center', paddingHorizontal: 10, fontSize: RFValue(15,720), fontWeight: 'bold'}}>Chọn ngày</Text>
-        </TouchableOpacity>
-        <Text style={{alignSelf: 'center', paddingTop: 10, fontSize: RFValue(15, 720), fontWeight: 'bold'}}>{selectDate}</Text>
-        <Modal
-          animationType='slide'
-          transparent={true}
-          visible={openCalendar}>
-            <View style={styles.centerCalendar}>
-              <View style={styles.modalView}>
-                <DatePicker mode='calendar'
-                  selected={selectDate}
-                  onDateChange={handleSelectDate}
-                  maximumDate={defaultDate}>
-                </DatePicker>
-                <TouchableOpacity onPress={handleCalendar}>
-                  <Text style={{fontSize: RFValue(14, 720)}}>Chọn</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-        </Modal> */}
         <View style={{ padding: 15 }}>
           <Calories></Calories>
         </View>
         <View>
           <Water style={{ alignSelf: 'center' }}></Water>
         </View>
-      </View>
-      <View style={[currentPage === 'monthlyStatistic' ? styles.displayPage : styles.hidePage]}>
-        {/* <TouchableOpacity style={{flexDirection: 'row', paddingTop: 20, alignSelf: 'center'}} onPress={handleCalendar}>
-          <Icon name='calendar-outline' type='ionicon' color={colors.blue}/>
-          <Text style={{color: colors.blue, textAlignVertical: 'center', paddingHorizontal: 10, fontSize: RFValue(15,720), fontWeight: 'bold'}}>Chọn tháng</Text>
-        </TouchableOpacity>
-        <Text style={{alignSelf: 'center', paddingTop: 10, fontSize: RFValue(15, 720), fontWeight: 'bold'}}>{selectMonth}</Text>
-        <Modal
-          animationType='slide'
-          transparent={true}
-          visible={openCalendar}>
-            <View style={styles.centerCalendar}>
-              <View style={styles.modalView}>
-                <DatePicker mode='monthYear'
-                  selected={selectMonth}
-                  onDateChange={handleSelectMonth}
-                  maximumDate={defaultMonth}>
-                </DatePicker>
-                <TouchableOpacity onPress={handleCalendar}>
-                  <Text style={{fontSize: RFValue(14, 720)}}>Chọn</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-        </Modal> */}
-      </View>
-      <View style={[currentPage === 'yearlyStatistic' ? styles.displayPage : styles.hidePage]}>
-
       </View>
       <View style={{ paddingBottom: 60 }}></View>
     </ScrollView>
