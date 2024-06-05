@@ -141,16 +141,18 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         padding: 20,
         borderRadius: 10,
+        width: '50%'
     },
     modalTitle: {
         fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 10,
+        alignSelf: 'center'
     },
     option: {
         paddingVertical: 10,
         paddingHorizontal: 15,
-        borderRadius: 5,
+        borderRadius: 10,
         marginBottom: 10,
     },
     optionText: {
@@ -171,6 +173,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#FF5722', // Màu cam đậm
     },
     cancelOption: {
-        backgroundColor: '#FF5252', // Màu đỏ
+        backgroundColor: '#D1D1D1', // Màu xám
     },
 });

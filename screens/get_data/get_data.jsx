@@ -104,6 +104,7 @@ export default function GetData() {
 						setCurrentPageNav('page2Nav');
 					}}>
 				</Button>
+				<View style={{height: 1000}}></View>
 			</View>
 			<View style={[{ alignItems: 'center', backgroundColor: colors.white }, currentPage === 'page2' ? styles.displayPage : styles.hidePage]}>
 				<Text style={[styles.titleText, { marginTop: 20 }]}>2. Tuổi và số đo cơ thể của bạn</Text>
@@ -152,6 +153,7 @@ export default function GetData() {
 						handleContinuePage2();
 					}}>
 				</Button>
+				<View style={{height: 1000}}></View>
 			</View>
 			<View style={[{backgroundColor: colors.white}, currentPage === 'page3' ? styles.displayPage : styles.hidePage]}>
 				<Text style={[styles.titleText, { marginTop: 20 }]}>3. Mục tiêu của bạn</Text>
@@ -186,6 +188,7 @@ export default function GetData() {
 						Alert.alert('Thông báo', 'Hoàn tất! Chào mừng bạn đến với HealthBuddy!');
 					}}>
 				</Button>
+				<View style={{height: 1000}}></View>
 			</View>
 		</View>
 	)
