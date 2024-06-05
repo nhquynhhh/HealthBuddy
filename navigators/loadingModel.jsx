@@ -1,6 +1,7 @@
 // LoadingModal.js
 import React from 'react';
 import { Modal, View, ActivityIndicator, StyleSheet, Text } from 'react-native';
+import { colors } from '../utils/colors';
 
 const LoadingModal = ({ visible }) => {
 	return (
@@ -12,7 +13,7 @@ const LoadingModal = ({ visible }) => {
 			<View style={styles.modalBackground}>
 				<View style={styles.activityIndicatorWrapper}>
 					<ActivityIndicator
-						animating={visible} size="large" color="#0000ff" />
+						animating={visible} size="large" color={colors.blue} />
 					<Text style={styles.loadingText}>Đang đăng nhập</Text>
 				</View>
 			</View>
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
 		backgroundColor: 'rgba(0, 0, 0, 0.5)',
 	},
 	activityIndicatorWrapper: {
-		backgroundColor: '#FFFFFF',
+		backgroundColor: colors.white,
 		padding: 20,
 		borderRadius: 15,
 		display: 'flex',
@@ -45,7 +46,7 @@ const styles = StyleSheet.create({
 	},
 	loadingText: {
 		marginTop: 20,
-		color: '#0000ff',
+		color: colors.blue,
 		fontSize: 18,
 		fontWeight: 'bold',
 	},
