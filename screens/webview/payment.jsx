@@ -17,7 +17,7 @@ export default function Payment({ route }) {
 
 
 	const navigation = useNavigation();
-	const URL = `${BASE_URL}/confirm_payment`;
+	const URL = `${BASE_URL}/confirm_payment/vnpay`;
 	const handleNavigationStateChange = async (navState) => {
 		const { url: currentUrl } = navState;
 		console.log('Current URL:', currentUrl);
@@ -27,11 +27,15 @@ export default function Payment({ route }) {
 			navigation.navigate("PersonalTab", "Personal");
 			// lấy các params trong url
 			const resultCodeMatch = currentUrl.match(/resultCode=([^&]+)/);
+			const responseCodeMatch = currentUrl.match(/vnp_ResponseCode=([^&]+)/);
+			console.log('Result code:', responseCodeMatch);
 			const resultCode = resultCodeMatch ? resultCodeMatch[1] : null;
-			if (resultCode === '0') {
+			const respnseCode = responseCodeMatch ? responseCodeMatch[1] : null;
+			if (respnseCode === '00') {
 				const accountInfo = await handleGetAccountInfo();
 				if (accountInfo) {
 					setAccount(accountInfo);
+					console.log(accountInfo)
 				}
 				const userInfo = await handleGetUserInfo();
 				if (userInfo) {

@@ -27,7 +27,13 @@ const calculateEnergy = (height, weight, age, gender) => {
 
 function BodyIndex() {
 
-	const [user, setUser] = useState(null);
+	const [user, setUser] = useState({
+		age: 18,
+		weight: 60,
+		height: 165,
+		gender: 'male',
+		username: 'user',
+	});
 	
 	const [isModalVisible, setIsModalVisible] = useState(false);
 	const [reminderTime, setReminderTime] = useState(null);

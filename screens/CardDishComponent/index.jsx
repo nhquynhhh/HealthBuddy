@@ -40,7 +40,6 @@ export const CardDishComponent = ({ id, dish }) => {
                 default:
                     throw new Error('Invalid meal type');
             }
-            Alert.alert(`Calories for ${mealType} saved successfully!`);
         } catch (error) {
             console.error(`Failed to save ${mealType} calories:`, error);
             Alert.alert(`Failed to save ${mealType} calories.`);

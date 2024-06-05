@@ -4,7 +4,7 @@ import { Icon, Button, Divider, ListItem } from "react-native-elements";
 import { LinearGradient } from 'expo-linear-gradient';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button'
 import { colors } from '../../utils/colors'
-import {handlePayMentURL} from '../../services/payment/call_payment'
+import {handlePayMentURLMOMO, handlePayMentURLVNPAY} from '../../services/payment/call_payment'
 import { useNavigation,useFocusEffect, useIsFocused } from '@react-navigation/native';
 import Payment from '../webview/payment';
 import { setPaymentURL } from '../../asyncStorage/auth';
@@ -32,7 +32,7 @@ export default function Premium() {
 	
 	const handlePayment = async () => {
 		setIsLoading(true);
-		const response = await handlePayMentURL(upgradePackSelected);
+		const response = await handlePayMentURLVNPAY(upgradePackSelected);
 		console.log(response);
 		if (response !== null) {
 			navigation.navigate('Payment', { url: response });
@@ -88,7 +88,7 @@ export default function Premium() {
 					radioStyle={{ paddingVertical: 5 }}
 				/>
 			</View>
-			<Button title={"TIẾP TỤC"}
+			<Button title={"THANH TOÁN"}
 				style={styles.btnClick}
 				titleStyle={{ fontWeight: '700', fontSize: 20 }}
 				buttonStyle={{ minWidth: windowWidth * 0.9, height: 45, borderRadius: 10 }}

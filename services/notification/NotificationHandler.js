@@ -11,8 +11,6 @@ export const loadAlarmFromStorage = async () => {
 	}
 };
 
-
-
 export const scheduleAlarm = async (alarmHour, alarmMinute) => {
 
 	const now = new Date();
@@ -24,7 +22,7 @@ export const scheduleAlarm = async (alarmHour, alarmMinute) => {
 	try {
 		await Notifications.scheduleNotificationAsync({
 			content: {
-				title: "Alarm",
+				title: "Nhắc nhở",
 				body: "Tới giờ! Uống nước thôi!",
 			},
 			trigger: { date: alarmTime },

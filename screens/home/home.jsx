@@ -1,4 +1,4 @@
-import { ScrollView, Text, View, Image, useWindowDimensions, StyleSheet, TouchableOpacity, FlatList, Alert, RefreshControl  } from 'react-native'
+import { ScrollView, Text, View, Image, useWindowDimensions, StyleSheet, TouchableOpacity, FlatList, Alert, RefreshControl, SafeAreaView, StatusBar } from 'react-native'
 import React, { Component, useContext, useEffect, useState, useCallback } from 'react'
 import { SearchBar, Icon, Divider } from 'react-native-elements';
 import { useNavigation, useFocusEffect, useIsFocused } from '@react-navigation/native';
@@ -43,17 +43,27 @@ export default function Home() {
 	const [updatedFavDish, setUpdatedFavDish] = useState([]);
 	const [isPremium, setIsPremium] = useState(false);
 	const [refreshing, setRefreshing] = useState(false);
-	// const [user, setUser] = useState(null);
-	// const [gender, setGender] = useState(null);
-	// const [caloriesNeeded, setCaloriesNeeded] = useState(0);
-	// const [energy, setEnergy] = useState(0);
-	// const [caloriesNeeded, setCaloriesNeeded] = useState(0);
-	// const [user, setUser] = useState(null);
+	const [targetCalories, setTargetCalories] = useState(1);
+	const [user, setUser] = useState({
+		age: 18,
+		weight: 60,
+		height: 165,
+		gender: 'male',
+		username: 'user',
+	});
+
+	const calculateEnergy = (user) => {
+		if (user.gender == "male") {
+			energy = ((6.25 * user?.height) + (10 * user?.weight) - (5 * user?.age) + 5).toFixed(0);
+		} else {
+			energy = ((6.25 * user?.height) + (10 * user?.weight) - (5 * user?.age) - 161).toFixed(0);
+		}
+		return energy;
+	}
 
 	const getFavoriteDishes = async () => {
 		setFavDish([]);
 		const response = await handleGetHomeFavoriteDishes(user.id);
-		console.log("response", response);
 		if (response.length > 0) {
 			response.map((item) => {
 				favDishList.push({ name: item, image: { uri: 'https://www.marionskitchen.com/wp-content/uploads/2022/12/Filipino-Spaghetti-04.jpg' }, isFavorite: true });
@@ -63,8 +73,8 @@ export default function Home() {
 		}
 	}
 
-	const [calories, setCalories] = useState(null);
-	const [caloWorkOut, setCaloWorkOut] = useState(null);
+	const [calories, setCalories] = useState(0);
+	const [caloWorkOut, setCaloWorkOut] = useState(0);
 
 	const getCalories = async () => {
 		const response = await handleGetCalories();
@@ -81,15 +91,18 @@ export default function Home() {
 		const response = await handleGetUserInfo();
 		if (response) {
 			setIsPremium(response.has_subscription);
-			// setEnergy(calculateEnergy(response.height, response.weight, response.age, response.gender));
-			// setCaloriesNeeded((energy - 0).toFixed(0));
-			// setUserInfo(response);
-			// setUser(response);
-			// setGender(response.gender == 'male' ? 'nam' : 'nữ')
-			// setCaloriesNeeded(calculateEnergy(response.height, response.weight, response.age, response.gender) - 0);
-			// setEnergy((calculateEnergy(response.height, response.weight, response.age, response.gender)));
+			setTargetCalories(calculateEnergy(response));
+			setUser(response);
 		}
 	}
+
+	useEffect(() => {
+		getUserInfo();
+		setRefreshing(true);
+		getFavoriteDishes();
+		getCalories();
+		setRefreshing(false);
+	}, [isFocused]);
 
 	useEffect(() => {
 		getUserInfo();
@@ -106,29 +119,10 @@ export default function Home() {
 		getUserInfo();
 		getFavoriteDishes();
 		setRefreshing(false);
+		console.log("refreshing", user);
+		setUserInfo(user);
 	}
 
-	// useEffect(() => {
-	// 	if (isFocused) {
-	// 		getCalories();
-	// 		getUserInfo();
-	// 	}
-	// }, [isFocused]);
-
-	user = {
-		age: userInfo?.age,
-		weight: userInfo?.weight,
-		height: userInfo?.height,
-		gender: userInfo?.gender == 'male' ? 'nam' : 'nữ',
-	}
-	const BMI = (user?.weight / ((user?.height * user?.height) / 10000)).toFixed(1);
-	let energy;
-	if (user?.gender == "nam") {
-		energy = (6.25 * user?.height) + (10 * user?.weight) - (5 * user?.age) + 5;
-	} else {
-		energy = (6.25 * user?.height) + (10 + user?.weight) - (5 * user?.age) - 161;
-	}
-	const caloriesNeeded = (energy - 0).toFixed(0);
 	const categories = [
 		{ image: require('../../assets/img_kcal_icon.png'), label: 'Kiểm soát\ncalories', screen: 'Calories', tab: '' },
 		{ image: require('../../assets/img_water_icon.png'), label: 'Theo dõi\nuống nước', screen: 'Water', tab: '' },
@@ -141,123 +135,132 @@ export default function Home() {
 	];
 
 	return (
-		<ScrollView style={{ backgroundColor: colors.white, marginBottom: 60 }} showsVerticalScrollIndicator={false}
-			refreshControl={
-				<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-			}
-		>
-			{/* Header */}
-
-			
-
-			<View style={{ flexDirection: 'row', marginTop: 20, paddingLeft: 20, paddingTop: 20, paddingBottom: 10 }}>
-				<Image source={require('../../assets/img_bare_logo.png')} style={{ width: 50, height: 50 }}></Image>
-				<Text style={{ textAlignVertical: 'center', fontSize: RFValue(16, 720), marginLeft: 15 }}>Xin chào, {"\n"}
-					<Text style={{ fontWeight: '800', fontSize: RFValue(18, 720) }}>{userInfo?.username}</Text></Text>
-			</View>
-			{/* Divider */}
-			<Divider style={{ backgroundColor: colors.gray, height: 0.5 }}></Divider>
-			{/* Category list */}
-			<View style={[styles.catList, { marginTop: 30, width: windowWidth * 0.97 }]}>
-				<FlatList
-					scrollEnabled={false}
-					data={categories}
-					renderItem={({ item }) => {
-						if (item.tab !== '') {
-							return (
-								<TouchableOpacity
-									style={[styles.iconContainer, { width: windowWidth * 0.96 / 4 }]}
-									onPress={() => {
-										
-										navigation.navigate(item.tab, item.screen)
-									}}
-								>
-									<View style={styles.roundContainer}>
-										<Image source={item.image} style={styles.image} />
-									</View>
-									<Text style={styles.text}>{item.label}</Text>
-								</TouchableOpacity>
-							);
-						} else {
-							return (
-								<TouchableOpacity
-									style={[styles.iconContainer, { width: windowWidth * 0.96 / 4 }]}
-									onPress={() => {
-										if (item.screen == 'MenuSuggestion' && !isPremium) {
-											Alert.alert('Thông báo', 'Chức năng này chỉ dành cho tài khoản Premium', [{ text: 'OK' }])
-											return;
-										}
-										navigation.navigate(item.screen)
-									}}
-								>
-									<View style={styles.roundContainer}>
-										<Image source={item.image} style={styles.image} />
-									</View>
-									<Text style={styles.text}>{item.label}</Text>
-								</TouchableOpacity>
-							);
-						}
-					}}
-					keyExtractor={(item, index) => index.toString()}
-					numColumns={4}
-					columnWrapperStyle={styles.row}
-				/>
-			</View>
-			{/* Today's calories */}
-			<View style={{ padding: 20, borderWidth: 1, width: windowWidth * 0.9, alignSelf: 'center', borderRadius: 10, borderColor: colors.gray, marginVertical: 20 }}>
-				<Text style={styles.headerBox}>Lượng calories hôm nay</Text>
-				<Text style={{ textAlign: 'right', fontSize: RFValue(12, 720), marginBottom: 15 }}>Hoàn thành: <Text style={{ color: colors.blue, fontWeight: 'bold' }}>{(((calories - caloWorkOut) / caloriesNeeded) * 100).toFixed(2)} %</Text></Text>
-				<Progress.Bar progress={(calories - caloWorkOut) / caloriesNeeded}
-					width={RFValue(280, 720)}
-					height={6}
-					unfilledColor={colors.gray}
-					borderWidth={0}
-					color={((calories - caloWorkOut) / caloriesNeeded) > 1 ? colors.red : colors.green}
-					style={{ alignSelf: 'center' }} />
-				{/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15 }}>
-					<Text style={{ fontSize: RFValue(13, 720) }}>Mục tiêu:</Text>
-					<Text style={{ fontWeight: 'bold' }}>{energy.toFixed(0)} calories</Text>
-				</View> */}
-				<View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15 }}>
-					<Text style={{ fontSize: RFValue(13, 720) }}>Calories đã hấp thụ:</Text>
-					<Text style={{ fontWeight: 'bold' }}>{calories} calories</Text>
+		<SafeAreaView style={styles.container}>
+			<StatusBar barStyle="light-content"  />
+			<ScrollView style={{ backgroundColor: colors.white, marginBottom: 60 }} showsVerticalScrollIndicator={false}
+				refreshControl={
+					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+				}
+			>
+				<View style={{ flexDirection: 'row', paddingLeft: 20, paddingTop: 20, paddingBottom: 10 }}>
+					<Image source={require('../../assets/img_bare_logo.png')} style={{ width: 50, height: 50 }}></Image>
+					<Text style={{ textAlignVertical: 'center', fontSize: RFValue(16, 720), marginLeft: 15 }}>Xin chào, {"\n"}
+						<Text style={{ fontWeight: '800', fontSize: RFValue(18, 720) }}>{user?.username}</Text></Text>
 				</View>
-				<View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15 }}>
-					<Text style={{ fontSize: RFValue(13, 720) }}>Calories vận động:</Text>
-					<Text style={{ fontWeight: 'bold' }}>{caloWorkOut} calories</Text>
+				{/* Divider */}
+				<Divider style={{ backgroundColor: colors.gray, height: 0.5 }}></Divider>
+				{/* Category list */}
+				<View style={[styles.catList, { marginTop: 30, width: windowWidth * 0.97 }]}>
+					<FlatList
+						scrollEnabled={false}
+						data={categories}
+						renderItem={({ item }) => {
+							if (item.tab !== '') {
+								return (
+									<TouchableOpacity
+										style={[styles.iconContainer, { width: windowWidth * 0.96 / 4 }]}
+										onPress={() => {
+
+											navigation.navigate(item.tab, item.screen)
+										}}
+									>
+										<View style={styles.roundContainer}>
+											<Image source={item.image} style={styles.image} />
+										</View>
+										<Text style={styles.text}>{item.label}</Text>
+									</TouchableOpacity>
+								);
+							} else {
+								return (
+									<TouchableOpacity
+										style={[styles.iconContainer, { width: windowWidth * 0.96 / 4 }]}
+										onPress={() => {
+											if (item.screen == 'MenuSuggestion' && !isPremium) {
+												Alert.alert('Thông báo', 'Chức năng này chỉ dành cho tài khoản Premium', [{ text: 'OK' }])
+												return;
+											}
+											navigation.navigate(item.screen)
+										}}
+									>
+										<View style={styles.roundContainer}>
+											<Image source={item.image} style={styles.image} />
+										</View>
+										<Text style={styles.text}>{item.label}</Text>
+									</TouchableOpacity>
+								);
+							}
+						}}
+						keyExtractor={(item, index) => index.toString()}
+						numColumns={4}
+						columnWrapperStyle={styles.row}
+					/>
 				</View>
-				<Divider style={{ backgroundColor: colors.gray, height: 0.2, marginTop: 15 }}></Divider>
-				<View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15, fontSize: RFValue(13, 720) }}>
+				{/* Today's calories */}
+				<View style={{ padding: 20, borderWidth: 1, width: windowWidth * 0.9, alignSelf: 'center', borderRadius: 10, borderColor: colors.gray, marginVertical: 20 }}>
+					<Text style={styles.headerBox}>Lượng calories hôm nay</Text>
+					<Text style={{ textAlign: 'right', fontSize: RFValue(12, 720), marginBottom: 15 }}>Hoàn thành: <Text style={{ color: colors.blue, fontWeight: 'bold' }}>{(((calories - caloWorkOut) / targetCalories) * 100).toFixed(2)} %</Text></Text>
+					<Progress.Bar progress={(calories - caloWorkOut) / targetCalories}
+						width={RFValue(280, 720)}
+						height={6}
+						unfilledColor={colors.gray}
+						borderWidth={0}
+						color={((calories - caloWorkOut) / targetCalories) > 1 ? colors.red : colors.green}
+						style={{ alignSelf: 'center' }} />
+					<View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15 }}>
+						<Text style={{ fontSize: RFValue(13, 720) }}>Mục tiêu:</Text>
+						<Text style={{ fontWeight: 'bold' }}>{targetCalories} calories</Text>
+					</View>
+					<View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15 }}>
+						<Text style={{ fontSize: RFValue(13, 720) }}>Calories đã hấp thụ:</Text>
+						<Text style={{ fontWeight: 'bold' }}>{calories} calories</Text>
+					</View>
+					<View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15 }}>
+						<Text style={{ fontSize: RFValue(13, 720) }}>Calories vận động:</Text>
+						<Text style={{ fontWeight: 'bold' }}>{caloWorkOut} calories</Text>
+					</View>
+					<Divider style={{ backgroundColor: colors.gray, height: 0.2, marginTop: 15 }}></Divider>
+					{calories - caloWorkOut > targetCalories ? (
+						<View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15, fontSize: RFValue(13, 720) }}>
+							<Text style={{ fontWeight: 'bold' }}>Cần vận động thêm:</Text>
+							<Text style={{ fontWeight: 'bold', color: colors.blue, fontSize: RFValue(14, 720) }}>{(calories - caloWorkOut) - targetCalories} calories</Text>
+						</View>
+					) : (
+						<View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15, fontSize: RFValue(13, 720) }}>
+							<Text style={{ fontWeight: 'bold' }}>Cần thêm:</Text>
+							<Text style={{ fontWeight: 'bold', color: colors.blue, fontSize: RFValue(14, 720) }}>{targetCalories - (calories - caloWorkOut)} calories</Text>
+						</View>
+
+					)}
+					{/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 15, fontSize: RFValue(13, 720) }}>
 					<Text style={{ fontWeight: 'bold' }}>Cần thêm:</Text>
-					<Text style={{ fontWeight: 'bold', color: colors.blue, fontSize: RFValue(14, 720) }}>{caloriesNeeded - (calories - caloWorkOut)} calories</Text>
+					<Text style={{ fontWeight: 'bold', color: colors.blue, fontSize: RFValue(14, 720) }}>{targetCalories - (calories - caloWorkOut)} calories</Text>
+				</View> */}
+					<TouchableOpacity onPress={() => { navigation.navigate('Calories') }}>
+						<Text style={{ textAlign: 'right', marginTop: 15, fontStyle: 'italic', color: colors.darkGray }}>Chi tiết {'\u25BA'}</Text>
+					</TouchableOpacity>
 				</View>
-				<TouchableOpacity onPress={() => { navigation.navigate('Calories') }}>
-					<Text style={{ textAlign: 'right', marginTop: 15, fontStyle: 'italic', color: colors.darkGray }}>Chi tiết {'\u25BA'}</Text>
-				</TouchableOpacity>
-			</View>
-			 {/* SuggestDishComponent */}
-			 {isPremium ? (
-            <SuggestDishComponent />
-        ) : (
-            <TouchableOpacity
-                onPress={() => Alert.alert('Thông báo', 'Đăng ký để mở khóa tính năng Gợi ý món ăn', [{ text: 'OK' }])}
-                style={{
-                    padding: 20,
-                    borderWidth: 1,
-                    width: windowWidth * 0.9,
-                    alignSelf: 'center',
-                    borderRadius: 10,
-                    borderColor: colors.gray,
-                    marginVertical: 20
-                }}
-            >
-                <Text style={[styles.headerBox, { marginBottom: 20 }]}>Gợi ý món ăn</Text>
-				<Text style={{ textAlign: 'center', color: colors.red, fontWeight: 'bold', marginTop: 0.5 }}>CHỈ ÁP DỤNG CHO THÀNH VIÊN PREMIUM </Text>
-        		<Text style={{ fontStyle: 'italic', textAlign: 'center', color: colors.darkGray,marginTop: 10 }}>Đăng ký để mở khóa tính năng Gợi ý món ăn</Text>
-            </TouchableOpacity>
-        )}
-			{/* Favourite dish */}
-			{/* <View style={{ padding: 20, borderWidth: 1, width: windowWidth * 0.9, alignSelf: 'center', borderRadius: 10, borderColor: colors.gray, marginVertical: 20 }}>
+				{isPremium ? (
+					<SuggestDishComponent />
+				) : (
+					<TouchableOpacity
+						onPress={() => Alert.alert('Thông báo', 'Đăng ký để mở khóa tính năng Gợi ý món ăn', [{ text: 'OK' }])}
+						style={{
+							padding: 20,
+							borderWidth: 1,
+							width: windowWidth * 0.9,
+							alignSelf: 'center',
+							borderRadius: 10,
+							borderColor: colors.gray,
+							marginVertical: 20
+						}}
+					>
+						<Text style={[styles.headerBox, { marginBottom: 20 }]}>Gợi ý món ăn</Text>
+						<Text style={{ textAlign: 'center', color: colors.red, fontWeight: 'bold', marginTop: 0.5 }}>CHỈ ÁP DỤNG CHO THÀNH VIÊN PREMIUM </Text>
+						<Text style={{ fontStyle: 'italic', textAlign: 'center', color: colors.darkGray, marginTop: 10 }}>Đăng ký để mở khóa tính năng Gợi ý món ăn</Text>
+					</TouchableOpacity>
+				)}
+				{/* Favourite dish */}
+				{/* <View style={{ padding: 20, borderWidth: 1, width: windowWidth * 0.9, alignSelf: 'center', borderRadius: 10, borderColor: colors.gray, marginVertical: 20 }}>
 				<Text style={[styles.headerBox, { marginBottom: 20 }]}>Món ăn yêu thích</Text>
 				<FlatGrid
 					scrollEnabled={false}
@@ -278,11 +281,15 @@ export default function Home() {
 					<Text style={{ textAlign: 'right', fontStyle: 'italic', color: colors.darkGray }}>Chi tiết {'\u25BA'}</Text>
 				</TouchableOpacity>
 			</View> */}
-		</ScrollView>
+			</ScrollView>
+		</SafeAreaView>
 	)
 }
 
 const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+	},
 	catList: {
 		flex: 1,
 		justifyContent: 'center',
