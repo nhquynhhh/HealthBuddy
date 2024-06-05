@@ -7,6 +7,7 @@ import { colors } from "../../utils/colors";
 import { AuthContext } from '../../context/AuthContext';
 import { set } from "date-fns";
 import { handleGetDishList } from "../../services/dish/get_all_dishes";
+import {handleGetAllIngredients} from "../../services/ingredients/get_all_ingredients";
 import { CardDishComponent } from "../CardDishComponent";
 import GradientCircleNextButton from "../GradientCircleNextButton";
 import GradientCirclePreviousButton from "../GradientCirclePreviousButton";
@@ -34,17 +35,17 @@ function Search() {
 	}, []);
 
 	useEffect(() => {
-		setIsLoading(true);
 		getDishList();
-		setIsLoading(false);
 	}, [pagination.current_page]);
 
 
-	// useEffect(() => {
-	// 	setIsLoading(true);
-	// 	getDishList();
-	// 	setIsLoading(false);
-	// }, [isDish, isIngredient]);
+	useEffect(() => {
+		if (isDish) {
+			getDishList();
+		} else {
+			getIngredientsList();
+		}
+	}, [isDish, isIngredient]);
 
 
 	const getDishList = async () => {
@@ -56,6 +57,16 @@ function Search() {
 			setPagination(response.pagination);
 		}
 		setIsLoading(false);
+	}
+
+	const getIngredientsList = async () => {
+		setIsLoading(true);
+		if (isIngredient) {
+			const response = await handleGetAllIngredients();
+			setListItems(response);
+		}
+		setIsLoading(false);
+	
 	}
 
 	const handleSearch = (text) => {
@@ -145,7 +156,7 @@ function Search() {
 			</ScrollView>
 			<View style={{paddingBottom: 100}}>
 			<View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: "center" }}>
-                {pagination.current_page > 1 && (
+                {pagination.current_page > 1 && isDish && (
                     <GradientCirclePreviousButton 
                         onPress={() => setPagination((prev) => ({
                             ...prev,
@@ -154,10 +165,10 @@ function Search() {
                         colors={['#FF1E3F', '#FF7E06']}
                     />
                 )}
-                {pagination.current_page && 
+                {pagination.current_page && isDish &&
                     <Text style={{fontWeight: "bold"}}>Trang {pagination.current_page}</Text>
                     }
-                {pagination.current_page < pagination.total_pages && (
+                {pagination.current_page < pagination.total_pages && isDish && (
                     <GradientCircleNextButton
                         onPress={() => setPagination((prev) => ({
                             ...prev,

@@ -1,5 +1,3 @@
-
-
 import { View, Text, Image, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, useWindowDimensions, ScrollView, Platform, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, Alert, ActivityIndicator, Modal } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import React, { Component, useContext, useState } from 'react'
@@ -21,7 +19,7 @@ export default function Login() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [modalVisible, setModalVisible] = useState(false);
 
-	const { storeAccessToken, storeRefreshToken, isLogged, setIsLogged, setUserInfo, setAccount, dishes, setDishes, ingredients, setIngredients } = useContext(AuthContext);
+	const { storeAccessToken, storeRefreshToken, isLogged, setIsLogged, setUserInfo, setAccount, dishes, setDishes, ingredients, setIngredients, isLoggedWithPassword, setIsLoggedWithPassword } = useContext(AuthContext);
 	const [email, setEmail] = React.useState("");
 	const [password, setPassword] = React.useState("");
 
@@ -36,8 +34,10 @@ export default function Login() {
 			Alert.alert('Thông báo', 'Vui lòng nhập mật khẩu');
 			return;
 		}
+		setIsLoggedWithPassword(true);
 		const result = await handleLogin(email, password);
 		if (result === true) {
+			setIsLoggedWithPassword(false);
 			const data = await handleGetUserInfo();
 			if (data) {
 				setUserInfo(data);
@@ -57,6 +57,7 @@ export default function Login() {
 			setIsLogged(true);
 		}
 		else {
+			setIsLoggedWithPassword(false);
 			setIsLogged(false);
 			Alert.alert('Thông báo', 'Đăng nhập thất bại');
 		}

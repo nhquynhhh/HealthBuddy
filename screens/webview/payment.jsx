@@ -13,30 +13,34 @@ export default function Payment({ route }) {
 	const { userInfo, setAccount, setUserInfo } = useContext(AuthContext);
 
 	const [modalVisible, setModalVisible] = useState(false);
+	const [failureModalVisible, setFailureModalVisible] = useState(false);
 
 
 	const navigation = useNavigation();
-	const URL = `${BASE_URL}/confirm_payment`;
+	const URL = `${BASE_URL}/confirm_payment/vnpay`;
 	const handleNavigationStateChange = async (navState) => {
 		const { url: currentUrl } = navState;
 		console.log('Current URL:', currentUrl);
 
 		// Kiểm tra nếu URL là URL thành công bạn mong muốn
 		if (currentUrl.includes(URL)) {
+			navigation.navigate("PersonalTab", "Personal");
 			// lấy các params trong url
-			const url = new URL(currentUrl);
-			const params = new URLSearchParams(url.search);
-
-			if (params.get('resultCode') === '0') {
-				navigation.navigate("HomeTab", "Home");
+			const resultCodeMatch = currentUrl.match(/resultCode=([^&]+)/);
+			const responseCodeMatch = currentUrl.match(/vnp_ResponseCode=([^&]+)/);
+			console.log('Result code:', responseCodeMatch);
+			const resultCode = resultCodeMatch ? resultCodeMatch[1] : null;
+			const respnseCode = responseCodeMatch ? responseCodeMatch[1] : null;
+			if (respnseCode === '00') {
 				const accountInfo = await handleGetAccountInfo();
 				if (accountInfo) {
 					setAccount(accountInfo);
+					console.log(accountInfo)
 				}
 				const userInfo = await handleGetUserInfo();
 				if (userInfo) {
 					setUserInfo(userInfo);
-				}	
+				}
 			}
 		}
 	};
@@ -46,24 +50,6 @@ export default function Payment({ route }) {
 				source={{ uri: url }}
 				onNavigationStateChange={handleNavigationStateChange}
 			/>
-			<Modal
-				animationType="slide"
-				transparent={true}
-				visible={modalVisible}
-				onRequestClose={() => {
-					setModalVisible(!modalVisible);
-				}}
-			>
-				<View style={styles.centeredView}>
-					<View style={styles.modalView}>
-						<Text style={styles.modalText}>Nâng cấp tài khoản thành công!</Text>
-						<Button
-							onPress={() => setModalVisible(false)}
-							title="Đóng"
-						/>
-					</View>
-				</View>
-			</Modal>
 		</View>
 	);
 }

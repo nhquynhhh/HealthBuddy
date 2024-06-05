@@ -1,10 +1,10 @@
-import { View, Text, Image, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, useWindowDimensions } from 'react-native'
+import { View, Text, Image, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, useWindowDimensions, ActivityIndicator } from 'react-native'
 import React, { Component, useState, useContext } from 'react'
 import { Icon, Button, Divider, ListItem } from "react-native-elements";
 import { LinearGradient } from 'expo-linear-gradient';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button'
 import { colors } from '../../utils/colors'
-import {handlePayMentURL} from '../../services/payment/call_payment'
+import {handlePayMentURLMOMO, handlePayMentURLVNPAY} from '../../services/payment/call_payment'
 import { useNavigation,useFocusEffect, useIsFocused } from '@react-navigation/native';
 import Payment from '../webview/payment';
 import { setPaymentURL } from '../../asyncStorage/auth';
@@ -15,13 +15,14 @@ export default function Premium() {
 	const navigation = useNavigation();
 	const [url, setUrl] = useState('');
 	const { paymentURL, setPaymentURL } = useContext(AuthContext);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const upgradePack = [
 		{ label: '550.000đ / năm', value: "yearly" },
 		{ label: '50.000đ / tháng', value: "monthly" }
 	]
 
-	const [upgradePackSelected, setUpgradePackSelected] = useState('monthly');
+	const [upgradePackSelected, setUpgradePackSelected] = useState('yearly');
 	const [webViewUrl, setWebViewUrl] = useState(null);
 
 	const handleRadioPress = (value) => {
@@ -30,15 +31,18 @@ export default function Premium() {
 	  };
 	
 	const handlePayment = async () => {
-		const response = await handlePayMentURL(upgradePackSelected);
+		setIsLoading(true);
+		const response = await handlePayMentURLVNPAY(upgradePackSelected);
 		console.log(response);
 		if (response !== null) {
 			navigation.navigate('Payment', { url: response });
+			setIsLoading(false);
 		}
 	}
 
 	return (
 		<View style={styles.container}>
+			{isLoading && <ActivityIndicator size="large" color={colors.blue} />}
 			<View style={{ marginLeft: 30 }}>
 				<View style={{ alignItems: 'center', position: 'relative' }}>
 					<LinearGradient
@@ -84,7 +88,7 @@ export default function Premium() {
 					radioStyle={{ paddingVertical: 5 }}
 				/>
 			</View>
-			<Button title={"TIẾP TỤC"}
+			<Button title={"THANH TOÁN"}
 				style={styles.btnClick}
 				titleStyle={{ fontWeight: '700', fontSize: 20 }}
 				buttonStyle={{ minWidth: windowWidth * 0.9, height: 45, borderRadius: 10 }}

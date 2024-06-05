@@ -3,7 +3,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Icon } from 'react-native-elements';
 import { colors } from '../utils/colors'
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, Alert, TouchableOpacity } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from '../screens/home/home';
@@ -28,10 +28,41 @@ import BMI from '../screens/bmi/bmi';
 import FoodDetails from '../screens/food_details/food_details';
 import Energy from '../screens/energy/energy';
 import Reminders from '../screens/reminders/reminders';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Payment from '../screens/webview/payment';
+import { handleGetUserInfo } from '../services/info/get_info';
 
 const MainNavigator = () => {
+
+    const navigation = useNavigation();
+
+	const onPressScanTab = async () => {
+
+		const info = await handleGetUserInfo();
+
+		if (info.has_subscription === true) {
+			navigation.navigate("ScanTab", "Scan");
+		} else {
+			Alert.alert('Thông báo', 'Chức năng này chỉ dành cho tài khoản Premium', [{ text: 'OK' }])
+		}
+	}
+
+	const onPressHomeTab = async () => {
+		navigation.navigate("HomeTab", "Home");
+	}
+
+	const onPressStatisticsTab = async () => {
+		navigation.navigate("StatisticsTab", "StatisticsStackScreens");
+	}
+
+	const onPressPersonalTab = async () => {
+		navigation.navigate("PersonalTab", "PersonalStackScreens");
+	}
+
+	const onPressWorkoutTab = async () => {
+		navigation.navigate("NotiTab", "WorkoutStackScreens");
+	}
+
 	const HomeStack = createNativeStackNavigator();
 	function HomeStackScreens() {
 		return (
@@ -119,10 +150,12 @@ const MainNavigator = () => {
 					options={{
 						tabBarIcon: ({ focused }) => {
 							return (
+								<TouchableOpacity onPress={onPressHomeTab}>
 								<View style={{ alignItems: "center", justifyContent: "center" }}>
 									<Icon name={focused ? "home" : "home-outline"} type="ionicon" size={23} color={focused ? colors.blue : colors.black} />
 									<Text style={{ fontSize: 12, color: focused ? colors.blue : colors.black, marginTop: 4, fontWeight: focused ? 'bold' : 'normal' }}>Trang chủ</Text>
 								</View>
+								</TouchableOpacity>
 							)
 						}
 					}} />
@@ -132,18 +165,21 @@ const MainNavigator = () => {
 						headerTitle: "Thống kê",
 						tabBarIcon: ({ focused }) => {
 							return (
+								<TouchableOpacity onPress={onPressStatisticsTab}>
 								<View style={{ alignItems: "center", justifyContent: "center" }}>
 									<Icon name={focused ? "stats-chart-sharp" : "stats-chart-outline"} type="ionicon" size={23} color={focused ? colors.blue : colors.black} />
 									<Text style={{ fontSize: 12, color: focused ? colors.blue : colors.black, marginTop: 4, fontWeight: focused ? 'bold' : 'normal' }}>Thống kê</Text>
 								</View>
+								</TouchableOpacity>
 							)
 						}
 					}} />
-				{/* <Tab.Screen name="ScanTab"
+				<Tab.Screen name="ScanTab"
 					component={Scan}
 					options={{
 						tabBarIcon: ({ focused }) => {
 							return (
+								<TouchableOpacity onPress={onPressScanTab}>
 								<LinearGradient
 									colors={[colors.blue, colors.lightBlue]}
 									start={{ x: 0, y: 0 }}
@@ -157,19 +193,26 @@ const MainNavigator = () => {
 										top: -30
 									}}>
 									<Icon name="scan-helper" type="material-community" size={35} color="white" />
+									
 								</LinearGradient>
+								</TouchableOpacity>
 							)
-						}
-					}} /> */}
+						},
+						// tabBarButton: () => {
+							
+						// }
+					}} />
 				<Tab.Screen name="NotiTab"
-					component={NotiStackScreens}
+					component={WorkoutStackScreens}
 					options={{
 						tabBarIcon: ({ focused }) => {
 							return (
+								<TouchableOpacity onPress={onPressWorkoutTab}>
 								<View style={{ alignItems: "center", justifyContent: "center" }}>
-									<Icon name={focused ? "notifications" : "notifications-outline"} type="ionicon" size={23} color={focused ? colors.blue : colors.black} />
-									<Text style={{ fontSize: 12, color: focused ? colors.blue : colors.black, marginTop: 4, fontWeight: focused ? 'bold' : 'normal' }}>Thông báo</Text>
+									<Icon name={focused ? "accessibility" : "accessibility-outline"} type="ionicon" size={23} color={focused ? colors.blue : colors.black} />
+									<Text style={{ fontSize: 12, color: focused ? colors.blue : colors.black, marginTop: 4, fontWeight: focused ? 'bold' : 'normal' }}>Tập luyện</Text>
 								</View>
+								</TouchableOpacity>
 							)
 						}
 					}} />
@@ -178,10 +221,12 @@ const MainNavigator = () => {
 					options={{
 						tabBarIcon: ({ focused }) => {
 							return (
+								<TouchableOpacity onPress={onPressPersonalTab}>
 								<View style={{ alignItems: "center", justifyContent: "center" }}>
 									<Icon name={focused ? "person" : "person-outline"} type="ionicon" size={23} color={focused ? colors.blue : colors.black} />
 									<Text style={{ fontSize: 12, color: focused ? colors.blue : colors.black, marginTop: 4, fontWeight: focused ? 'bold' : 'normal' }}>Cá nhân</Text>
 								</View>
+								</TouchableOpacity>
 							)
 						}
 					}} />

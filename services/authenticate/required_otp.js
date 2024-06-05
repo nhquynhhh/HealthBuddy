@@ -1,4 +1,4 @@
-import { CallOTPAPI } from "../api/api_otp";
+import { CallOTPAPI, callOTPAgain } from "../api/api_otp";
 import { setAccessToken, setRefreshToken, getAccessToken, getRefreshToken, setEncrypted, getEncrypted } from '../../asyncStorage/auth';
 
 const callOTPPassAPI = async (email) => {
@@ -7,7 +7,7 @@ const callOTPPassAPI = async (email) => {
 		if (response.ok) {
 			const data = await response.json();
 			const { encrypted, message, token } = data;
-			const { access_token, refresh_token } = token;
+			const { access_token } = token;
 			console.log(access_token);
 			setAccessToken(access_token);
 			setEncrypted(encrypted);
@@ -20,4 +20,20 @@ const callOTPPassAPI = async (email) => {
 	}
 }
 
-export { callOTPPassAPI }
+const callOTPAgainAPI = async () => {
+	const token = await getAccessToken();
+	const response = await callOTPAgain(token);
+	if (response.ok) {
+		const data = await response.json();
+		const { encrypted, message, token } = data;
+		const { access_token } = token;
+		console.log(access_token);
+		setAccessToken(access_token);
+		setEncrypted(encrypted);
+		return true;
+	} else {
+		return false;
+	}
+}
+
+export { callOTPPassAPI, callOTPAgainAPI }

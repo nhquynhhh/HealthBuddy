@@ -8,7 +8,6 @@ import { handleGetFavoriteDishes } from '../../services/favorite/get_favorite_di
 const FoodList = ({ FoodList, Dish }) => {
 	const navigation = useNavigation();
 	const { userInfo } = useContext(AuthContext);
-	// const isFocused = useIsFocused();
 
 
 	const onPressHandler = async () => {
@@ -57,8 +56,6 @@ const FoodList = ({ FoodList, Dish }) => {
 	);
 }
 
-
-// CSS
 
 const styles = StyleSheet.create({
 	ContainerItem: {

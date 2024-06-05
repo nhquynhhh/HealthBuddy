@@ -26,15 +26,21 @@ export default function GetData() {
 	const [age, setAge] = useState('');
 	const [height, setHeight] = useState('');
 	const [weight, setWeight] = useState('');
-	const [targetSelected, setTargetSelected] = useState('');
+	const [targetSelected, setTargetSelected] = useState('Giảm cân');
 
 	const handleContinuePage2 = () => {
 		if (age === '' || height === '' || weight === '') {
 			Alert.alert('Thông báo', 'Vui lòng nhập đầy đủ thông tin.');
 			return;
-		} else if (age < 0 || height < 0 || weight < 0) {
+		}  else if (isNaN(age) || isNaN(height) || isNaN(weight)) {
+			Alert.alert('Thông báo', 'Tuổi, chiều cao và cân nặng phải là số');
+			return;
+		} else if (age <= 0 || height <= 0 || weight <= 0){
 			Alert.alert('Thông báo', 'Thông tin đã nhập không hợp lệ. Tuổi, chiều cao và cân nặng phải lớn hơn 0');
 			return;
+		} else if (age < 18 || height < 100 || weight < 30 || height > 250 || weight > 200) {
+			Alert.alert('Thông báo', 'Thông tin đã nhập không hợp lệ. Tuổi phải lớn hơn 18, chiều cao phải lớn hơn 100 và cân nặng phải từ 30 đến 200 kg');
+			return; 
 		} else {
 			setCurrentPage('page3');
 			setCurrentPageNav('page3Nav');
@@ -60,15 +66,14 @@ export default function GetData() {
 	}
 
 	return (
-		<View style={{ alignItems: 'center', paddingTop: 60 }}>
-			<View style={{ flexDirection: 'row', alignItems: 'center' }}>
+		<View style={{ alignItems: 'center', paddingTop: 60, backgroundColor: colors.white }}>
+			<View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: colors.white }}>
 				<View style={[styles.activePage, { width: windowWidth / 4, marginHorizontal: 10 }, currentPageNav === 'page1Nav' ? styles.activePage : styles.inactivePage]} name='page1Nav'></View>
 				<View style={[styles.inactivePage, { width: windowWidth / 4, marginHorizontal: 10 }, currentPageNav === 'page2Nav' ? styles.activePage : styles.inactivePage]} name='page2Nav'></View>
 				<View style={[styles.inactivePage, { width: windowWidth / 4, marginHorizontal: 10 }, currentPageNav === 'page3Nav' ? styles.activePage : styles.inactivePage]} name='page3Nav'></View>
 			</View>
-			<View style={[{ alignItems: 'center' }, currentPage === 'page1' ? styles.displayPage : styles.hidePage]}>
+			<View style={[{ alignItems: 'center', backgroundColor: colors.white }, currentPage === 'page1' ? styles.displayPage : styles.hidePage]}>
 				<Text style={styles.describeText}>Trước khi bắt đầu, hãy cung cấp cho chúng tôi một vài thông tin về bạn.</Text>
-				{/* Different from AOD */}
 				<Text style={[styles.titleText, { width: '90%', textAlign: 'left', paddingLeft: 30 }]}>1. Giới tính của bạn</Text>
 				<View style={{ flexDirection: 'row', alignItems: 'center', width: '90%', marginHorizontal: 40 }}>
 					<TouchableOpacity
@@ -100,7 +105,7 @@ export default function GetData() {
 					}}>
 				</Button>
 			</View>
-			<View style={[{ alignItems: 'center' }, currentPage === 'page2' ? styles.displayPage : styles.hidePage]}>
+			<View style={[{ alignItems: 'center', backgroundColor: colors.white }, currentPage === 'page2' ? styles.displayPage : styles.hidePage]}>
 				<Text style={[styles.titleText, { marginTop: 20 }]}>2. Tuổi và số đo cơ thể của bạn</Text>
 				<View>
 					<Text style={styles.headerText}>Tuổi</Text>
@@ -148,7 +153,7 @@ export default function GetData() {
 					}}>
 				</Button>
 			</View>
-			<View style={[{}, currentPage === 'page3' ? styles.displayPage : styles.hidePage]}>
+			<View style={[{backgroundColor: colors.white}, currentPage === 'page3' ? styles.displayPage : styles.hidePage]}>
 				<Text style={[styles.titleText, { marginTop: 20 }]}>3. Mục tiêu của bạn</Text>
 				<View style={{ marginLeft: 27 }}>
 					<RadioForm
@@ -178,7 +183,7 @@ export default function GetData() {
 					}}
 					onPress={() => {
 						handleUpdateUser();
-						Alert.alert('Thông báo', 'Xong');
+						Alert.alert('Thông báo', 'Hoàn tất! Chào mừng bạn đến với HealthBuddy!');
 					}}>
 				</Button>
 			</View>

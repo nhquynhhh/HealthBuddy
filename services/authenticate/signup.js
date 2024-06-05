@@ -29,5 +29,4 @@ const signup = async (props) => {
 }
 
 
-
 export { signup }

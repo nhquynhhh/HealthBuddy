@@ -1,19 +1,15 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Text, View } from "react-native";
 import DateTimePicker from "react-native-modal-datetime-picker";
-import { setReminderNoti } from "../../asyncStorage/auth";
+import { setReminderNoti, removeReminderTime } from "../../asyncStorage/auth";
 import { getTime } from "date-fns";
-import { select } from "d3";
+import { scheduleAlarm } from '../../services/notification/NotificationHandler';
 
-export default class Clock extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			isDateTimePickerVisible: false,
-			selectedDate: '',
-		};
-	}
-	convertTimeToDate(timeString) {
+export default function Clock({ reminderTime, onClose }) {
+	const [isDateTimePickerVisible, setIsDateTimePickerVisible] = useState(true);
+	const [selectedDate, setSelectedDate] = useState('');
+
+	const convertTimeToDate = (timeString) => {
 		const [time, modifier] = timeString.split(' ');
 		let [hours, minutes, seconds] = time.split(':');
 		if (modifier === 'PM' && hours !== '12') {
@@ -28,48 +24,41 @@ export default class Clock extends Component {
 		now.setSeconds(seconds);
 		now.setMilliseconds(0);
 		return now;
-	}
+	};
 
-	async componentDidMount() {
-		if (this.props.reminderTime) {
-			const date = this.convertTimeToDate(this.props.reminderTime);
-			this.setState({ selectedDate: date });
+	useEffect(() => {
+		if (reminderTime) {
+			const date = convertTimeToDate(reminderTime);
+			setSelectedDate(date);
 		}
-	}
+	}, [reminderTime]);
 
-	showDateTimePicker = () => {
-		this.setState({ isDateTimePickerVisible: true });
+	const handleDatePicked = async (date) => {
+		await removeReminderTime();
+		const timeS = date.toLocaleTimeString();
+		const [time, period] = timeS.split(' ');
+		const [hour, minute] = time.split(':').map(Number);
+		const adjustedHour = period === 'PM' ? hour + 12 : hour;
+
+		console.log(adjustedHour, minute);
+		console.log("A date has been picked: ", timeS);
+		await setReminderNoti(timeS);
+		await scheduleAlarm(adjustedHour, minute);
+
+		setIsDateTimePickerVisible(false);
+		onClose(timeS); // Assuming onClose is a callback to update the parent component
 	};
 
-	hideDateTimePicker = () => {
-		this.setState({ isDateTimePickerVisible: false });
-		this.props.onClose();
-	};
-
-	handleDatePicked = async (date) => {
-
-		// get time from date
-		const time = date.toLocaleTimeString();
-
-		console.log("A date has been picked: ", time);
-		await setReminderNoti(time);
-		// this.setState({ selectedDate: date });
-		this.hideDateTimePicker();
-		this.props.onClose(time);
-	};
-
-	render() {
-		const { selectedDate, isDateTimePickerVisible } = this.state;
-		return (
-			<>
-				<DateTimePicker
-					mode="time"
-					isVisible={true}
-					onConfirm={this.handleDatePicked}
-					onCancel={this.hideDateTimePicker}
-					date={selectedDate ? new Date(selectedDate) : new Date()}
-				/>
-			</>
-		);
-	}
+	return (
+		<DateTimePicker
+			mode="time"
+			isVisible={isDateTimePickerVisible}
+			onConfirm={handleDatePicked}
+			onCancel={() => {
+				setIsDateTimePickerVisible(false);
+				onClose();
+			}}
+			date={selectedDate ? new Date(selectedDate) : new Date()}
+		/>
+	);
 }

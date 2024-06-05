@@ -1,4 +1,4 @@
-import { ScrollView, Text, View, Image, useWindowDimensions, StyleSheet, TouchableOpacity, TextInput, RefreshControl, Alert } from 'react-native'
+import { ScrollView, Text, View, Image, useWindowDimensions, StyleSheet, TouchableOpacity, TextInput, RefreshControl, Alert, ActivityIndicator } from 'react-native'
 import React, { useContext, useEffect, useState } from 'react'
 import { SearchBar, Icon, Divider, Input, Button } from 'react-native-elements';
 import { useNavigation, useFocusEffect, useIsFocused } from '@react-navigation/native';
@@ -11,6 +11,8 @@ import { removeAccessTokenAsync, removeRefreshTokenAsync } from '../../asyncStor
 import { SafeAreaView } from 'react-native-safe-area-context';
 import RadioForm from 'react-native-simple-radio-button';
 import { handleGetUserInfo } from '../../services/info/get_info';
+import {handleUpdateUserInfo} from '../../services/info/update_info';
+import { set } from 'date-fns';
 
 export default function Personal() {
 	const windowHeight = useWindowDimensions().height;
@@ -19,8 +21,10 @@ export default function Personal() {
 	const isFocused = useIsFocused();
 	const [expiredDate, setExpiredDate] = useState('');
 	const { removeAccessToken, removeRefreshToken, isLogged, setIsLogged, userInfo, account, setUserInfo, setAccount } = useContext(AuthContext);
-
+	const [isLoading, setIsLoading] = useState(true);
 	const [refresh, setRefresh] = useState(false);
+	const [selectedValue, setSelectedValue] = useState(0);
+	const [user, setUser] = useState(null);
 
 	const handleLogout = () => {
 		// are you sure to logout
@@ -62,31 +66,29 @@ export default function Personal() {
 	const closeModal2 = () => {
 		setIsModalVisible(false);
 	}
-	const [accountType, setAccountType] = useState(userInfo.has_subscription ? "PREMIUM" : "STANDARD");
-	const [checked, setChecked] = useState(userInfo.gender);
-	const [gender, setGender] = useState(userInfo.gender == 'male' ? 'Nam' : 'Nữ');
+	const [accountType, setAccountType] = useState("");
+	const [checked, setChecked] = useState();
+	const [gender, setGender] = useState();
 
-	const [age, setAge] = useState(userInfo.age);
-	const [height, setHeight] = useState(userInfo.height);
-	const [weight, setWeight] = useState(userInfo.weight);
-	const [targetSelected, setTargetSelected] = useState(userInfo.aim);
-	const [targetLabel, setTargetLabel] = useState(userInfo.aim);
+	const [age, setAge] = useState();
+	const [height, setHeight] = useState();
+	const [weight, setWeight] = useState();
+	const [targetLabel, setTargetLabel] = useState();
 
-	const [tempAge, setTempAge] = useState(userInfo.age);
-	const [tempHeight, setTempHeight] = useState(userInfo.height);
-	const [tempWeight, setTempWeight] = useState(userInfo.weight);
+	const [tempAge, setTempAge] = useState();
+	const [tempHeight, setTempHeight] = useState();
+	const [tempWeight, setTempWeight] = useState();
+	const [tempTarget, setTempTarget] = useState();
+	const [tempTargetLabel, setTempTargetLabel] = useState();
 
 	const target = [
 		{ label: 'Giảm cân', value: 0 },
 		{ label: 'Duy trì cân nặng', value: 1 },
 		{ label: 'Tăng cân', value: 2 }
 	]
+	const [targetSelected, setTargetSelected] = useState();
+
 	const loadData = async () => {
-		setAge(userInfo.age);
-		setHeight(userInfo.height);
-		setWeight(userInfo.weight);
-		setTargetSelected(userInfo.aim);
-		setGender(userInfo.gender == 'male' ? 'Nam' : 'Nữ')
 		const response = await handleGetUserInfo();
 		if (response) {
 			setAccountType(response.has_subscription ? "PREMIUM" : "STANDARD");
@@ -94,15 +96,39 @@ export default function Personal() {
 			const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
 			const formattedDate = new Intl.DateTimeFormat('vi-VN', options).format(date);
 			setExpiredDate(formattedDate);
+			setAge(response.age);
+			setHeight(response.height);
+			setWeight(response.weight);
+			setTargetSelected(response.aim);
+			setChecked(response.gender)
+			setGender(response.gender == 'male' ? 'Nam' : 'Nữ')
+			setTempAge(response.age.toString());
+			setTempHeight(response.height.toString());
+			setTempWeight(response.weight.toString());
+			setTargetLabel(response.aim);
+			const targetSelected = target.find(item => item.label === response.aim);
+			console.log( "Target" , targetSelected)
+			// Gán giá trị label của targetSelected cho selectedValue
+			setSelectedValue(targetSelected ? targetSelected.value : 0);
+			setTempTarget(targetSelected ? targetSelected.value : 0);
+
+			// setSelectedValue((target.find(item => item.value === response.aim)).value);
 		}
 	}
 
-	const updateInfoFromTemp = () => {
-		setTargetSelected(targetLabel);
-		setAge(tempAge);
-		setHeight(tempHeight);
-		setWeight(tempWeight);
-		setGender(checked);
+	const handleUpdateUserInfo2 = () => {
+		if (tempAge < 18 || tempHeight < 100 || tempWeight < 30 || tempWeight > 200 || tempHeight > 250) {
+			Alert.alert('Thông báo', 'Thông tin đã nhập không hợp lệ. Tuổi phải lớn hơn 18 , chiều cao phải từ 1m đến 2.5m, cân nặng từ 30kg đến 200kg');
+			loadData();
+			return;
+		} else {
+			setAge(parseInt(tempAge));
+			setHeight(parseInt(tempHeight));
+			setWeight(parseInt(weight));
+			setGender(checked == 'male' ? 'Nam' : 'Nữ');
+		}
+
+
 	}
 
 	const updateUserInfo = async () => {
@@ -115,31 +141,41 @@ export default function Personal() {
 		loadData();
 	}
 
-	useEffect(() => {
-		loadData();
-		console.log(userInfo);
-	}, [])
+	const updateData1 = async () => {
 
-	// useEffect(() => {
-	// 	if (isFocused) {
-	// 		console.log(account.has_subscription ? "PREMIUM" : "STANDARD");
-	// 		console.log(userInfo);
-	// 	}
-	// }, [isFocused]);
+		const response = await handleUpdateUserInfo({ age: age, height: height, weight: weight, aim: tempTargetLabel, gender: checked });
+		if (response) {
+			loadData();
+		}
+	}
+
+	const updateData2 = async () => {
+		if (age < 18 || height < 100 || weight < 30 || weight > 200 || height > 250) {
+			Alert.alert('Thông báo', 'Thông tin đã nhập không hợp lệ. Tuổi phải lớn hơn 18 , chiều cao phải từ 1m đến 2.5m, cân nặng từ 30kg đến 200kg');
+			loadData();
+			return;
+		}
+		const response = await handleUpdateUserInfo({ age: tempAge, height: tempHeight, weight: tempWeight, aim: targetSelected, gender: checked });
+		if (response) {
+			loadData();
+		}
+	}
+
+	useEffect(() => {
+		setIsLoading(true);
+		loadData();
+		setIsLoading(false);
+	}, [])
 
 	const onRefresh = () => {
 		setRefresh(true);
 		loadData();
 		setRefresh(false);
-
 	}
-
-	useEffect(() => {
-		setTargetSelected(targetLabel);
-	}, [targetSelected])
 
 	return (
 		<SafeAreaView style={{ backgroundColor: colors.white, marginBottom: 60 }}>
+			{isLoading && <ActivityIndicator size="large" color={colors.blue} style={{ marginTop: 20 }}></ActivityIndicator>}
 			<ScrollView refreshControl={
 				<RefreshControl refreshing={refresh} onRefresh={onRefresh} />
 			} >
@@ -161,8 +197,7 @@ export default function Personal() {
 							<Text style={{ fontWeight: 'bold', fontSize: RFValue(14, 720), color: colors.blue }}>Thay đổi</Text>
 						</TouchableOpacity>
 					</View>
-					<Text style={{ marginVertical: 10, fontSize: RFValue(14, 720) }}>{targetSelected}</Text>
-					<Text style={{ fontSize: RFValue(14, 720) }}>Cân nặng mong muốn: <Text style={{ fontWeight: 'bold' }}>55kg</Text></Text>
+					<Text style={{ marginTop: 10, fontSize: RFValue(14, 720) }}>{targetSelected}</Text>
 				</View>
 				<View style={{ padding: 15, borderWidth: 1.5, width: windowWidth * 0.9, alignSelf: 'center', borderRadius: 10, borderColor: colors.blue, marginVertical: 5 }}>
 					<View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -227,8 +262,8 @@ export default function Personal() {
 							<Text style={{ color: colors.white, textAlign: 'left', lineHeight: 25 }}>
 								<Text style={{ fontWeight: 'bold', fontSize: RFValue(14, 720) }}>Thành viên PREMIUM{"\n"}</Text>
 								<Text style={{ fontStyle: 'italic' }}>
-									Tài khoản hết hạn vào ngày
-									<Text style={{ fontWeight: 'bold' }}> {expiredDate} {"\n"}</Text>
+									Tài khoản hết hạn vào ngày {"\n"}
+									<Text style={{ fontWeight: 'bold' }}> {expiredDate} </Text>
 								</Text>
 							</Text>
 						</LinearGradient>
@@ -274,8 +309,11 @@ export default function Personal() {
 						</View>
 						<RadioForm
 							radio_props={target}
+							initial={selectedValue}
 							onPress={value => {
-								setTargetLabel(target.find(item => item.value === value)?.label);
+								setTempTargetLabel(target.find(item => item.value === value)?.label);
+								// setSelectedValue(value);
+								setTempTarget(value);
 							}}
 							selectedLabelColor={colors.blue}
 							buttonSize={8}
@@ -285,17 +323,6 @@ export default function Personal() {
 							style={{ paddingLeft: 30 }}
 							status={targetLabel}
 						/>
-						<Text style={{ fontWeight: 'bold', fontSize: RFValue(20, 720), padding: 20 }}>Cân nặng mong muốn</Text>
-						<View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20, paddingBottom: 20 }}>
-							<TextInput
-								style={[styles.inputField, { paddingLeft: 20, paddingRight: 20, borderColor: colors.blue, borderWidth: 1, borderRadius: 10 }]}
-								placeholder='Cân nặng'
-								keyboardType='numeric'
-							/>
-							<View style={{ marginLeft: 10 }}>
-								<Text style={{ fontSize: RFValue(20, 720) }}>kg</Text>
-							</View>
-						</View>
 						<Button title={"XÁC NHẬN"}
 							style={styles.btnClick}
 							titleStyle={{ fontWeight: '700', fontSize: 20 }}
@@ -308,8 +335,9 @@ export default function Personal() {
 							}}
 							onPress={() => {
 								closeModal();
-
-								updateUserInfo();
+								setTargetSelected(target.find(item => item.value === tempTarget)?.label);
+								setSelectedValue(tempTarget);
+								updateData1();
 							}}>
 						</Button>
 					</View>
@@ -387,7 +415,7 @@ export default function Personal() {
 											style={[styles.inputField, { paddingLeft: 15, paddingRight: 15, width: "100%", borderColor: colors.blue, borderWidth: 1, borderRadius: 10 }]}
 											placeholder='Tuổi'
 											keyboardType='numeric'
-											value={tempAge.toString()}
+											value={tempAge}
 											onChangeText={text => {
 												const numericValue = parseInt(text);
 												setTempAge(isNaN(numericValue) ? '' : numericValue); // Đảm bảo chỉ có số mới được chấp nhận
@@ -402,7 +430,7 @@ export default function Personal() {
 											style={[styles.inputField, { paddingLeft: 15, paddingRight: 15, width: "100%", borderColor: colors.blue, borderWidth: 1, borderRadius: 10 }]}
 											placeholder='Chiều cao(cm)'
 											keyboardType='numeric'
-											value={tempHeight.toString()}
+											value={tempHeight}
 											onChangeText={text => {
 												const numericValue = parseInt(text);
 												setTempHeight(isNaN(numericValue) ? '' : numericValue); // Đảm bảo chỉ có số mới được chấp nhận
@@ -418,7 +446,7 @@ export default function Personal() {
 											style={[styles.inputField, { paddingLeft: 15, paddingRight: 15, width: "100%", borderColor: colors.blue, borderWidth: 1, borderRadius: 10 }]}
 											placeholder='Cân nặng(kg)'
 											keyboardType='numeric'
-											value={tempWeight.toString()}
+											value={tempWeight}
 											onChangeText={text => {
 												const numericValue = parseInt(text);
 												setTempWeight(isNaN(numericValue) ? '' : numericValue); // Đảm bảo chỉ có số mới được chấp nhận
@@ -441,8 +469,8 @@ export default function Personal() {
 							}}
 							onPress={
 								() => {
-									updateUserInfo();
-									updateInfoFromTemp();
+									handleUpdateUserInfo2();
+									updateData2();
 									closeModal2();
 								}
 							}>
