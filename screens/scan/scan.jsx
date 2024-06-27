@@ -48,7 +48,6 @@ export default function Scan() {
               setImage(uri)
               // navigation.push('ResultDetection', {uri})
           } else {
-              Alert.alert('Image picker canceled', 'Image picker canceled. You can add your own message here.');
           }
       } 
       catch (error) {
