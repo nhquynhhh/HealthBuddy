@@ -32,6 +32,7 @@ import React, { useState, useContext } from 'react';
 import Payment from '../screens/webview/payment';
 import PreviewScreen from '../screens/preview/preview';
 import { handleGetUserInfo } from '../services/info/get_info';
+import Results from '../screens/results/results';
 
 const MainNavigator = () => {
 
@@ -79,6 +80,8 @@ const MainNavigator = () => {
 				<HomeStack.Screen name="Search" component={Search} options={{ headerTitle: "Tra cứu" }} />
 				<HomeStack.Screen name="BMI" component={BMI} options={{ headerTitle: "BMI là gì ?" }} />
 				<HomeStack.Screen name="Energy" component={Energy} options={{ headerTitle: "Cách tính năng lượng" }} />
+				<HomeStack.Screen name="Results" component={Results} options={{ headerTitle: "Kết quả nhận dạng" }} />
+
 				<HomeStack.Screen name="FoodDetails" component={FoodDetails}
 					options={({ route }) => ({
 						headerTitle: route.params.data.name
