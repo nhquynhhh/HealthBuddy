@@ -30,6 +30,7 @@ import Energy from '../screens/energy/energy';
 import Reminders from '../screens/reminders/reminders';
 import React, { useState, useContext } from 'react';
 import Payment from '../screens/webview/payment';
+import PreviewScreen from '../screens/preview/preview';
 import { handleGetUserInfo } from '../services/info/get_info';
 
 const MainNavigator = () => {
@@ -128,6 +129,17 @@ const MainNavigator = () => {
 		)
 	}
 
+	const ScanStack = createNativeStackNavigator();
+	function ScanStackScreens() {
+		return (
+			<ScanStack.Navigator screenOptions={{ headerTitleAlign: 'center', headerTitleStyle: { fontWeight: 'bold' } }}>
+				<ScanStack.Screen name="ScanStack" component={Scan} options={{ headerShown: false }} />
+				<ScanStack.Screen name="PreviewScreen" component={PreviewScreen} options={{ headerTitle: "Xem trước ảnh" }} />
+			</ScanStack.Navigator>
+		)
+
+	}
+
 	const Tab = createBottomTabNavigator();
 	function BottomNavigation() {
 		const screenOptions = {
@@ -175,7 +187,7 @@ const MainNavigator = () => {
 						}
 					}} />
 				<Tab.Screen name="ScanTab"
-					component={Scan}
+					component={ScanStackScreens}
 					options={{
 						tabBarIcon: ({ focused }) => {
 							return (

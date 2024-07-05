@@ -177,6 +177,12 @@ const required_otp_again = {
 	method: 'POST'
 }
 
+const detect = {
+	url: `${BASE_URL}/api/detect`,
+	method: 'POST'
+
+}
+
 export {
 	login_api,
 	signup_api,
@@ -198,5 +204,6 @@ export {
 	get_home_favorite_dishes,
 	get_fav_list,
 	get_calories, add_morning, add_noon, add_dinner, add_snack, add_exercise, save_water, get_water,get_statistic,get_statistic_water,new_genetic_algorithm,get_suggest_menu,
-	create_payment_url_momo, recommend_dish, required_otp_again, create_payment_url_vnpay
+	create_payment_url_momo, recommend_dish, required_otp_again, create_payment_url_vnpay,
+	detect
 };
