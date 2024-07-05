@@ -11,6 +11,7 @@ export default function PreviewScreen({ route, navigation }) {
 		console.log('Detecting object...');
 		const object = await handleDetect({ uri: imageUri });
 		console.log(object);
+		navigation.navigate("Results", { detectedObject: object});
 	}
 
 	const retakePicture = () => {
