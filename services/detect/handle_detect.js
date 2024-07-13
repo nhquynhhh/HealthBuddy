@@ -7,7 +7,7 @@ export const handleDetect = async (props) => {
 		const { uri } = props;
 		const response = await callDetectAPI(uri, accessToken);
 		const data = await response.json();
-		return data.objects[0];
+		return data
 	} catch (error) {
 		console.error('Error detecting object:', error);
 	}	
